@@ -1,0 +1,31 @@
+/* Mercado Pago Checkout Pro enrolment plugin styles. */
+
+.enrol-mpcheckoutpro .enrol-mpcheckoutpro-cost {
+    font-weight: 600;
+}
+
+.enrol-mpcheckoutpro .enrol-mpcheckoutpro-description {
+    margin-bottom: 0.5rem;
+}
+
+.enrol-mpcheckoutpro .enrol-mpcheckoutpro-installments {
+    margin-bottom: 0.5rem;
+}
+
+.enrol-mpcheckoutpro-result dl.row dt {
+    font-weight: 600;
+}
+
+.enrol-mpcheckoutpro-result code {
+    word-break: break-all;
+}
+
+.enrol-mpcheckoutpro-summary .card {
+    min-width: 9rem;
+}
+
+@media (max-width: 576px) {
+    .enrol-mpcheckoutpro-summary .card {
+        min-width: 100%;
+    }
+}

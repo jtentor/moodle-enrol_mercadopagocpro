@@ -1,0 +1,75 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace enrol_mpcheckoutpro\event;
+
+/**
+ * A Mercado Pago webhook notification was accepted.
+ *
+ * @package    enrol_mpcheckoutpro
+ * @copyright  2026 Julio Tentor <jtentor@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class webhook_received extends \core\event\base {
+
+    /**
+     * Initialise the event data.
+     *
+     * @return void
+     */
+    protected function init() {
+        $this->data['crud'] = 'r';
+        $this->data['edulevel'] = self::LEVEL_OTHER;
+    }
+
+    /**
+     * Localised event name.
+     *
+     * @return string
+     */
+    public static function get_name() {
+        return get_string('event:webhook_received', 'enrol_mpcheckoutpro');
+    }
+
+    /**
+     * Description for the log report.
+     *
+     * @return string
+     */
+    public function get_description() {
+        return "A Mercado Pago '{$this->other['type']}' notification for resource "
+            . "'{$this->other['dataid']}' was accepted.";
+    }
+
+    /**
+     * Build the event from a normalised notification.
+     *
+     * @param array $notification
+     * @return self
+     */
+    public static function create_from_notification(array $notification): self {
+        return self::create([
+            'context' => \context_system::instance(),
+            'other' => [
+                'type' => (string)$notification['type'],
+                'action' => (string)$notification['action'],
+                'dataid' => (string)$notification['dataid'],
+                'requestid' => (string)$notification['requestid'],
+                'livemode' => !empty($notification['livemode']),
+            ],
+        ]);
+    }
+}

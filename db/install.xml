@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="enrol/mpcheckoutpro/db" VERSION="20260823" COMMENT="XMLDB file for Moodle enrol/mpcheckoutpro"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="enrol_mpcheckoutpro_txn" COMMENT="One row per Mercado Pago Checkout Pro preference created by this plugin, tracking the resulting payment and the enrolment it produced.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="enrolid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Enrolment instance this transaction belongs to."/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Denormalised course id, kept so the record survives instance deletion for auditing."/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="externalreference" TYPE="char" LENGTH="128" NOTNULL="true" SEQUENCE="false" COMMENT="Signed external_reference sent to Mercado Pago in the preference."/>
+        <FIELD NAME="preferenceid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Preference id returned by POST /checkout/preferences."/>
+        <FIELD NAME="paymentid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Mercado Pago payment id (GET /v1/payments/{id})."/>
+        <FIELD NAME="merchantorderid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="32" NOTNULL="true" DEFAULT="created" SEQUENCE="false" COMMENT="Local mirror of the Mercado Pago payment status."/>
+        <FIELD NAME="statusdetail" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="enrolmentstate" TYPE="char" LENGTH="16" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="none|pending|active|suspended|unenrolled - what this plugin has done with the enrolment."/>
+        <FIELD NAME="amount" TYPE="number" LENGTH="12" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2"/>
+        <FIELD NAME="currency" TYPE="char" LENGTH="3" NOTNULL="true" DEFAULT="ARS" SEQUENCE="false"/>
+        <FIELD NAME="marketplacefee" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="2" COMMENT="marketplace_fee sent in the preference when split payments are enabled."/>
+        <FIELD NAME="sellerid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Mercado Pago collector/seller user id used for this transaction."/>
+        <FIELD NAME="installments" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="paymentmethodid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="paymenttypeid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="livemode" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="0 when the transaction was produced with test credentials."/>
+        <FIELD NAME="initpoint" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="init_point / sandbox_init_point the user was redirected to."/>
+        <FIELD NAME="metadata" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON metadata sent in the preference."/>
+        <FIELD NAME="lastapipayload" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Redacted copy of the last payment payload received from the API, for troubleshooting."/>
+        <FIELD NAME="lasterror" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="reconcileattempts" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timeapproved" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timeexpires" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="expiration_date_to sent in the preference."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="enrolid" TYPE="foreign" FIELDS="enrolid" REFTABLE="enrol" REFFIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="externalreference" TYPE="unique" FIELDS="externalreference"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="paymentid" UNIQUE="false" FIELDS="paymentid"/>
+        <INDEX NAME="preferenceid" UNIQUE="false" FIELDS="preferenceid"/>
+        <INDEX NAME="status-timemodified" UNIQUE="false" FIELDS="status, timemodified"/>
+        <INDEX NAME="enrolid-userid" UNIQUE="false" FIELDS="enrolid, userid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="enrol_mpcheckoutpro_wh" COMMENT="Audit log of every webhook notification received on the plugin endpoint, including rejected ones.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="txnid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Transaction this notification resolved to, when it could be matched."/>
+        <FIELD NAME="notificationid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Top level id of the notification body."/>
+        <FIELD NAME="requestid" TYPE="char" LENGTH="128" NOTNULL="false" SEQUENCE="false" COMMENT="x-request-id header."/>
+        <FIELD NAME="type" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Notification type, e.g. payment."/>
+        <FIELD NAME="action" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="Notification action, e.g. payment.updated."/>
+        <FIELD NAME="dataid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false" COMMENT="data.id of the notification."/>
+        <FIELD NAME="signaturestatus" TYPE="char" LENGTH="32" NOTNULL="true" DEFAULT="unknown" SEQUENCE="false" COMMENT="valid|invalid|missing|skipped"/>
+        <FIELD NAME="httpstatus" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Status code returned to Mercado Pago."/>
+        <FIELD NAME="processed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="attempts" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="nextretry" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp for the next internal retry of a deferred notification."/>
+        <FIELD NAME="errormessage" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="payload" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Redacted notification body."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timeprocessed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="txnid" TYPE="foreign" FIELDS="txnid" REFTABLE="enrol_mpcheckoutpro_txn" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="processed-nextretry" UNIQUE="false" FIELDS="processed, nextretry"/>
+        <INDEX NAME="dataid-type" UNIQUE="false" FIELDS="dataid, type"/>
+        <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="enrol_mpcheckoutpro_cred" COMMENT="Per enrolment instance Mercado Pago credentials, stored encrypted and deliberately kept out of the enrol table so they are never included in course backups.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="enrolid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="accesstoken" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Encrypted with core\encryption."/>
+        <FIELD NAME="publickey" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Encrypted with core\encryption."/>
+        <FIELD NAME="webhooksecret" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Encrypted with core\encryption."/>
+        <FIELD NAME="refreshtoken" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Encrypted OAuth refresh token when the seller was connected through OAuth."/>
+        <FIELD NAME="sellerid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="tokenexpires" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="enrolid" TYPE="foreign-unique" FIELDS="enrolid" REFTABLE="enrol" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

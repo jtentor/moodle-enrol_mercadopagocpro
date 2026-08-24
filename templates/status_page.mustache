@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template enrol_mpcheckoutpro/status_page
+
+    Payment result shown when the buyer comes back from Mercado Pago.
+
+    Context variables required for this template:
+    * tone - success | info | warning | error
+    * message - the explanation shown to the buyer
+    * statuslabel - localised payment status
+    * paymentid - Mercado Pago payment id, may be empty
+    * reference - the external reference of the transaction
+    * amount - formatted amount and currency
+    * date - localised date of the last update
+    * isenrolled - whether the user now has access to the course
+    * coursename - name of the course
+
+    Example context (json):
+    {
+        "tone": "success",
+        "message": "Your payment was approved and you are now enrolled.",
+        "statuslabel": "Approved",
+        "paymentid": "1234567890",
+        "reference": "mpcp-12-34-56-0011223344556677",
+        "amount": "15000.00 ARS",
+        "date": "21 August 2026, 10:15 AM",
+        "isenrolled": true,
+        "coursename": "Introduction to Databases"
+    }
+}}
+<div class="enrol-mpcheckoutpro-result">
+    <div class="alert alert-{{#tone}}{{.}}{{/tone}}" role="status">
+        {{message}}
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">{{#str}} course, core {{/str}}</dt>
+        <dd class="col-sm-9">{{coursename}}</dd>
+
+        <dt class="col-sm-3">{{#str}} paymentstatus, enrol_mpcheckoutpro {{/str}}</dt>
+        <dd class="col-sm-9">{{statuslabel}}</dd>
+
+        <dt class="col-sm-3">{{#str}} cost, enrol_mpcheckoutpro {{/str}}</dt>
+        <dd class="col-sm-9">{{amount}}</dd>
+
+        {{#paymentid}}
+            <dt class="col-sm-3">{{#str}} paymentid, enrol_mpcheckoutpro {{/str}}</dt>
+            <dd class="col-sm-9"><code>{{paymentid}}</code></dd>
+        {{/paymentid}}
+
+        <dt class="col-sm-3">{{#str}} externalreference, enrol_mpcheckoutpro {{/str}}</dt>
+        <dd class="col-sm-9"><code>{{reference}}</code></dd>
+
+        <dt class="col-sm-3">{{#str}} lastupdate, enrol_mpcheckoutpro {{/str}}</dt>
+        <dd class="col-sm-9">{{date}}</dd>
+    </dl>
+
+    {{^isenrolled}}
+        <p class="small text-muted">{{#str}} keepthisreference, enrol_mpcheckoutpro {{/str}}</p>
+    {{/isenrolled}}
+</div>

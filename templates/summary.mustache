@@ -1,0 +1,45 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template enrol_mpcheckoutpro/summary
+
+    Totals per payment status shown above the transaction report.
+
+    Context variables required for this template:
+    * stats - array of {label, count, amount, isapproved}
+
+    Example context (json):
+    {
+        "stats": [
+            {"label": "Approved", "count": 12, "amount": "ARS 180000.00", "isapproved": true},
+            {"label": "Rejected", "count": 3, "amount": "ARS 45000.00", "isapproved": false}
+        ]
+    }
+}}
+{{#stats.0}}
+<div class="enrol-mpcheckoutpro-summary d-flex flex-wrap gap-2 mb-3">
+    {{#stats}}
+        <div class="card {{#isapproved}}border-success{{/isapproved}}">
+            <div class="card-body py-2 px-3">
+                <div class="small text-muted">{{label}}</div>
+                <div class="h5 mb-0">{{count}}</div>
+                <div class="small">{{amount}}</div>
+            </div>
+        </div>
+    {{/stats}}
+</div>
+{{/stats.0}}

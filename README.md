@@ -1,2 +1,164 @@
-# mp_checkoutpro
-A Moodle plugin to enrol students after payment in Mercado Pago payment gateway. Checkout Pro option.
+# Mercado Pago Checkout Pro enrolment method for Moodle
+
+`enrol_mpcheckoutpro` lets students pay for a course through **Mercado Pago
+Checkout Pro** and be enrolled automatically once the payment is credited.
+
+- **Component:** `enrol_mpcheckoutpro`
+- **Directory:** `enrol/mpcheckoutpro`
+- **Main class:** `enrol_mpcheckoutpro_plugin`
+- **Version:** v1.0.0
+- **Requires:** Moodle 5.2.2 (`2026042002.00`) or a later release of the 5.2 branch, PHP 8.2+
+- **Default currency:** ARS (BRL, CLP, COP, MXN, PEN and UYU are also selectable)
+- **Licence:** GPL v3 or later
+
+## How it works
+
+```
+Student clicks "Pay with Mercado Pago"
+        │
+        ▼
+checkout.php ──► transaction row ──► POST /checkout/preferences ──► init_point
+        │                                                              │
+        │                                                              ▼
+        │                                                   Mercado Pago checkout
+        │                                                              │
+        ├────────────── back_urls ◄────────────────────────────────────┤
+        │                    │                                         │
+        │                    ▼                                         ▼
+        │              return.php                             webhook.php
+        │                    │                                         │
+        │                    └──────────► GET /v1/payments/{id} ◄──────┘
+        │                                        │
+        │                                        ▼
+        │                            payment_processor decides
+        │                                        │
+        └──────── reconcile_payments task ───────┘   (safety net, every 10 min)
+```
+
+Three independent paths can settle the same payment — the buyer's return, the
+webhook and the scheduled reconciliation. All three converge on
+`GET /v1/payments/{id}` and take a per-transaction lock, so the outcome is the
+same whichever one arrives first, and a lost notification can never strand a
+payment.
+
+## Security model
+
+- **Nothing the browser says is trusted.** The price, the currency and the
+  status all come from the API response, never from a query string or a POST.
+- **Every notification is verified.** The `x-signature` header is validated with
+  HMAC-SHA256 through the official SDK validator before anything is processed.
+  Unverifiable notifications are answered with `401` by default.
+- **Amount checking.** An approved payment that does not match the expected
+  amount and currency is recorded but never grants access.
+- **Credentials never reach the browser.** Checkout Pro is a redirect flow, so
+  no key is published in the page. Per-course credentials are encrypted with
+  `\core\encryption` and stored outside the `enrol` table so they are excluded
+  from course backups.
+- **HTTPS is mandatory.** The enrolment method refuses to be enabled on a site
+  that is not served over HTTPS, because Mercado Pago requires it for
+  `notification_url` and `back_urls`.
+- **Rate limiting** on both the public webhook endpoint and preference creation.
+- **Redaction.** Tokens, card data, emails and identification numbers are
+  stripped from anything written to the database or the log.
+
+## Replacing the earlier `enrol_mp_checkoutpro`
+
+This component supersedes `enrol_mp_checkoutpro`, whose plugin name contained an
+underscore that core cannot carry. Uninstall the old one first — *Site
+administration ▸ Plugins ▸ Plugins overview ▸ Uninstall* — and export its
+transaction report beforehand if you need the payment history, because
+uninstalling drops its tables. Then remove `enrol/mp_checkoutpro` from disk and
+install this plugin. There is no upgrade path and no shared data.
+
+If the old plugin left rows behind in the `enrol` table under the name `mp`,
+`php enrol/mpcheckoutpro/cli/diagnose.php --fixorphans` removes them.
+
+## Installation
+
+1. Copy this directory to `enrol/mpcheckoutpro` inside your Moodle
+   installation (`public/enrol/mpcheckoutpro` on Moodle 5.x source trees).
+2. Visit **Site administration ▸ Notifications** and complete the upgrade.
+3. Enable the method in **Site administration ▸ Plugins ▸ Enrolments ▸ Manage
+   enrol plugins**.
+4. Configure the credentials in **Site administration ▸ Plugins ▸ Enrolments ▸
+   Mercado Pago Checkout Pro**.
+
+The official Mercado Pago PHP SDK is bundled under `vendor/mercadopago`, so no
+Composer step is required. If you prefer to manage it yourself, run
+`composer install --no-dev` inside the plugin directory; a
+`vendor/autoload.php` there takes precedence over the bundled copy.
+
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full production checklist.
+
+## Configuration
+
+### Site level
+
+| Group | What it covers |
+| --- | --- |
+| Credentials | Production and test access token, public key and webhook secret; environment switch; whether courses may supply their own credentials |
+| Webhooks | Signature enforcement and tolerance, deferred processing, rate limits, reconciliation limits |
+| Preference | `auto_return`, `binary_mode`, `statement_descriptor`, expiry, installments, excluded payment types and methods, custom metadata |
+| Split payments | Marketplace application client id/secret and the identifier sent as `marketplace` |
+| Behaviour | Holding enrolments for pending payments, refund/chargeback action, notifications, welcome message default, expiry action, retention |
+| Diagnostics | Verbose logging, API timeout and retries, integrator and platform ids |
+| Instance defaults | Status, cost, currency, role and duration applied to new instances |
+
+Credentials can also come from `config.php` or the environment, which is the
+recommended pattern when the database is shared with less trusted environments:
+
+```php
+// config.php
+$CFG->enrol_mpcheckoutpro = [
+    'accesstoken'   => getenv('MP_CHECKOUTPRO_ACCESS_TOKEN'),
+    'publickey'     => getenv('MP_CHECKOUTPRO_PUBLIC_KEY'),
+    'webhooksecret' => getenv('MP_CHECKOUTPRO_WEBHOOK_SECRET'),
+];
+```
+
+Resolution order is: per-instance credentials → `config.php`/environment → the
+site settings stored in the database.
+
+### Course level
+
+Each enrolment instance sets its own price, currency, role, duration, start and
+end dates, group, and enrolment cap, plus per-course overrides for installments,
+excluded payment types and methods, item description, metadata, holding
+enrolments, notifications, the refund action and, when split payments are on,
+the marketplace commission and seller.
+
+It also carries a **course welcome message**, behaving exactly as in
+`enrol_self`: pick who it comes from, optionally write your own text with the
+standard placeholders (`{$a->firstname}`, `{$a->coursename}`, `{$a->courselink}`,
+…), and it is sent once, when the payment is approved and the enrolment becomes
+active — never for a payment that is still pending. Core's "from the key holder"
+option is not offered, because a paid enrolment has no key holder.
+
+## Endpoints
+
+| File | Reachable by | Purpose |
+| --- | --- | --- |
+| `checkout.php` | logged-in user, sesskey | Creates the preference and redirects to Mercado Pago |
+| `return.php` | logged-in user | The three `back_urls`; re-queries the API and shows the result |
+| `webhook.php` | Mercado Pago, no session | Receives, verifies and dispatches notifications |
+| `oauth.php` | manager, sesskey | Connects a marketplace seller through OAuth |
+| `transactions.php` | `enrol/mpcheckoutpro:viewtransactions` | Per-course payment report |
+| `cli/diagnose.php` | CLI | Checks the whole install and says why the method may not appear |
+
+## Documentation
+
+- [`docs/API.md`](docs/API.md) — every Mercado Pago endpoint and field the plugin uses, with the source in the official documentation.
+- [`docs/TESTING.md`](docs/TESTING.md) — unit tests, Behat and end-to-end testing with Mercado Pago test users.
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — production checklist and hardening.
+- [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — symptoms, causes and fixes.
+- [`docs/HUMAN-TASKS.md`](docs/HUMAN-TASKS.md) — the prioritised list of things only a human can do: credentials, webhook registration, business decisions, and the known gaps.
+- [`CHANGELOG.md`](CHANGELOG.md) — release history.
+
+## References
+
+- [Checkout Pro overview](https://www.mercadopago.com.ar/developers/en/reference/online-payments/checkout-pro/overview)
+- [Create preference](https://www.mercadopago.com.br/developers/en/reference/online-payments/checkout-pro/preferences/create-preference/post)
+- [Configure return URLs](https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls)
+- [Webhooks](https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks)
+- [Mercado Pago PHP SDK](https://github.com/mercadopago/sdk-php)
+- [Moodle enrolment plugin API](https://moodledev.io/docs/5.2/apis/plugintypes/enrol)

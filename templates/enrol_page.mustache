@@ -1,0 +1,72 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template enrol_mpcheckoutpro/enrol_page
+
+    Body of the enrolment widget shown on the course enrolment page.
+
+    Context variables required for this template:
+    * cost - formatted price including the currency symbol
+    * currency - ISO-4217 currency code
+    * description - optional description of what is being bought
+    * installments - maximum installments offered, 0 to hide
+    * testmode - true when the site is using Mercado Pago test credentials
+    * haspending - true when the user already has a payment being processed
+    * pendingstatus - label of that pending payment
+
+    Example context (json):
+    {
+        "cost": "$ 15.000,00",
+        "currency": "ARS",
+        "description": "Full access for 12 months",
+        "installments": 6,
+        "testmode": false,
+        "haspending": false,
+        "pendingstatus": ""
+    }
+}}
+<div class="enrol-mpcheckoutpro">
+    {{#testmode}}
+        <div class="alert alert-warning" role="alert">
+            {{#str}} testmodenotice, enrol_mpcheckoutpro {{/str}}
+        </div>
+    {{/testmode}}
+
+    {{#haspending}}
+        <div class="alert alert-info" role="status">
+            {{#str}} pendingpaymentnotice, enrol_mpcheckoutpro, {{pendingstatus}} {{/str}}
+        </div>
+    {{/haspending}}
+
+    <p class="enrol-mpcheckoutpro-cost h4 mb-2">
+        {{#str}} labelvalue, core, {"label": {{#quote}}{{#str}} cost, enrol_mpcheckoutpro {{/str}}{{/quote}}, "value": {{#quote}}{{cost}}{{/quote}} }{{/str}}
+    </p>
+
+    {{#description}}
+        <p class="enrol-mpcheckoutpro-description text-muted">{{description}}</p>
+    {{/description}}
+
+    {{#installments}}
+        <p class="enrol-mpcheckoutpro-installments">
+            {{#str}} installmentsavailable, enrol_mpcheckoutpro, {{installments}} {{/str}}
+        </p>
+    {{/installments}}
+
+    <p class="enrol-mpcheckoutpro-notice small text-muted mb-0">
+        {{#str}} redirectnotice, enrol_mpcheckoutpro {{/str}}
+    </p>
+</div>
