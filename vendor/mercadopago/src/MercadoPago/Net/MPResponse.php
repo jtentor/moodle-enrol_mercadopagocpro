@@ -25,9 +25,7 @@ class MPResponse
         return $this->status_code;
     }
 
-    /**
-     * @return array<string,mixed> Decoded JSON body. 
-     */
+    /** @return array<string,mixed> Decoded JSON body. */
     public function getContent(): array
     {
         return $this->content;

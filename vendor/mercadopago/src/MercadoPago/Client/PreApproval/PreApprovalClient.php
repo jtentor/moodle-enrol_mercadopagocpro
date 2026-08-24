@@ -29,9 +29,7 @@ final class PreApprovalClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/preapproval/search";
 
-    /**
-     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
-     */
+    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -40,12 +38,12 @@ final class PreApprovalClient extends MercadoPagoClient
     /**
      * Creates a new subscription (pre-approval).
      *
-     * @param  array<string,mixed> $request         Subscription data (payer_email, auto_recurring, back_url, etc.).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param array<string,mixed> $request Subscription data (payer_email, auto_recurring, back_url, etc.).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PreApproval The created subscription resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/create-preapproval/post
+     * @see https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/create-preapproval/post
      */
     public function create(array $request, ?RequestOptions $request_options = null): PreApproval
     {
@@ -58,12 +56,12 @@ final class PreApprovalClient extends MercadoPagoClient
     /**
      * Retrieves a subscription by its ID.
      *
-     * @param  string              $id              Subscription (pre-approval) ID.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param string $id Subscription (pre-approval) ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PreApproval The found subscription resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/get-preapproval/get
+     * @see https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/get-preapproval/get
      */
     public function get(string $id, ?RequestOptions $request_options = null): PreApproval
     {
@@ -75,13 +73,13 @@ final class PreApprovalClient extends MercadoPagoClient
     /**
      * Updates an existing subscription.
      *
-     * @param  string              $id              Subscription (pre-approval) ID.
-     * @param  array<string,mixed> $request         Fields to update (status, auto_recurring, etc.).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param string $id Subscription (pre-approval) ID.
+     * @param array<string,mixed> $request Fields to update (status, auto_recurring, etc.).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PreApproval The updated subscription resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/update-preapproval/put
+     * @see https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/update-preapproval/put
      */
     public function update(string $id, array $request, ?RequestOptions $request_options = null): PreApproval
     {
@@ -94,12 +92,12 @@ final class PreApprovalClient extends MercadoPagoClient
     /**
      * Searches subscriptions with pagination and filters.
      *
-     * @param  MPSearchRequest     $request         Search criteria (limit, offset, filters like status, payer_id).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param MPSearchRequest $request Search criteria (limit, offset, filters like status, payer_id).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PreApprovalSearch Paginated search results.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/search-preapproval/get
+     * @see https://www.mercadopago.com/developers/en/reference/online-payments/subscriptions/search-preapproval/get
      */
     public function search(MPSearchRequest $request, ?RequestOptions $request_options = null): PreApprovalSearch
     {
@@ -113,8 +111,8 @@ final class PreApprovalClient extends MercadoPagoClient
     /**
      * Returns a Generator that lazily fetches all pages of pre-approvals matching the search criteria.
      *
-     * @param  MPSearchRequest     $request         Search filters and pagination seed.
-     * @param  RequestOptions|null $request_options Per-request overrides.
+     * @param MPSearchRequest $request Search filters and pagination seed.
+     * @param RequestOptions|null $request_options Per-request overrides.
      * @return \Generator Yields individual PreApproval items.
      */
     public function searchAll(MPSearchRequest $request, ?RequestOptions $request_options = null): \Generator

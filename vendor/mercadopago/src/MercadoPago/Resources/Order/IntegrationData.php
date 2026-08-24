@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -18,34 +16,22 @@ use MercadoPago\Serialization\Mapper;
  */
 class IntegrationData
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Identifier of the corporation that owns the integration. 
-     */
+    /** Identifier of the corporation that owns the integration. */
     public ?string $corporation_id;
 
-    /**
-     * MercadoPago application ID used to create the order. 
-     */
+    /** MercadoPago application ID used to create the order. */
     public ?string $application_id;
 
-    /**
-     * Certified integrator identifier assigned by MercadoPago. 
-     */
+    /** Certified integrator identifier assigned by MercadoPago. */
     public ?string $integrator_id;
 
-    /**
-     * E-commerce platform identifier (e.g., for WooCommerce, Magento, etc.). 
-     */
+    /** E-commerce platform identifier (e.g., for WooCommerce, Magento, etc.). */
     public ?string $platform_id;
 
-    /**
-     * Sponsor details when the order is created on behalf of another account. Maps to {@see Sponsor}. 
-     */
+    /** Sponsor details when the order is created on behalf of another account. Maps to {@see Sponsor}. */
     public array|object|null $sponsor;
 
     private $map = [

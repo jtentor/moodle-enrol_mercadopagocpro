@@ -9,8 +9,6 @@ namespace MercadoPago\Client\Customer;
  */
 class CustomerCreateRequest
 {
-    /**
-     * Customer's email address. Must be unique across the merchant's customer base. 
-     */
+    /** Customer's email address. Must be unique across the merchant's customer base. */
     public string $email;
 }

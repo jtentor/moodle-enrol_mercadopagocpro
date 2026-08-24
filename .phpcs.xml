@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="enrol_mpcheckoutpro">
+    <description>Moodle coding style for the Mercado Pago Checkout Pro enrolment plugin.</description>
+
+    <!-- Check this directory by default. -->
+    <file>.</file>
+
+    <!--
+        The bundled Mercado Pago SDK is third party code. It must stay byte for
+        byte identical to the upstream release so it can be verified and upgraded,
+        and thirdpartylibs.xml declares it unmodified. Never let phpcbf near it.
+    -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+
+    <!-- Nothing generated belongs in a style check either. -->
+    <exclude-pattern>*/amd/build/*</exclude-pattern>
+    <exclude-pattern>.vscode/*</exclude-pattern>
+
+    <!--
+        moodle-extra is the standard plus the recommended best practices, which is
+        what Moodle suggests for new code. Use "moodle" for the required rules only.
+    -->
+    <rule ref="moodle-extra">
+        <!--
+            PEAR.Files.IncludingFile rewrites a conditional require_once() into
+            include_once, which is NOT equivalent: include_once only warns when the
+            file is missing, so a broken include surfaces later as an undefined
+            function instead of failing where the problem is. Moodle core uses
+            require_once() for libraries everywhere, including inside conditionals.
+            Turning this sniff off keeps phpcbf from silently weakening the code.
+        -->
+        <exclude name="PEAR.Files.IncludingFile"/>
+    </rule>
+
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+</ruleset>

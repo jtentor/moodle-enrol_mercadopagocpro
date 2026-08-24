@@ -33,12 +33,11 @@ class MercadoPagoClient
      * execution to the HTTP client. This is the central dispatch point used by
      * all concrete client methods.
      *
-     * @param  string                   $uri             API path (e.g., "/v1/payments").
-     * @param  string                   $method          HTTP verb — one of {@see HttpMethod}
-     *                                                   constants.
-     * @param  string|null              $payload         JSON-encoded request body.
-     * @param  array<string,mixed>|null $query_params    Query-string parameters.
-     * @param  RequestOptions|null      $request_options Per-request overrides (access token, custom headers, timeout).
+     * @param string              $uri             API path (e.g., "/v1/payments").
+     * @param string              $method          HTTP verb — one of {@see HttpMethod} constants.
+     * @param string|null         $payload         JSON-encoded request body.
+     * @param array<string,mixed>|null $query_params Query-string parameters.
+     * @param RequestOptions|null $request_options Per-request overrides (access token, custom headers, timeout).
      * @return MPResponse Parsed API response.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

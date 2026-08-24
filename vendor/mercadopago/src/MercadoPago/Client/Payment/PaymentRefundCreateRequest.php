@@ -9,8 +9,6 @@ namespace MercadoPago\Client\Payment;
  */
 class PaymentRefundCreateRequest
 {
-    /**
-     * Amount to refund. Must be less than or equal to the remaining payment balance. 
-     */
+    /** Amount to refund. Must be less than or equal to the remaining payment balance. */
     public float $amount;
 }

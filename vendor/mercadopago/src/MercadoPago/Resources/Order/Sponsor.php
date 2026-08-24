@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,8 +14,6 @@ namespace MercadoPago\Resources\Order;
  */
 class Sponsor
 {
-    /**
-     * MercadoPago account ID of the sponsor. 
-     */
+    /** MercadoPago account ID of the sponsor. */
     public ?string $id;
 }

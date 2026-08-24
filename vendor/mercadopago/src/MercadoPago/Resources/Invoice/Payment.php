@@ -10,18 +10,12 @@ namespace MercadoPago\Resources\Invoice;
  */
 class Payment
 {
-    /**
-     * The ID of the payment. 
-     */
+    /** The ID of the payment. */
     public ?int $id;
 
-    /**
-     * Status of the invoice. 
-     */
+    /** Status of the invoice. */
     public ?string $status;
 
-    /**
-     * Status detail. 
-     */
+    /** Status detail. */
     public ?string $status_detail;
 }

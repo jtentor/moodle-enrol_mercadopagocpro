@@ -13,28 +13,18 @@ namespace MercadoPago\Resources\IdentificationType;
  */
 class IdentificationTypeListResult
 {
-    /**
-     * Identification type code (e.g., "CPF", "DNI", "CURP"). 
-     */
+    /** Identification type code (e.g., "CPF", "DNI", "CURP"). */
     public ?string $id;
 
-    /**
-     * Human-readable name of the identification type (e.g., "CPF", "DNI", "CURP"). 
-     */
+    /** Human-readable name of the identification type (e.g., "CPF", "DNI", "CURP"). */
     public ?string $name;
 
-    /**
-     * Category of identification document (e.g., "number"). 
-     */
+    /** Category of identification document (e.g., "number"). */
     public ?string $type;
 
-    /**
-     * Minimum number of characters allowed for this identification number. 
-     */
+    /** Minimum number of characters allowed for this identification number. */
     public ?int $min_length;
 
-    /**
-     * Maximum number of characters allowed for this identification number. 
-     */
+    /** Maximum number of characters allowed for this identification number. */
     public ?int $max_length;
 }

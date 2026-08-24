@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -21,24 +19,16 @@ use MercadoPago\Serialization\Mapper;
  */
 class Transactions extends MPResource
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Payments associated with this order. Each element maps to {@see Payment}. 
-     */
+    /** Payments associated with this order. Each element maps to {@see Payment}. */
     public ?array $payments;
 
-    /**
-     * Refunds processed for this order's payments. Each element maps to {@see Refund}. 
-     */
+    /** Refunds processed for this order's payments. Each element maps to {@see Refund}. */
     public ?array $refunds;
 
-    /**
-     * Chargebacks filed against this order's payments. Each element maps to {@see Chargeback}. 
-     */
+    /** Chargebacks filed against this order's payments. Each element maps to {@see Chargeback}. */
     public ?array $chargebacks;
 
     private $map = [

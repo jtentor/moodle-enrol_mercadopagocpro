@@ -9,28 +9,18 @@ namespace MercadoPago\Client\OAuth;
  */
 class OAuthCreateRequest
 {
-    /**
-     * Your application's client secret. 
-     */
+    /** Your application's client secret. */
     public string $client_secret;
 
-    /**
-     * Your application's client ID. 
-     */
+    /** Your application's client ID. */
     public string $client_id;
 
-    /**
-     * OAuth grant type. Fixed to "authorization_code" for this flow. 
-     */
+    /** OAuth grant type. Fixed to "authorization_code" for this flow. */
     public string $grant_type = "authorization_code";
 
-    /**
-     * Authorization code received from the OAuth redirect. 
-     */
+    /** Authorization code received from the OAuth redirect. */
     public string $code;
 
-    /**
-     * Must match the redirect_uri used when building the authorization URL. 
-     */
+    /** Must match the redirect_uri used when building the authorization URL. */
     public string $redirect_uri;
 }

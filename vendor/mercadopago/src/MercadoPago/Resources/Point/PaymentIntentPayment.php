@@ -11,18 +11,12 @@ namespace MercadoPago\Resources\Point;
  */
 class PaymentIntentPayment
 {
-    /**
-     * Number of installments for the payment. 
-     */
+    /** Number of installments for the payment. */
     public ?int $installments;
 
-    /**
-     * Cost of installments. 
-     */
+    /** Cost of installments. */
     public ?string $installments_cost;
 
-    /**
-     * Type of the payment. 
-     */
+    /** Type of the payment. */
     public ?string $type;
 }

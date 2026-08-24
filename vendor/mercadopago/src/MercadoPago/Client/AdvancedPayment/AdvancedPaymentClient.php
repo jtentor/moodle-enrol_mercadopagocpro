@@ -31,9 +31,7 @@ final class AdvancedPaymentClient extends MercadoPagoClient
 
     private const URL_DISBURSES = "/v1/advanced_payments/%s/disburses";
 
-    /**
-     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
-     */
+    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -42,8 +40,8 @@ final class AdvancedPaymentClient extends MercadoPagoClient
     /**
      * Creates a new advanced (split) payment.
      *
-     * @param  array<string,mixed> $request         Advanced payment data including payments, disbursements, and payer.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param array<string,mixed> $request Advanced payment data including payments, disbursements, and payer.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The created advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -59,8 +57,8 @@ final class AdvancedPaymentClient extends MercadoPagoClient
     /**
      * Retrieves an advanced payment by its ID.
      *
-     * @param  int                 $id              Advanced payment ID.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param int $id Advanced payment ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The found advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -76,8 +74,8 @@ final class AdvancedPaymentClient extends MercadoPagoClient
     /**
      * Searches advanced payments with pagination and filters.
      *
-     * @param  MPSearchRequest     $request         Search criteria.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param MPSearchRequest $request Search criteria.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPaymentSearch Paginated search results.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -94,9 +92,9 @@ final class AdvancedPaymentClient extends MercadoPagoClient
     /**
      * Updates an existing advanced payment.
      *
-     * @param  int                 $id              Advanced payment ID.
-     * @param  array<string,mixed> $request         Fields to update.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param int $id Advanced payment ID.
+     * @param array<string,mixed> $request Fields to update.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The updated advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -114,8 +112,8 @@ final class AdvancedPaymentClient extends MercadoPagoClient
      *
      * Sends `{"capture": true}` to finalise a two-step payment flow.
      *
-     * @param  int                 $id              Advanced payment ID.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param int $id Advanced payment ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The captured advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -134,8 +132,8 @@ final class AdvancedPaymentClient extends MercadoPagoClient
      *
      * Only payments that have not yet been captured can be cancelled.
      *
-     * @param  int                 $id              Advanced payment ID.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param int $id Advanced payment ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The cancelled advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -154,9 +152,9 @@ final class AdvancedPaymentClient extends MercadoPagoClient
      *
      * Allows the marketplace to control when funds become available to sellers.
      *
-     * @param  int                 $id              Advanced payment ID.
-     * @param  string              $release_date    New release date in ISO 8601 format (e.g. "2025-12-31 00:00:00.000").
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param int $id Advanced payment ID.
+     * @param string $release_date New release date in ISO 8601 format (e.g. "2025-12-31 00:00:00.000").
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return AdvancedPayment The updated advanced payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

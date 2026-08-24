@@ -15,8 +15,8 @@ class MPSearchRequest
     private const OFFSET_PARAM = "offset";
 
     /**
-     * @param int|null            $limit   Maximum number of results to return.
-     * @param int|null            $offset  Zero-based offset for pagination.
+     * @param int|null   $limit   Maximum number of results to return.
+     * @param int|null   $offset  Zero-based offset for pagination.
      * @param array<string,mixed> $filters Key-value pairs appended as query-string parameters (e.g., ['status' => 'approved']).
      */
     public function __construct(
@@ -36,9 +36,7 @@ class MPSearchRequest
         return $this->offset;
     }
 
-    /**
-     * @return array<string,mixed> 
-     */
+    /** @return array<string,mixed> */
     public function getFilters(): array
     {
         return $this->filters;

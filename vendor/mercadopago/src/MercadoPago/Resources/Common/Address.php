@@ -14,59 +14,37 @@ use MercadoPago\Serialization\Mapper;
  */
 class Address
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * Unique identifier of the address. 
-     */
+    /** Unique identifier of the address. */
     public ?string $id;
 
-    /**
-     * Postal/ZIP code of the address. 
-     */
+    /** Postal/ZIP code of the address. */
     public ?string $zip_code;
 
-    /**
-     * Name of the street. 
-     */
+    /** Name of the street. */
     public ?string $street_name;
 
-    /**
-     * House or building number on the street. 
-     */
+    /** House or building number on the street. */
     public ?string $street_number;
 
-    /**
-     * Neighborhood or district name. 
-     */
+    /** Neighborhood or district name. */
     public ?string $neighborhood;
 
-    /**
-     * State or province name. 
-     */
+    /** State or province name. */
     public ?string $state;
 
-    /**
-     * Additional address details (e.g. apartment, suite, floor). 
-     */
+    /** Additional address details (e.g. apartment, suite, floor). */
     public ?string $complement;
 
-    /**
-     * Floor number within a building. 
-     */
+    /** Floor number within a building. */
     public ?string $floor;
 
-    /**
-     * Apartment or unit identifier within a floor. 
-     */
+    /** Apartment or unit identifier within a floor. */
     public ?string $apartment;
 
-    /**
-     * @var City|array|null City information associated with this address. 
-     */
+    /** @var City|array|null City information associated with this address. */
     public array|object|null $city;
 
     private $map = [

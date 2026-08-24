@@ -9,14 +9,10 @@ namespace MercadoPago\Client\Point;
  */
 class PointPaymentIntentListRequest
 {
-    /**
-     * Start date for the filter range (ISO 8601 format). 
-     */
+    /** Start date for the filter range (ISO 8601 format). */
     public string $start_date;
 
-    /**
-     * End date for the filter range (ISO 8601 format). 
-     */
+    /** End date for the filter range (ISO 8601 format). */
     public string $end_date;
 
     public function getParameters(): array

@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 
- */
+/** API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,13 +14,9 @@ namespace MercadoPago\Resources\Order;
  */
 class PaymentMethodDiscount
 {
-    /**
-     * Payment method type this discount applies to (e.g., "credit_card", "debit_card"). 
-     */
+    /** Payment method type this discount applies to (e.g., "credit_card", "debit_card"). */
     public ?string $type;
 
-    /**
-     * Discounted total amount when this payment method is used. 
-     */
+    /** Discounted total amount when this payment method is used. */
     public ?string $new_total_amount;
 }

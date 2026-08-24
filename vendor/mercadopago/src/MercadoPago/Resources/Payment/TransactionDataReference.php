@@ -10,8 +10,6 @@ namespace MercadoPago\Resources\Payment;
  */
 class TransactionDataReference
 {
-    /**
-     * Identifier of the original transaction used as the stored credential reference. 
-     */
+    /** Identifier of the original transaction used as the stored credential reference. */
     public ?string $id;
 }

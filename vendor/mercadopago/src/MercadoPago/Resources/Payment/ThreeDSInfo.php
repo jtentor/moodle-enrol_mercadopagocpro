@@ -11,13 +11,9 @@ namespace MercadoPago\Resources\Payment;
  */
 class ThreeDSInfo
 {
-    /**
-     * URL to the 3DS challenge page where the cardholder completes authentication. 
-     */
+    /** URL to the 3DS challenge page where the cardholder completes authentication. */
     public ?string $external_resource_url;
 
-    /**
-     * Base64-encoded Challenge Request (CReq) message for the 3DS flow. 
-     */
+    /** Base64-encoded Challenge Request (CReq) message for the 3DS flow. */
     public ?string $creq;
 }

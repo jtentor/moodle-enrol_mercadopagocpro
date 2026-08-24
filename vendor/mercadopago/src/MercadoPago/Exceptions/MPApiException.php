@@ -38,17 +38,13 @@ class MPApiException extends Exception
         $this->status_code = $response->getStatusCode();
     }
 
-    /**
-     * Returns the full API response including the decoded error body. 
-     */
+    /** Returns the full API response including the decoded error body. */
     public function getApiResponse(): MPResponse
     {
         return $this->api_response;
     }
 
-    /**
-     * Returns the HTTP status code from the API response (e.g., 400, 404, 500). 
-     */
+    /** Returns the HTTP status code from the API response (e.g., 400, 404, 500). */
     public function getStatusCode(): int
     {
         return $this->status_code;

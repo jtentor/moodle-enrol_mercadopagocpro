@@ -13,19 +13,13 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentSearch extends MPResource
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * @var \MercadoPago\Resources\Common\Paging|array|null Pagination metadata (total, limit, offset). 
-     */
+    /** @var \MercadoPago\Resources\Common\Paging|array|null Pagination metadata (total, limit, offset). */
     public array|object|null $paging;
 
-    /**
-     * @var PaymentSearchResult[]|array|null List of payments matching the search criteria. 
-     */
+    /** @var PaymentSearchResult[]|array|null List of payments matching the search criteria. */
     public array|object|null $results;
 
     private $map = [

@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -19,29 +17,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class TransactionSecurity
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Unique identifier of the 3DS authentication transaction. 
-     */
+    /** Unique identifier of the 3DS authentication transaction. */
     public ?string $id;
 
-    /**
-     * Authentication validation status (e.g., "automatic", "manual"). 
-     */
+    /** Authentication validation status (e.g., "automatic", "manual"). */
     public ?string $validation;
 
-    /**
-     * Whether liability shifted to the issuer after 3DS authentication (e.g., "yes", "no"). 
-     */
+    /** Whether liability shifted to the issuer after 3DS authentication (e.g., "yes", "no"). */
     public ?string $liability_shift;
 
-    /**
-     * Challenge URL where the buyer must complete 3DS authentication. 
-     */
+    /** Challenge URL where the buyer must complete 3DS authentication. */
     public ?string $url;
 
     /**

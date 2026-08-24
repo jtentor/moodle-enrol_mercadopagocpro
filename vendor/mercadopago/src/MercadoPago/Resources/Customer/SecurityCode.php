@@ -11,14 +11,10 @@ namespace MercadoPago\Resources\Customer;
  */
 class SecurityCode
 {
-    /**
-     * Number of digits in the security code (typically 3 or 4). 
-     */
+    /** Number of digits in the security code (typically 3 or 4). */
     public ?int $length;
 
-    /**
-     * Physical location of the security code on the card (e.g., "back", "front"). 
-     */
+    /** Physical location of the security code on the card (e.g., "back", "front"). */
     public ?string $card_location;
 
 }

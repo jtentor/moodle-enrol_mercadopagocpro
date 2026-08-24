@@ -9,13 +9,9 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ReceiverAddressCountry
 {
-    /**
-     * Country ID. 
-     */
+    /** Country ID. */
     public ?string $id;
 
-    /**
-     * Country name. 
-     */
+    /** Country name. */
     public ?string $name;
 }

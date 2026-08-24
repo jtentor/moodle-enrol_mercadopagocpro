@@ -1104,7 +1104,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
     public function restore_group_member($instance, $groupid, $userid)
     {
         global $CFG;
-        include_once $CFG->dirroot . '/group/lib.php';
+        require_once $CFG->dirroot . '/group/lib.php';
         groups_add_member($groupid, $userid);
         unset($instance);
     }

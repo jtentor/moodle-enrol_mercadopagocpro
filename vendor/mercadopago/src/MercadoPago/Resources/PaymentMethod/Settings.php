@@ -17,24 +17,16 @@ use MercadoPago\Serialization\Mapper;
  */
 class Settings
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Setting bin. 
-     */
+    /** Setting bin. */
     public array|object|null $bin;
 
-    /**
-     * Setting card number. 
-     */
+    /** Setting card number. */
     public array|object|null $card_number;
 
-    /**
-     * Setting security code. 
-     */
+    /** Setting security code. */
     public array|object|null $security_code;
 
     private $map = [

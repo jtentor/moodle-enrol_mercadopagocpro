@@ -46,9 +46,37 @@ Mercado Pago checkout itself is out of Behat's reach.
 
 ### Code checks
 
+Run `phpcs` and `phpcbf` from **inside the plugin directory** so they pick up the
+bundled `.phpcs.xml`, which is the only configuration that is safe here:
+
 ```bash
-vendor/bin/phpcs --standard=moodle enrol/mpcheckoutpro --ignore=enrol/mpcheckoutpro/vendor
+cd enrol/mpcheckoutpro
+../../vendor/bin/phpcs           # uses .phpcs.xml
+../../vendor/bin/phpcbf          # same rules, applies the fixes
+cd ../..
 php admin/cli/check_database_schema.php
+```
+
+`.phpcs.xml` does two things that matter, and running `phpcbf` without it will
+damage the plugin:
+
+- **It excludes `vendor/`.** The Mercado Pago SDK is third party code and
+  `thirdpartylibs.xml` declares it unmodified. `phpcbf` reformats 246 of its 250
+  files — cosmetic, but it destroys the byte identity that makes the bundle
+  auditable and upgradeable.
+- **It disables `PEAR.Files.IncludingFile`.** That sniff rewrites a conditional
+  `require_once` into `include_once`, which is not equivalent: `include_once`
+  only warns when the file is missing, so a broken library path surfaces much
+  later as an undefined function instead of failing at the include. Moodle core
+  uses `require_once` for libraries everywhere, conditionals included.
+
+If you prefer to pass the standard explicitly, the equivalent is:
+
+```bash
+vendor/bin/phpcs --standard=moodle-extra \
+  --exclude=PEAR.Files.IncludingFile \
+  --ignore=enrol/mpcheckoutpro/vendor \
+  enrol/mpcheckoutpro
 ```
 
 ## Manual testing with Mercado Pago test credentials

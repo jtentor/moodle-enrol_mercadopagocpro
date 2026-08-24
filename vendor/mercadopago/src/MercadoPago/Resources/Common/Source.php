@@ -12,18 +12,12 @@ namespace MercadoPago\Resources\Common;
  */
 class Source
 {
-    /**
-     * Unique identifier of the source actor. 
-     */
+    /** Unique identifier of the source actor. */
     public ?string $id;
 
-    /**
-     * Display name of the source actor. 
-     */
+    /** Display name of the source actor. */
     public ?string $name;
 
-    /**
-     * Type of source (e.g. "collector", "buyer", "admin"). 
-     */
+    /** Type of source (e.g. "collector", "buyer", "admin"). */
     public ?string $type;
 }

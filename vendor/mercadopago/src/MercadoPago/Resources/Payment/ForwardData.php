@@ -13,19 +13,13 @@ use MercadoPago\Serialization\Mapper;
  */
 class ForwardData
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * @var \MercadoPago\Resources\Common\SubMerchant|array|null Sub-merchant identification and address data for PayFac flows. 
-     */
+    /** @var \MercadoPago\Resources\Common\SubMerchant|array|null Sub-merchant identification and address data for PayFac flows. */
     public array|object|null $sub_merchant;
 
-    /**
-     * @var NetworkTransactionData|array|null Network transaction identifiers for recurring/installment card payments. 
-     */
+    /** @var NetworkTransactionData|array|null Network transaction identifiers for recurring/installment card payments. */
     public array|object|null $network_transaction_data;
 
     private $map = [

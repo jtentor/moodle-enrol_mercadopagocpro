@@ -11,8 +11,6 @@ namespace MercadoPago\Resources\Payment;
  */
 class NetworkTransactionData
 {
-    /**
-     * Unique transaction identifier assigned by the card network for traceability. 
-     */
+    /** Unique transaction identifier assigned by the card network for traceability. */
     public ?string $network_transaction_id;
 }

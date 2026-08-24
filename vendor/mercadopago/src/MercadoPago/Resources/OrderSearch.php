@@ -15,19 +15,13 @@ use MercadoPago\Serialization\Mapper;
  */
 class OrderSearch extends MPResource
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Pagination metadata (offset, limit, total). Maps to {@see \MercadoPago\Resources\Common\Paging}. 
-     */
+    /** Pagination metadata (offset, limit, total). Maps to {@see \MercadoPago\Resources\Common\Paging}. */
     public array|object|null $paging;
 
-    /**
-     * Array of {@see Order} resources matching the search criteria. 
-     */
+    /** Array of {@see Order} resources matching the search criteria. */
     public array|object|null $data;
 
     private $map = [

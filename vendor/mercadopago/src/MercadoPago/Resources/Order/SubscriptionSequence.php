@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,13 +14,9 @@ namespace MercadoPago\Resources\Order;
  */
 class SubscriptionSequence
 {
-    /**
-     * Current payment number in the subscription series (e.g., 3 for the third payment). 
-     */
+    /** Current payment number in the subscription series (e.g., 3 for the third payment). */
     public ?int $number;
 
-    /**
-     * Total number of planned payments in the subscription (null if open-ended). 
-     */
+    /** Total number of planned payments in the subscription (null if open-ended). */
     public ?int $total;
 }

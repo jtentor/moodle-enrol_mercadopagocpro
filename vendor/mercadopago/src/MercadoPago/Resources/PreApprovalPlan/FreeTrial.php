@@ -13,18 +13,12 @@ use MercadoPago\Serialization\Mapper;
  */
 class FreeTrial
 {
-    /**
-     * Frequency. 
-     */
+    /** Frequency. */
     public ?int $frequency;
 
-    /**
-     * Frequency type. 
-     */
+    /** Frequency type. */
     public ?string $frequency_type;
 
-    /**
-     * First invoice offset. 
-     */
+    /** First invoice offset. */
     public ?int $first_invoice_offset;
 }

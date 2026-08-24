@@ -15,7 +15,7 @@ interface MPHttpClient
     /**
      * Sends an HTTP request to the MercadoPago API and returns the parsed response.
      *
-     * @param  MPRequest $request Fully-built request including URI, method, headers, and payload.
+     * @param MPRequest $request Fully-built request including URI, method, headers, and payload.
      * @return MPResponse Parsed API response with status code and decoded JSON body.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception When a transport-level error occurs (e.g., network timeout).

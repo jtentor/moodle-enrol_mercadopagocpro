@@ -38,9 +38,7 @@ final class PointClient extends MercadoPagoClient
 
     private const DEVICE_WITH_ID_URL = "/point/integration-api/devices/%s";
 
-    /**
-     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
-     */
+    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -51,9 +49,9 @@ final class PointClient extends MercadoPagoClient
      *
      * The device will display the payment request for the buyer to tap/swipe their card.
      *
-     * @param  string              $device_id       Target Point device ID.
-     * @param  array<string,mixed> $request         Payment intent data (amount, description, etc.).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param string $device_id Target Point device ID.
+     * @param array<string,mixed> $request Payment intent data (amount, description, etc.).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentIntent The created payment intent resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -69,8 +67,8 @@ final class PointClient extends MercadoPagoClient
     /**
      * Retrieves a payment intent by its ID.
      *
-     * @param  string              $payment_intent_id Payment intent ID.
-     * @param  RequestOptions|null $request_options   Per-request configuration overrides.
+     * @param string $payment_intent_id Payment intent ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentIntent The found payment intent resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -86,9 +84,9 @@ final class PointClient extends MercadoPagoClient
     /**
      * Cancels a pending payment intent on a Point device.
      *
-     * @param  string              $device_id         Device ID where the intent was sent.
-     * @param  string              $payment_intent_id Payment intent ID to cancel.
-     * @param  RequestOptions|null $request_options   Per-request configuration overrides.
+     * @param string $device_id Device ID where the intent was sent.
+     * @param string $payment_intent_id Payment intent ID to cancel.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentIntentCancel Cancellation confirmation resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -104,8 +102,8 @@ final class PointClient extends MercadoPagoClient
     /**
      * Lists payment intent events within a date range.
      *
-     * @param  PointPaymentIntentListRequest $request         Date range filter (start_date, end_date).
-     * @param  RequestOptions|null           $request_options Per-request configuration overrides.
+     * @param PointPaymentIntentListRequest $request Date range filter (start_date, end_date).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentIntentList Paginated list of payment intent events.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -121,8 +119,8 @@ final class PointClient extends MercadoPagoClient
     /**
      * Retrieves the current status and event history of a payment intent.
      *
-     * @param  string              $payment_intent_id Payment intent ID.
-     * @param  RequestOptions|null $request_options   Per-request configuration overrides.
+     * @param string $payment_intent_id Payment intent ID.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentIntentStatus Status and events for the payment intent.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -138,8 +136,8 @@ final class PointClient extends MercadoPagoClient
     /**
      * Lists Point devices associated with the account.
      *
-     * @param  MPSearchRequest     $request         Search criteria (pagination and filters).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param MPSearchRequest $request Search criteria (pagination and filters).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PointDevices Collection of Point device resources.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -156,9 +154,9 @@ final class PointClient extends MercadoPagoClient
     /**
      * Changes the operating mode of a Point device (e.g., PDV, STANDALONE).
      *
-     * @param  string                          $device_id       Device ID.
-     * @param  PointDeviceOperatingModeRequest $request         New operating mode configuration.
-     * @param  RequestOptions|null             $request_options Per-request configuration overrides.
+     * @param string $device_id Device ID.
+     * @param PointDeviceOperatingModeRequest $request New operating mode configuration.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return PointDeviceOperatingMode Updated device operating mode resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

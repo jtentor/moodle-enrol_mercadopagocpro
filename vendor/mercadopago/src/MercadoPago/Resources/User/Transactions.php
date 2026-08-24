@@ -15,34 +15,22 @@ use MercadoPago\Serialization\Mapper;
  */
 class Transactions
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * The number of canceled transactions. 
-     */
+    /** The number of canceled transactions. */
     public ?int $canceled;
 
-    /**
-     * The number of completed transactions. 
-     */
+    /** The number of completed transactions. */
     public ?int $completed;
 
-    /**
-     * The transaction period (e.g., "historic"). 
-     */
+    /** The transaction period (e.g., "historic"). */
     public ?string $period;
 
-    /**
-     * User ratings and feedback statistics. 
-     */
+    /** User ratings and feedback statistics. */
     public array|object|null $ratings;
 
-    /**
-     * The total number of transactions. 
-     */
+    /** The total number of transactions. */
     public ?int $total;
 
     public $map = [

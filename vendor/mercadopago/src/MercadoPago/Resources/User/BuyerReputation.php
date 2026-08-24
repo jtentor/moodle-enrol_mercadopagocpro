@@ -14,24 +14,16 @@ use MercadoPago\Serialization\Mapper;
  */
 class BuyerReputation
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * The number of canceled transactions. 
-     */
+    /** The number of canceled transactions. */
     public ?int $canceled_transactions;
 
-    /**
-     * User tags associated with the buyer reputation. 
-     */
+    /** User tags associated with the buyer reputation. */
     public ?array $tags;
 
-    /**
-     * User transaction metrics and statistics. 
-     */
+    /** User transaction metrics and statistics. */
     public array|object|null $transactions;
 
     public $map = [

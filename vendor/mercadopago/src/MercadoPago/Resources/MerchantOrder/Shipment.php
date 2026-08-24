@@ -17,84 +17,52 @@ use MercadoPago\Serialization\Mapper;
  */
 class Shipment
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Shipping ID. 
-     */
+    /** Shipping ID. */
     public ?int $id;
 
-    /**
-     * Shipping type. 
-     */
+    /** Shipping type. */
     public ?string $shipping_type;
 
-    /**
-     * Shipping mode. 
-     */
+    /** Shipping mode. */
     public ?string $shipping_mode;
 
-    /**
-     * Shipping picking type. 
-     */
+    /** Shipping picking type. */
     public ?string $picking_type;
 
-    /**
-     * Shipping status. 
-     */
+    /** Shipping status. */
     public ?string $status;
 
-    /**
-     * Shipping sub status. 
-     */
+    /** Shipping sub status. */
     public ?string $shipping_substatus;
 
-    /**
-     * Shipping items. 
-     */
+    /** Shipping items. */
     public ?array $items;
 
-    /**
-     * Date of creation. 
-     */
+    /** Date of creation. */
     public ?string $date_created;
 
-    /**
-     * Last modified date. 
-     */
+    /** Last modified date. */
     public ?string $last_modified;
 
-    /**
-     * First printed date. 
-     */
+    /** First printed date. */
     public ?string $date_first_printed;
 
-    /**
-     * Shipping service ID. 
-     */
+    /** Shipping service ID. */
     public ?string $service_id;
 
-    /**
-     * Sender ID. 
-     */
+    /** Sender ID. */
     public ?int $sender_id;
 
-    /**
-     * Receiver ID. 
-     */
+    /** Receiver ID. */
     public ?int $receiver_id;
 
-    /**
-     * Shipping address. 
-     */
+    /** Shipping address. */
     public array|object|null $receiver_address;
 
-    /**
-     * Shipping options. 
-     */
+    /** Shipping options. */
     public array|object|null $shipping_option;
 
     private $map = [

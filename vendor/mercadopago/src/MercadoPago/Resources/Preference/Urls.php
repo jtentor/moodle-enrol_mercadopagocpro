@@ -11,18 +11,12 @@ namespace MercadoPago\Resources\Preference;
  */
 class Urls
 {
-    /**
-     * URL to when the payment succeed. 
-     */
+    /** URL to when the payment succeed. */
     public ?string $success;
 
-    /**
-     * URL to when the payment is pending. 
-     */
+    /** URL to when the payment is pending. */
     public ?string $pending;
 
-    /**
-     * URL to when the payment fail. 
-     */
+    /** URL to when the payment fail. */
     public ?string $failure;
 }

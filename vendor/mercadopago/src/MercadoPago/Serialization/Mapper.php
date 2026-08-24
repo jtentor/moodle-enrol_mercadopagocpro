@@ -22,7 +22,7 @@ trait Mapper
     /**
      * Resolves the PHP class name for a given JSON field, or null if unmapped.
      *
-     * @param  string $field JSON field name (e.g., "payer", "items").
+     * @param string $field JSON field name (e.g., "payer", "items").
      * @return class-string|null Fully-qualified class name, or null if the field has no mapping.
      */
     public function map(string $field)

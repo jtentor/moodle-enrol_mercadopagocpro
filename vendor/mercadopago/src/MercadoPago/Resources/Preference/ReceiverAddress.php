@@ -13,28 +13,18 @@ use MercadoPago\Resources\Common\Address;
  */
 class ReceiverAddress extends Address
 {
-    /**
-     * Country. 
-     */
+    /** Country. */
     public ?string $country_name;
 
-    /**
-     * State. 
-     */
+    /** State. */
     public ?string $state_name;
 
-    /**
-     * Floor. 
-     */
+    /** Floor. */
     public ?string $floor;
 
-    /**
-     * Apartment. 
-     */
+    /** Apartment. */
     public ?string $apartment;
 
-    /**
-     * City name. 
-     */
+    /** City name. */
     public ?string $city_name;
 }

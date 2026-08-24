@@ -11,28 +11,18 @@ namespace MercadoPago\Resources\Customer;
  */
 class PaymentMethod
 {
-    /**
-     * Payment method identifier (e.g., "visa", "master", "amex"). 
-     */
+    /** Payment method identifier (e.g., "visa", "master", "amex"). */
     public ?string $id;
 
-    /**
-     * Human-readable name of the payment method (e.g., "Visa", "Mastercard"). 
-     */
+    /** Human-readable name of the payment method (e.g., "Visa", "Mastercard"). */
     public ?string $name;
 
-    /**
-     * Payment type classification (e.g., "credit_card", "debit_card", "prepaid_card"). 
-     */
+    /** Payment type classification (e.g., "credit_card", "debit_card", "prepaid_card"). */
     public ?string $payment_type_id;
 
-    /**
-     * URL to the payment method logo image (HTTP). 
-     */
+    /** URL to the payment method logo image (HTTP). */
     public ?string $thumbnail;
 
-    /**
-     * URL to the payment method logo image over HTTPS. 
-     */
+    /** URL to the payment method logo image over HTTPS. */
     public ?string $secure_thumbnail;
 }

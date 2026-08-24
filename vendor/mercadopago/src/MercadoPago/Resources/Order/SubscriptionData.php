@@ -1,8 +1,6 @@
 <?php
 
-/**
- * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
- */
+/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
 
 namespace MercadoPago\Resources\Order;
 
@@ -18,29 +16,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class SubscriptionData
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Position of this payment within the subscription series. Maps to {@see SubscriptionSequence}. 
-     */
+    /** Position of this payment within the subscription series. Maps to {@see SubscriptionSequence}. */
     public array|object|null $subscription_sequence;
 
-    /**
-     * Unique identifier of the invoice being paid. 
-     */
+    /** Unique identifier of the invoice being paid. */
     public ?string $invoice_id;
 
-    /**
-     * Billing period definition for this subscription cycle. Maps to {@see InvoicePeriod}. 
-     */
+    /** Billing period definition for this subscription cycle. Maps to {@see InvoicePeriod}. */
     public array|object|null $invoice_period;
 
-    /**
-     * ISO 8601 date when this subscription billing was generated. 
-     */
+    /** ISO 8601 date when this subscription billing was generated. */
     public ?string $billing_date;
 
     private $map = [

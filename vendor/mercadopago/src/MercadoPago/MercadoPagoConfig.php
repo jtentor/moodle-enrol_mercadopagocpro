@@ -21,79 +21,49 @@ use MercadoPago\Net\MPHttpClient;
  */
 class MercadoPagoConfig
 {
-    /**
-     * @var string Mercado Pago SDK version. 
-     */
+    /** @var string Mercado Pago SDK version. */
     public static string $CURRENT_VERSION = "3.14.0";
 
-    /**
-     * @var string Base URL for all API requests. Override only for testing or proxy scenarios. 
-     */
+    /** @var string Base URL for all API requests. Override only for testing or proxy scenarios. */
     public static string $BASE_URL = "https://api.mercadopago.com";
 
-    /**
-     * @var string Internal product identifier sent in the X-Product-Id header. 
-     */
+    /** @var string Internal product identifier sent in the X-Product-Id header. */
     public static string $PRODUCT_ID = "BC32A7RU643001OI3940";
 
-    /**
-     * Runtime environment: disables SSL verification for local development. 
-     */
+    /** Runtime environment: disables SSL verification for local development. */
     public const LOCAL = 'local';
 
-    /**
-     * Runtime environment: production-safe defaults (SSL verification enabled). 
-     */
+    /** Runtime environment: production-safe defaults (SSL verification enabled). */
     public const SERVER = 'server';
 
-    /**
-     * @var string Current runtime environment. Defaults to SERVER. 
-     */
+    /** @var string Current runtime environment. Defaults to SERVER. */
     private static string $runtime_enviroment = self::SERVER;
 
-    /**
-     * @var string OAuth access token used for API authentication (Bearer token). 
-     */
+    /** @var string OAuth access token used for API authentication (Bearer token). */
     private static string $access_token = "";
 
-    /**
-     * @var string Integrator ID for tracking MercadoPago partner integrations. 
-     */
+    /** @var string Integrator ID for tracking MercadoPago partner integrations. */
     private static string $integrator_id = "";
 
-    /**
-     * @var string Corporation ID for multi-account corporate setups. 
-     */
+    /** @var string Corporation ID for multi-account corporate setups. */
     private static string $corporation_id = "";
 
-    /**
-     * @var string Platform ID for marketplace or e-commerce platform tracking. 
-     */
+    /** @var string Platform ID for marketplace or e-commerce platform tracking. */
     private static string $platform_id = "";
 
-    /**
-     * @var int Maximum retry attempts for failed requests. Default: 3. 
-     */
+    /** @var int Maximum retry attempts for failed requests. Default: 3. */
     private static int $max_retries = 3;
 
-    /**
-     * @var int Base delay between retries in milliseconds. Actual delay uses exponential backoff. Default: 500ms. 
-     */
+    /** @var int Base delay between retries in milliseconds. Actual delay uses exponential backoff. Default: 500ms. */
     private static int $retry_delay = 500;
 
-    /**
-     * @var int Maximum concurrent cURL connections (CURLOPT_MAXCONNECTS). Default: 10. 
-     */
+    /** @var int Maximum concurrent cURL connections (CURLOPT_MAXCONNECTS). Default: 10. */
     private static int $max_connections = 10;
 
-    /**
-     * @var int Connection timeout in milliseconds (CURLOPT_CONNECTTIMEOUT_MS). Default: 20000ms. 
-     */
+    /** @var int Connection timeout in milliseconds (CURLOPT_CONNECTTIMEOUT_MS). Default: 20000ms. */
     private static int $connection_timeout = 20000;
 
-    /**
-     * @var MPHttpClient|null Custom HTTP client. When null, a default cURL-based client is created lazily. 
-     */
+    /** @var MPHttpClient|null Custom HTTP client. When null, a default cURL-based client is created lazily. */
     private static ?MPHttpClient $http_client = null;
 
     /**
@@ -139,9 +109,7 @@ class MercadoPagoConfig
         return self::$integrator_id;
     }
 
-    /**
-     * @param string $integrator_id Integrator ID assigned by MercadoPago for partner tracking. 
-     */
+    /** @param string $integrator_id Integrator ID assigned by MercadoPago for partner tracking. */
     public static function setIntegratorId(string $integrator_id): void
     {
         self::$integrator_id = $integrator_id;
@@ -152,9 +120,7 @@ class MercadoPagoConfig
         return self::$corporation_id;
     }
 
-    /**
-     * @param string $corporation_id Corporation ID for multi-account corporate setups. 
-     */
+    /** @param string $corporation_id Corporation ID for multi-account corporate setups. */
     public static function setCorporationId(string $corporation_id): void
     {
         self::$corporation_id = $corporation_id;
@@ -165,9 +131,7 @@ class MercadoPagoConfig
         return self::$platform_id;
     }
 
-    /**
-     * @param string $platform_id Platform ID for marketplace or e-commerce platform tracking. 
-     */
+    /** @param string $platform_id Platform ID for marketplace or e-commerce platform tracking. */
     public static function setPlatformId(string $platform_id): void
     {
         self::$platform_id = $platform_id;
@@ -178,9 +142,7 @@ class MercadoPagoConfig
         return self::$max_retries;
     }
 
-    /**
-     * @param int $max_retries Maximum number of retry attempts for failed requests. 
-     */
+    /** @param int $max_retries Maximum number of retry attempts for failed requests. */
     public static function setMaxRetries(int $max_retries): void
     {
         self::$max_retries = $max_retries;
@@ -191,9 +153,7 @@ class MercadoPagoConfig
         return self::$retry_delay;
     }
 
-    /**
-     * @param int $retry_delay Base delay between retries in milliseconds (actual delay uses exponential backoff). 
-     */
+    /** @param int $retry_delay Base delay between retries in milliseconds (actual delay uses exponential backoff). */
     public static function setRetryDelay(int $retry_delay): void
     {
         self::$retry_delay = $retry_delay;
@@ -204,9 +164,7 @@ class MercadoPagoConfig
         return self::$max_connections;
     }
 
-    /**
-     * @param int $max_connections Maximum number of concurrent cURL connections. 
-     */
+    /** @param int $max_connections Maximum number of concurrent cURL connections. */
     public static function setMaxConnections(int $max_connections): void
     {
         self::$max_connections = $max_connections;
@@ -217,9 +175,7 @@ class MercadoPagoConfig
         return self::$connection_timeout;
     }
 
-    /**
-     * @param int $connection_timeout Connection timeout in milliseconds. 
-     */
+    /** @param int $connection_timeout Connection timeout in milliseconds. */
     public static function setConnectionTimeout(int $connection_timeout): void
     {
         self::$connection_timeout = $connection_timeout;
@@ -234,7 +190,7 @@ class MercadoPagoConfig
      * Sets the runtime environment. Use {@see self::LOCAL} for development
      * (disables SSL verification) or {@see self::SERVER} for production.
      *
-     * @param  string $enviroment One of self::LOCAL or self::SERVER.
+     * @param string $enviroment One of self::LOCAL or self::SERVER.
      * @throws InvalidArgumentException When the value is not LOCAL or SERVER.
      */
     public static function setRuntimeEnviroment(string $enviroment): void

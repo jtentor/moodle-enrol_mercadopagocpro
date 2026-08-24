@@ -254,7 +254,7 @@ class enrolment_manager
         if ($settings->groupid <= 0) {
             return;
         }
-        include_once $CFG->dirroot . '/group/lib.php';
+        require_once $CFG->dirroot . '/group/lib.php';
 
         // The group must still exist and still belong to this course.
         $group = $DB->get_record('groups', ['id' => $settings->groupid, 'courseid' => $instance->courseid]);

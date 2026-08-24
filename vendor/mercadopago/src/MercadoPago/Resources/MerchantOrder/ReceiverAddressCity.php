@@ -9,13 +9,9 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ReceiverAddressCity
 {
-    /**
-     * City ID. 
-     */
+    /** City ID. */
     public ?string $id;
 
-    /**
-     * City name. 
-     */
+    /** City name. */
     public ?string $name;
 }

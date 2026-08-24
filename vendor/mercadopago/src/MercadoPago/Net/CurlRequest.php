@@ -12,9 +12,7 @@ namespace MercadoPago\Net;
  */
 class CurlRequest implements HttpRequest
 {
-    /**
-     * @var \CurlHandle cURL session handle. 
-     */
+    /** @var \CurlHandle cURL session handle. */
     private $handle;
 
     public function __construct()
@@ -22,40 +20,30 @@ class CurlRequest implements HttpRequest
         $this->handle = curl_init();
     }
 
-    /**
-     * @inheritDoc 
-     */
+    /** @inheritDoc */
     public function setOptionArray(array $value): void
     {
         curl_setopt_array($this->handle, $value);
     }
 
-    /**
-     * @inheritDoc 
-     */
+    /** @inheritDoc */
     public function execute(): bool|string
     {
         return curl_exec($this->handle);
     }
 
-    /**
-     * @inheritDoc 
-     */
+    /** @inheritDoc */
     public function getInfo(mixed $name): mixed
     {
         return curl_getinfo($this->handle, $name);
     }
 
-    /**
-     * @inheritDoc 
-     */
+    /** @inheritDoc */
     public function close(): void
     {
     }
 
-    /**
-     * @inheritDoc 
-     */
+    /** @inheritDoc */
     public function error(): string
     {
         return curl_error($this->handle);

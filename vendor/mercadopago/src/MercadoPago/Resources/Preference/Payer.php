@@ -18,69 +18,43 @@ use MercadoPago\Serialization\Mapper;
  */
 class Payer
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Payer's name. 
-     */
+    /** Payer's name. */
     public ?string $name;
 
-    /**
-     * Payer's surname. 
-     */
+    /** Payer's surname. */
     public ?string $surname;
 
-    /**
-     * Payer's email. 
-     */
+    /** Payer's email. */
     public ?string $email;
 
-    /**
-     * Payer's phone. 
-     */
+    /** Payer's phone. */
     public array|object|null $phone;
 
-    /**
-     * Payer's identification. 
-     */
+    /** Payer's identification. */
     public array|object|null $identification;
 
-    /**
-     * Payer's address. 
-     */
+    /** Payer's address. */
     public array|object|null $address;
 
-    /**
-     * Date of creation of the payer user. 
-     */
+    /** Date of creation of the payer user. */
     public ?string $date_created;
 
-    /**
-     * Date of the last purchase. 
-     */
+    /** Date of the last purchase. */
     public ?string $last_purchase;
 
-    /**
-     * Authentication type used by the payer. 
-     */
+    /** Authentication type used by the payer. */
     public ?string $authentication_type;
 
-    /**
-     * Whether the payer is a prime user. 
-     */
+    /** Whether the payer is a prime user. */
     public ?bool $is_prime_user;
 
-    /**
-     * Whether this is the payer's first online purchase. 
-     */
+    /** Whether this is the payer's first online purchase. */
     public ?bool $is_first_purchase_online;
 
-    /**
-     * ISO 8601 date when the payer registered. 
-     */
+    /** ISO 8601 date when the payer registered. */
     public ?string $registration_date;
 
     private $map = [

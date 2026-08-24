@@ -17,84 +17,52 @@ use MercadoPago\Serialization\Mapper;
  */
 class ReceiverAddress
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Receiver address ID. 
-     */
+    /** Receiver address ID. */
     public ?int $id;
 
-    /**
-     * Street name and number of receiver address. 
-     */
+    /** Street name and number of receiver address. */
     public ?string $address_line;
 
-    /**
-     * Apartment. 
-     */
+    /** Apartment. */
     public ?string $apartment;
 
-    /**
-     * City information. 
-     */
+    /** City information. */
     public array|object|null $city;
 
-    /**
-     * State information. 
-     */
+    /** State information. */
     public array|object|null $state;
 
-    /**
-     * Country information. 
-     */
+    /** Country information. */
     public array|object|null $country;
 
-    /**
-     * Comment about receiver address. 
-     */
+    /** Comment about receiver address. */
     public ?string $comment;
 
-    /**
-     * Contact information. 
-     */
+    /** Contact information. */
     public ?string $contact;
 
-    /**
-     * Postal code. 
-     */
+    /** Postal code. */
     public ?string $zip_code;
 
-    /**
-     * Street name. 
-     */
+    /** Street name. */
     public ?string $street_name;
 
-    /**
-     * Street number. 
-     */
+    /** Street number. */
     public ?string $street_number;
 
-    /**
-     * Floor. 
-     */
+    /** Floor. */
     public ?string $floor;
 
-    /**
-     * Phone. 
-     */
+    /** Phone. */
     public ?string $phone;
 
-    /**
-     * Latitude. 
-     */
+    /** Latitude. */
     public ?string $latitude;
 
-    /**
-     * Longitude. 
-     */
+    /** Longitude. */
     public ?string $longitude;
 
     private $map = [

@@ -10,8 +10,6 @@ namespace MercadoPago\Resources\Preference;
  */
 class FreeMethod
 {
-    /**
-     * Shipping method ID. 
-     */
+    /** Shipping method ID. */
     public ?int $id;
 }

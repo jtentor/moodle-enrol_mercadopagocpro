@@ -17,54 +17,34 @@ use MercadoPago\Serialization\Mapper;
  */
 class Shipments
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Shipment mode. 
-     */
+    /** Shipment mode. */
     public ?string $mode;
 
-    /**
-     * The payer have the option to pick up the shipment in your store (mode:me2 only). 
-     */
+    /** The payer have the option to pick up the shipment in your store (mode:me2 only). */
     public ?bool $local_pickup;
 
-    /**
-     * Dimensions of the shipment in cm x cm x cm, gr (mode:me2 only). 
-     */
+    /** Dimensions of the shipment in cm x cm x cm, gr (mode:me2 only). */
     public ?string $dimensions;
 
-    /**
-     * Select default shipping method in checkout (mode:me2 only). 
-     */
+    /** Select default shipping method in checkout (mode:me2 only). */
     public ?int $default_shipping_method;
 
-    /**
-     * Offer a shipping method as free shipping (mode:me2 only). 
-     */
+    /** Offer a shipping method as free shipping (mode:me2 only). */
     public ?array $free_methods;
 
-    /**
-     * Shipment cost (mode:custom only). 
-     */
+    /** Shipment cost (mode:custom only). */
     public ?float $cost;
 
-    /**
-     * Free shipping for mode:custom. 
-     */
+    /** Free shipping for mode:custom. */
     public ?bool $free_shipping;
 
-    /**
-     * Shipping address. 
-     */
+    /** Shipping address. */
     public array|object|null $receiver_address;
 
-    /**
-     * If use express shipment. 
-     */
+    /** If use express shipment. */
     public ?bool $express_shipment;
 
     public $map = [

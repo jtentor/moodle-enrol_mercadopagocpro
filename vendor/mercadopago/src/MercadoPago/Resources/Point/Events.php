@@ -11,18 +11,12 @@ namespace MercadoPago\Resources\Point;
  */
 class Events
 {
-    /**
-     * Payment intent ID. 
-     */
+    /** Payment intent ID. */
     public ?string $payment_intent_id;
 
-    /**
-     * Status. 
-     */
+    /** Status. */
     public ?string $status;
 
-    /**
-     * Created on. 
-     */
+    /** Created on. */
     public ?string $created_on;
 }

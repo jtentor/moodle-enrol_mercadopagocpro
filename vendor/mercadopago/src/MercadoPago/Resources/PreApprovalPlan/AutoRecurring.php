@@ -15,54 +15,34 @@ use MercadoPago\Serialization\Mapper;
  */
 class AutoRecurring
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Frequency. 
-     */
+    /** Frequency. */
     public ?int $frequency;
 
-    /**
-     * Frequency type. 
-     */
+    /** Frequency type. */
     public ?string $frequency_type;
 
-    /**
-     * Transaction amount. 
-     */
+    /** Transaction amount. */
     public ?float $transaction_amount;
 
-    /**
-     * Currency ID. 
-     */
+    /** Currency ID. */
     public ?string $currency_id;
 
-    /**
-     * Number of repetitions. 
-     */
+    /** Number of repetitions. */
     public ?int $repetitions;
 
-    /**
-     * Free trial details. 
-     */
+    /** Free trial details. */
     public ?object $free_trial;
 
-    /**
-     * Billing day. 
-     */
+    /** Billing day. */
     public ?int $billing_day;
 
-    /**
-     * Billing day proportional. 
-     */
+    /** Billing day proportional. */
     public ?bool $billing_day_proportional;
 
-    /**
-     * Transaction amount proportional. 
-     */
+    /** Transaction amount proportional. */
     public ?float $transaction_amount_proportional;
 
     public $map = [

@@ -15,49 +15,31 @@ use MercadoPago\Serialization\Mapper;
  */
 class AdditionalInfo
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * IP address of the buyer (required for bank transfer payments). 
-     */
+    /** IP address of the buyer (required for bank transfer payments). */
     public ?string $ip_address;
 
-    /**
-     * Tracking identifier for the payment flow. 
-     */
+    /** Tracking identifier for the payment flow. */
     public ?string $tracking_id;
 
-    /**
-     * @var \MercadoPago\Resources\Preference\Item[]|null List of items being purchased in this payment. 
-     */
+    /** @var \MercadoPago\Resources\Preference\Item[]|null List of items being purchased in this payment. */
     public ?array $items;
 
-    /**
-     * @var AdditionalInfoPayer|array|null Extended payer details (name, phone, address, registration date). 
-     */
+    /** @var AdditionalInfoPayer|array|null Extended payer details (name, phone, address, registration date). */
     public array|object|null $payer;
 
-    /**
-     * @var Shipments|array|null Shipping details including receiver address. 
-     */
+    /** @var Shipments|array|null Shipping details including receiver address. */
     public array|object|null $shipments;
 
-    /**
-     * Available balance in the payer's MercadoPago account at the time of payment. 
-     */
+    /** Available balance in the payer's MercadoPago account at the time of payment. */
     public ?float $available_balance;
 
-    /**
-     * Unique Sequential Number assigned by the payment processor. 
-     */
+    /** Unique Sequential Number assigned by the payment processor. */
     public ?string $nsu_processadora;
 
-    /**
-     * Authentication code returned by the payment processor. 
-     */
+    /** Authentication code returned by the payment processor. */
     public ?string $authentication_code;
 
     private $map = [

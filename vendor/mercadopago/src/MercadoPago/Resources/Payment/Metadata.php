@@ -10,8 +10,6 @@ namespace MercadoPago\Resources\Payment;
  */
 class Metadata
 {
-    /**
-     * Integrator-defined order number for mapping payments to internal orders. 
-     */
+    /** Integrator-defined order number for mapping payments to internal orders. */
     public ?string $order_number;
 }

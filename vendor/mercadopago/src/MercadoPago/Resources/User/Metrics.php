@@ -18,29 +18,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class Metrics
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * User sales metrics for a specific period. 
-     */
+    /** User sales metrics for a specific period. */
     public array|object|null $sales;
 
-    /**
-     * User claims metrics for a specific period. 
-     */
+    /** User claims metrics for a specific period. */
     public array|object|null $claims;
 
-    /**
-     * User delayed handling time metrics for a specific period. 
-     */
+    /** User delayed handling time metrics for a specific period. */
     public array|object|null $delayed_handling_time;
 
-    /**
-     * User cancellations metrics for a specific period. 
-     */
+    /** User cancellations metrics for a specific period. */
     public array|object|null $cancellations;
 
     public $map = [

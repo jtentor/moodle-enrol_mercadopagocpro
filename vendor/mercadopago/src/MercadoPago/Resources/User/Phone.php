@@ -12,8 +12,6 @@ use MercadoPago\Resources\Common\Phone as Base;
  */
 class Phone extends Base
 {
-    /**
-     * Indicates whether the user's phone number is verified (true/false). 
-     */
+    /** Indicates whether the user's phone number is verified (true/false). */
     public ?bool $verified;
 }

@@ -10,18 +10,12 @@ namespace MercadoPago\Resources\User;
  */
 class Cancellations
 {
-    /**
-     * The cancellations period (e.g., "365 days"). 
-     */
+    /** The cancellations period (e.g., "365 days"). */
     public ?string $period;
 
-    /**
-     * The cancellations rate (percentage). 
-     */
+    /** The cancellations rate (percentage). */
     public ?float $rate;
 
-    /**
-     * The cancellations value. 
-     */
+    /** The cancellations value. */
     public ?float $value;
 }

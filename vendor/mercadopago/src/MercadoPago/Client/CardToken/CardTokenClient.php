@@ -22,9 +22,7 @@ final class CardTokenClient extends MercadoPagoClient
 {
     private const URL = "/v1/card_tokens";
 
-    /**
-     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
-     */
+    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -33,8 +31,8 @@ final class CardTokenClient extends MercadoPagoClient
     /**
      * Creates a single-use card token from card data.
      *
-     * @param  array<string,mixed> $request         Card data (card_number, expiration_month, expiration_year, security_code, cardholder).
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param array<string,mixed> $request Card data (card_number, expiration_month, expiration_year, security_code, cardholder).
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return CardToken The created card token resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -50,8 +48,8 @@ final class CardTokenClient extends MercadoPagoClient
     /**
      * Retrieves a card token by ID.
      *
-     * @param  string              $id              Card token ID.
-     * @param  RequestOptions|null $request_options Request options.
+     * @param string $id Card token ID.
+     * @param RequestOptions|null $request_options Request options.
      * @return CardToken The card token resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      */

@@ -18,79 +18,49 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethodListResult
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Payment method ID. 
-     */
+    /** Payment method ID. */
     public ?string $id;
 
-    /**
-     * Payment method name. 
-     */
+    /** Payment method name. */
     public ?string $name;
 
-    /**
-     * Payment method payment type ID. 
-     */
+    /** Payment method payment type ID. */
     public ?string $payment_type_id;
 
-    /**
-     * Payment method status. 
-     */
+    /** Payment method status. */
     public ?string $status;
 
-    /**
-     * Payment method secure thumbnail. 
-     */
+    /** Payment method secure thumbnail. */
     public ?string $secure_thumbnail;
 
-    /**
-     * Payment method thumbnail. 
-     */
+    /** Payment method thumbnail. */
     public ?string $thumbnail;
 
-    /**
-     * Payment method deferred capture. 
-     */
+    /** Payment method deferred capture. */
     public ?string $deferred_capture;
 
-    /**
-     * Payment method settings. 
-     */
+    /** Payment method settings. */
     public array|object|null $settings;
 
-    /**
-     * Payment method min allowed amount. 
-     */
+    /** Payment method min allowed amount. */
     public ?float $min_allowed_amount;
 
-    /**
-     * Payment method max allowed amount. 
-     */
+    /** Payment method max allowed amount. */
     public ?float $max_allowed_amount;
 
-    /**
-     * Payment method accreditation time. 
-     */
+    /** Payment method accreditation time. */
     public ?int $accreditation_time;
 
-    /**
-     * Payment method financial institutions. 
-     */
+    /** Payment method financial institutions. */
     public array|object|null $financial_institutions;
 
-    /**
-     * Payment method processing modes. 
-     */
+    /** Payment method processing modes. */
     public ?string $processing_modes;
 
-    /**
-     * Payment method additional info needed. 
-     */
+    /** Payment method additional info needed. */
     public $additional_info_needed;
 
     private $map = [

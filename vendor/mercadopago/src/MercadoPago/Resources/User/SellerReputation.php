@@ -16,29 +16,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class SellerReputation
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * The seller's level ID (null in this case). 
-     */
+    /** The seller's level ID (null in this case). */
     public ?string $level_id;
 
-    /**
-     * The power seller status (null in this case). 
-     */
+    /** The power seller status (null in this case). */
     public ?string $power_seller_status;
 
-    /**
-     * User transaction metrics and statistics. 
-     */
+    /** User transaction metrics and statistics. */
     public array|object|null $transactions;
 
-    /**
-     * User transaction metrics. 
-     */
+    /** User transaction metrics. */
     public array|object|null $metrics;
 
     public $map = [

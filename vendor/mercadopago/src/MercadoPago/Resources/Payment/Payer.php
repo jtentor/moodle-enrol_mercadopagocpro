@@ -14,54 +14,34 @@ use MercadoPago\Serialization\Mapper;
  */
 class Payer
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * Payer type identifier (e.g. "customer", "registered", "guest"). Mandatory when the payer is a saved Customer. 
-     */
+    /** Payer type identifier (e.g. "customer", "registered", "guest"). Mandatory when the payer is a saved Customer. */
     public ?string $type;
 
-    /**
-     * Unique payer identifier in MercadoPago. 
-     */
+    /** Unique payer identifier in MercadoPago. */
     public ?string $id;
 
-    /**
-     * Payer's email address. 
-     */
+    /** Payer's email address. */
     public ?string $email;
 
-    /**
-     * @var \MercadoPago\Resources\Common\Identification|array|null Payer's identification document (e.g. CPF, DNI). 
-     */
+    /** @var \MercadoPago\Resources\Common\Identification|array|null Payer's identification document (e.g. CPF, DNI). */
     public array|object|null $identification;
 
-    /**
-     * Payer's given/first name. 
-     */
+    /** Payer's given/first name. */
     public ?string $first_name;
 
-    /**
-     * Payer's family/last name. 
-     */
+    /** Payer's family/last name. */
     public ?string $last_name;
 
-    /**
-     * Entity type for bank transfer payments (e.g. "individual", "association"). 
-     */
+    /** Entity type for bank transfer payments (e.g. "individual", "association"). */
     public ?string $entity_type;
 
-    /**
-     * @var \MercadoPago\Resources\Common\Phone|array|null Payer's contact phone number. 
-     */
+    /** @var \MercadoPago\Resources\Common\Phone|array|null Payer's contact phone number. */
     public array|object|null $phone;
 
-    /**
-     * Operator identifier when the payment is initiated by an operator on behalf of the payer. 
-     */
+    /** Operator identifier when the payment is initiated by an operator on behalf of the payer. */
     public ?string $operator_id;
 
     private $map = [

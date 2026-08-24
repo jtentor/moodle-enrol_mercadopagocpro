@@ -23,149 +23,91 @@ use MercadoPago\Serialization\Mapper;
  */
 class User extends MPResource
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * The user's ID. 
-     */
+    /** The user's ID. */
     public ?int $id;
 
-    /**
-     * The user's nickname. 
-     */
+    /** The user's nickname. */
     public ?string $nickname;
 
-    /**
-     * The registration date and time. 
-     */
+    /** The registration date and time. */
     public ?string $registration_date;
 
-    /**
-     * The user's first name. 
-     */
+    /** The user's first name. */
     public ?string $first_name;
 
-    /**
-     * The user's last name. 
-     */
+    /** The user's last name. */
     public ?string $last_name;
 
-    /**
-     * The user's gender. 
-     */
+    /** The user's gender. */
     public ?string $gender;
 
-    /**
-     * The country ID (e.g., "BR" for Brazil). 
-     */
+    /** The country ID (e.g., "BR" for Brazil). */
     public ?string $country_id;
 
-    /**
-     * The user's email. 
-     */
+    /** The user's email. */
     public ?string $email;
 
-    /**
-     * User identification data. 
-     */
+    /** User identification data. */
     public array|object|null $identification;
 
-    /**
-     * User address data. 
-     */
+    /** User address data. */
     public array|object|null $address;
 
-    /**
-     * User phone data. 
-     */
+    /** User phone data. */
     public array|object|null $phone;
 
-    /**
-     * User alternative phone data. 
-     */
+    /** User alternative phone data. */
     public array|object|null $alternative_phone;
 
-    /**
-     * The user type (e.g., "normal"). 
-     */
+    /** The user type (e.g., "normal"). */
     public ?string $user_type;
 
-    /**
-     * User tags. 
-     */
+    /** User tags. */
     public ?array $tags;
 
-    /**
-     * User logo. 
-     */
+    /** User logo. */
     public $logo;
 
-    /**
-     * User points. 
-     */
+    /** User points. */
     public ?int $points;
 
-    /**
-     * The site ID (e.g., "MLB" for MercadoLibre Brazil). 
-     */
+    /** The site ID (e.g., "MLB" for MercadoLibre Brazil). */
     public ?string $site_id;
 
-    /**
-     * User permalink. 
-     */
+    /** User permalink. */
     public ?string $permalink;
 
-    /**
-     * Seller experience (e.g., "NEWBIE"). 
-     */
+    /** Seller experience (e.g., "NEWBIE"). */
     public ?string $seller_experience;
 
-    /**
-     * User bill data. 
-     */
+    /** User bill data. */
     public array|object|null $bill_data;
 
-    /**
-     * User seller reputation data. 
-     */
+    /** User seller reputation data. */
     public array|object|null $seller_reputation;
 
-    /**
-     * User buyer reputation data. 
-     */
+    /** User buyer reputation data. */
     public array|object|null $buyer_reputation;
 
-    /**
-     * User status data. 
-     */
+    /** User status data. */
     public array|object|null $status;
 
-    /**
-     * Secure email. 
-     */
+    /** Secure email. */
     public ?string $secure_email;
 
-    /**
-     * User company data. 
-     */
+    /** User company data. */
     public array|object|null $company;
 
-    /**
-     * User credit data. 
-     */
+    /** User credit data. */
     public array|object|null $credit;
 
-    /**
-     * User context data. 
-     */
+    /** User context data. */
     public array|object|null $context;
 
-    /**
-     * User registration identifiers. 
-     */
+    /** User registration identifiers. */
     public ?array $registration_identifiers;
 
     public $map = [

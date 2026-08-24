@@ -12,8 +12,6 @@ namespace MercadoPago\Resources\Order;
  */
 class Retries
 {
-    /**
-     * Whether automatic payment retry is enabled. When false, a failed attempt ends the order. 
-     */
+    /** Whether automatic payment retry is enabled. When false, a failed attempt ends the order. */
     public ?bool $allowed;
 }

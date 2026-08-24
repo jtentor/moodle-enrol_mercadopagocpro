@@ -12,8 +12,6 @@ namespace MercadoPago\Resources\Order;
  */
 class TypeResponse
 {
-    /**
-     * QR code payload string for QR-based orders (e.g., for in-store payments). 
-     */
+    /** QR code payload string for QR-based orders (e.g., for in-store payments). */
     public ?string $qr_data = null;
 }

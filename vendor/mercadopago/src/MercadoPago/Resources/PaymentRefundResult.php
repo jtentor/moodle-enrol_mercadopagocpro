@@ -13,14 +13,10 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentRefundResult extends MPResource
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * @var PaymentRefundListResult[]|array|null List of refunds associated with the payment. 
-     */
+    /** @var PaymentRefundListResult[]|array|null List of refunds associated with the payment. */
     public array|object|null $data;
 
     private $map = [

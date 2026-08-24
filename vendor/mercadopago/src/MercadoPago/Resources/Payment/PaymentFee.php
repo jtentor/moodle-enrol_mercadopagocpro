@@ -10,13 +10,9 @@ namespace MercadoPago\Resources\Payment;
  */
 class PaymentFee
 {
-    /**
-     * Fee type (e.g. "fixed", "percentage"). 
-     */
+    /** Fee type (e.g. "fixed", "percentage"). */
     public ?string $type;
 
-    /**
-     * Fee value (absolute amount or percentage depending on type). 
-     */
+    /** Fee value (absolute amount or percentage depending on type). */
     public ?float $value;
 }

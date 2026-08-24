@@ -13,14 +13,10 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethodResult extends MPResource
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * @var PaymentMethodListResult[]|array|null List of available payment methods for the account. 
-     */
+    /** @var PaymentMethodListResult[]|array|null List of available payment methods for the account. */
     public array|object|null $data;
 
     private $map = [

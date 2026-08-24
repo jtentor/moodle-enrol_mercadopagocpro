@@ -18,9 +18,7 @@ class CustomerCardResult extends MPResource
 {
     use Mapper;
 
-    /**
-     * Array of card records returned by the API. 
-     */
+    /** Array of card records returned by the API. */
     public array|object|null $data;
 
     /**

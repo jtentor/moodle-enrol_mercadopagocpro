@@ -25,9 +25,7 @@ final class OAuthClient extends MercadoPagoClient
 
     private const URL = "/oauth/token";
 
-    /**
-     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
-     */
+    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -39,9 +37,9 @@ final class OAuthClient extends MercadoPagoClient
      * Redirect the seller to this URL to start the OAuth flow. After authorization,
      * MercadoPago redirects back to your `redirect_uri` with a `code` parameter.
      *
-     * @param  string $app_id       Your application's client ID.
-     * @param  string $redirect_uri URI where MercadoPago redirects after authorization.
-     * @param  string $random_id    CSRF protection state parameter (should be unique per request).
+     * @param string $app_id      Your application's client ID.
+     * @param string $redirect_uri URI where MercadoPago redirects after authorization.
+     * @param string $random_id    CSRF protection state parameter (should be unique per request).
      * @return string Full authorization URL with query parameters.
      */
     public function getAuthorizationURL(string $app_id, string $redirect_uri, string $random_id): string
@@ -63,8 +61,8 @@ final class OAuthClient extends MercadoPagoClient
      *
      * Call this after the seller is redirected back to your `redirect_uri` with the `code` parameter.
      *
-     * @param  OAuthCreateRequest  $request         Contains client_id, client_secret, code, and redirect_uri.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param OAuthCreateRequest $request Contains client_id, client_secret, code, and redirect_uri.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return OAuth Token response with access_token, refresh_token, and expiration.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -80,8 +78,8 @@ final class OAuthClient extends MercadoPagoClient
     /**
      * Refreshes an expired access token using a refresh token.
      *
-     * @param  OAuthRefreshRequest $request         Contains client_id, client_secret, and refresh_token.
-     * @param  RequestOptions|null $request_options Per-request configuration overrides.
+     * @param OAuthRefreshRequest $request Contains client_id, client_secret, and refresh_token.
+     * @param RequestOptions|null $request_options Per-request configuration overrides.
      * @return OAuth New token response with fresh access_token and refresh_token.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

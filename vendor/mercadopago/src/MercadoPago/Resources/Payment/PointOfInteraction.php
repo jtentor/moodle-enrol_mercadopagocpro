@@ -12,29 +12,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class PointOfInteraction
 {
-    /**
- * Maps nested objects to their corresponding DTO classes. 
-*/
+    /** Maps nested objects to their corresponding DTO classes. */
     use Mapper;
 
-    /**
-     * Interaction type (e.g. "OPENPLATFORM", "ATML", "QR"). 
-     */
+    /** Interaction type (e.g. "OPENPLATFORM", "ATML", "QR"). */
     public ?string $type;
 
-    /**
-     * Interaction subtype providing additional classification. 
-     */
+    /** Interaction subtype providing additional classification. */
     public ?string $sub_type;
 
-    /**
-     * @var ApplicationData|array|null Application that generated the interaction. 
-     */
+    /** @var ApplicationData|array|null Application that generated the interaction. */
     public array|object|null $application_data;
 
-    /**
-     * @var TransactionData|array|null Transaction data generated at the point of interaction (e.g. QR content, ticket URL). 
-     */
+    /** @var TransactionData|array|null Transaction data generated at the point of interaction (e.g. QR content, ticket URL). */
     public array|object|null $transaction_data;
 
     private $map = [

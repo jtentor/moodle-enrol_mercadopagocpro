@@ -14,19 +14,13 @@ use MercadoPago\Serialization\Mapper;
  */
 class Installments
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Interest-free installment promotion rules. Maps to {@see InstallmentsInterestFree}. 
-     */
+    /** Interest-free installment promotion rules. Maps to {@see InstallmentsInterestFree}. */
     public array|object|null $interest_free = null;
 
-    /**
-     * General installment availability settings. Maps to {@see InstallmentsAvailable}. 
-     */
+    /** General installment availability settings. Maps to {@see InstallmentsAvailable}. */
     public array|object|null $available = null;
 
     private $map = [

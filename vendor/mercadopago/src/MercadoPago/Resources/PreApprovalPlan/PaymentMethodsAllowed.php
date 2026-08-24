@@ -12,14 +12,10 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethodsAllowed
 {
-    /**
-     * Payment types. 
-     */
+    /** Payment types. */
     public ?array $payment_types;
 
-    /**
-     * Payment methods. 
-     */
+    /** Payment methods. */
     public ?array $payment_methods;
 
 }

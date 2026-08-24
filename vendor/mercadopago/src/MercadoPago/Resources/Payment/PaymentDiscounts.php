@@ -10,18 +10,12 @@ namespace MercadoPago\Resources\Payment;
  */
 class PaymentDiscounts
 {
-    /**
-     * Discount type (e.g. "fixed", "percentage"). 
-     */
+    /** Discount type (e.g. "fixed", "percentage"). */
     public ?string $type;
 
-    /**
-     * Discount value (absolute amount or percentage depending on type). 
-     */
+    /** Discount value (absolute amount or percentage depending on type). */
     public ?float $value;
 
-    /**
-     * ISO 8601 date until which the discount is valid. 
-     */
+    /** ISO 8601 date until which the discount is valid. */
     public ?string $limit_date;
 }

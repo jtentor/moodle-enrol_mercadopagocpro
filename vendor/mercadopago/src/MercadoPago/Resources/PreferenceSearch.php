@@ -19,24 +19,16 @@ use MercadoPago\Serialization\Mapper;
  */
 class PreferenceSearch extends MPResource
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Search elements. 
-     */
+    /** Search elements. */
     public array $elements;
 
-    /**
-     * Search next offset. 
-     */
+    /** Search next offset. */
     public ?int $next_offset;
 
-    /**
-     * Search total. 
-     */
+    /** Search total. */
     public ?int $total;
 
     private $map = [

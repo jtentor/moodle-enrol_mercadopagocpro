@@ -19,49 +19,31 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentIntent extends MPResource
 {
-    /**
- * Class mapper. 
-*/
+    /** Class mapper. */
     use Mapper;
 
-    /**
-     * Additional info of the payment intent.
-     */
+    /** Additional info of the payment intent.*/
     public array|object|null $additional_info;
 
-    /**
-     * Amount of the payment intent.
-     */
+    /** Amount of the payment intent.*/
     public ?float $amount;
 
-    /**
-     * Description of the payment intent.
-     */
+    /** Description of the payment intent.*/
     public ?string $description;
 
-    /**
-     * Device id for the payment intent.
-     */
+    /** Device id for the payment intent.*/
     public ?string $device_id;
 
-    /**
-     * ID of the payment intent.
-     */
+    /** ID of the payment intent.*/
     public ?string $id;
 
-    /**
-     * Payment intent details.
-     */
+    /** Payment intent details.*/
     public array|object|null $payment;
 
-    /**
-     * Payment intent mode.
-     */
+    /** Payment intent mode.*/
     public ?string $payment_mode;
 
-    /**
-     * State of the payment intent.
-     */
+    /** State of the payment intent.*/
     public ?string $state;
 
     public $map = [

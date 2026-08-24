@@ -10,13 +10,9 @@ namespace MercadoPago\Resources\PaymentMethod;
  */
 class FinancialInstitutions
 {
-    /**
-     * Unique identifier of the financial institution in the MercadoPago catalog. 
-     */
+    /** Unique identifier of the financial institution in the MercadoPago catalog. */
     public ?int $id;
 
-    /**
-     * Human-readable name of the financial institution (e.g., "Banco Nacion", "Bradesco"). 
-     */
+    /** Human-readable name of the financial institution (e.g., "Banco Nacion", "Bradesco"). */
     public ?string $description;
 }

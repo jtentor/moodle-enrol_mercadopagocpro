@@ -19,8 +19,8 @@ class Serializer
      * Nested objects are resolved using the resource's {@see Mapper::map()} method.
      * Numeric-keyed arrays are treated as collections and each element is deserialized individually.
      *
-     * @param  class-string<MPResource> $entity Fully-qualified class name to instantiate.
-     * @param  array<string,mixed>|null $data   Decoded JSON body from {@see \MercadoPago\Net\MPResponse::getContent()}.
+     * @param class-string<MPResource> $entity Fully-qualified class name to instantiate.
+     * @param array<string,mixed>|null $data   Decoded JSON body from {@see \MercadoPago\Net\MPResponse::getContent()}.
      * @return MPResource Fully-hydrated resource instance.
      */
     public static function deserializeFromJson(mixed $entity, mixed $data): MPResource

@@ -135,7 +135,7 @@ mpcp_report(
 $diskversion = null;
 if (file_exists($expecteddir . '/version.php')) {
     $plugin = new stdClass();
-    include $expecteddir . '/version.php';
+    require $expecteddir . '/version.php';
     $diskversion = $plugin->version ?? null;
     $requires = $plugin->requires ?? null;
 
@@ -451,7 +451,7 @@ mpcp_report(
 if ($options['courseid'] && $instance !== null) {
     echo PHP_EOL . '9. Instance form smoke test' . PHP_EOL;
 
-    include_once $CFG->libdir . '/formslib.php';
+    require_once $CFG->libdir . '/formslib.php';
 
     $course = $DB->get_record('course', ['id' => (int)$options['courseid']], '*', MUST_EXIST);
     $coursecontext = context_course::instance($course->id);

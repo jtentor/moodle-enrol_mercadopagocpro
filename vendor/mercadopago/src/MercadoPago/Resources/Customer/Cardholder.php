@@ -14,14 +14,10 @@ class Cardholder
 {
     use Mapper;
 
-    /**
-     * Full name of the cardholder as printed on the card. 
-     */
+    /** Full name of the cardholder as printed on the card. */
     public ?string $name;
 
-    /**
-     * Cardholder's personal identification document (e.g., CPF, DNI). 
-     */
+    /** Cardholder's personal identification document (e.g., CPF, DNI). */
     public array|object|null $identification;
 
     /**
