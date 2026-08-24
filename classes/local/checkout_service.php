@@ -102,19 +102,23 @@ class checkout_service {
     }
 
     /**
-     * Choose between init_point and sandbox_init_point.
+     * The URL the buyer is redirected to.
      *
-     * Both are returned by the Create preference endpoint; the sandbox one is what
-     * the test environment uses.
+     * Always init_point, in every environment. What makes a checkout a test
+     * checkout is the credentials the preference was created with plus a test
+     * buyer account - not a different URL. The current Mercado Pago testing guide
+     * never mentions sandbox_init_point: it says to create test users and open the
+     * normal checkout in an incognito window. The sandbox_init_point field is
+     * still returned by the API but sends the buyer to sandbox.mercadopago.com,
+     * which redirect-loops (ERR_TOO_MANY_REDIRECTS).
      *
      * @param object $preference
      * @param credentials $credentials
      * @return string
+     * @see https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/integration-test/test-purchases
      */
     protected function pick_init_point(object $preference, credentials $credentials): string {
-        if (!$credentials->is_live() && !empty($preference->sandbox_init_point)) {
-            return (string)$preference->sandbox_init_point;
-        }
+        unset($credentials);
         return (string)($preference->init_point ?? '');
     }
 
