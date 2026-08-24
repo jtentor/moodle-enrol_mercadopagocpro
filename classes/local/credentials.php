@@ -26,7 +26,7 @@ use core\encryption;
  *   1. Per enrolment instance credentials (enrol_mpcheckoutpro_cred), used for
  *      multi-tenant sites and for marketplace sellers connected through OAuth.
  *   2. Server level configuration: `$CFG->enrol_mpcheckoutpro` or the
- *      MP_CHECKOUTPRO_* environment variables. Nothing is written to the
+ *      MPCHECKOUTPRO_* environment variables. Nothing is written to the
  *      database in this mode.
  *   3. The site wide admin settings of the plugin.
  *
@@ -37,7 +37,8 @@ use core\encryption;
  * @copyright  2026 Julio Tentor <jtentor@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class credentials {
+final class credentials
+{
 
     /** @var string Production environment. */
     public const ENV_PRODUCTION = 'production';
@@ -71,15 +72,15 @@ final class credentials {
         private string $source,
         /** @var string|null */
         private ?string $sellerid = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Access token used as Bearer token against api.mercadopago.com.
      *
      * @return string
      */
-    public function get_access_token(): string {
+    public function get_access_token(): string
+    {
         return $this->accesstoken;
     }
 
@@ -89,7 +90,8 @@ final class credentials {
      *
      * @return string
      */
-    public function get_public_key(): string {
+    public function get_public_key(): string
+    {
         return $this->publickey;
     }
 
@@ -98,7 +100,8 @@ final class credentials {
      *
      * @return string
      */
-    public function get_webhook_secret(): string {
+    public function get_webhook_secret(): string
+    {
         return $this->webhooksecret;
     }
 
@@ -107,7 +110,8 @@ final class credentials {
      *
      * @return string
      */
-    public function get_environment(): string {
+    public function get_environment(): string
+    {
         return $this->environment;
     }
 
@@ -116,7 +120,8 @@ final class credentials {
      *
      * @return bool
      */
-    public function is_live(): bool {
+    public function is_live(): bool
+    {
         return $this->environment === self::ENV_PRODUCTION;
     }
 
@@ -125,7 +130,8 @@ final class credentials {
      *
      * @return string
      */
-    public function get_source(): string {
+    public function get_source(): string
+    {
         return $this->source;
     }
 
@@ -134,7 +140,8 @@ final class credentials {
      *
      * @return string|null
      */
-    public function get_seller_id(): ?string {
+    public function get_seller_id(): ?string
+    {
         return $this->sellerid;
     }
 
@@ -143,7 +150,8 @@ final class credentials {
      *
      * @return bool
      */
-    public function is_usable(): bool {
+    public function is_usable(): bool
+    {
         return $this->accesstoken !== '';
     }
 
@@ -152,7 +160,8 @@ final class credentials {
      *
      * @return bool
      */
-    public function can_validate_signature(): bool {
+    public function can_validate_signature(): bool
+    {
         return $this->webhooksecret !== '';
     }
 
@@ -161,7 +170,8 @@ final class credentials {
      *
      * @return array
      */
-    public function __debugInfo(): array {
+    public function __debugInfo(): array
+    {
         return [
             'environment' => $this->environment,
             'source' => $this->source,
@@ -178,7 +188,8 @@ final class credentials {
      * @param \stdClass|null $instance enrol instance record, or null for site level operations.
      * @return self
      */
-    public static function resolve(?\stdClass $instance = null): self {
+    public static function resolve(?\stdClass $instance = null): self
+    {
         $environment = self::get_environment_setting();
 
         if ($instance !== null && !empty($instance->id) && self::instance_override_allowed()) {
@@ -208,7 +219,8 @@ final class credentials {
      *
      * @return string
      */
-    public static function get_environment_setting(): string {
+    public static function get_environment_setting(): string
+    {
         $value = (string)get_config('enrol_mpcheckoutpro', 'environment');
         return $value === self::ENV_TEST ? self::ENV_TEST : self::ENV_PRODUCTION;
     }
@@ -218,7 +230,8 @@ final class credentials {
      *
      * @return bool
      */
-    public static function instance_override_allowed(): bool {
+    public static function instance_override_allowed(): bool
+    {
         return (bool)get_config('enrol_mpcheckoutpro', 'allowinstancecredentials');
     }
 
@@ -227,12 +240,13 @@ final class credentials {
      *
      * Recognised sources, in order:
      *   $CFG->enrol_mpcheckoutpro = ['accesstoken' => ..., 'publickey' => ..., 'webhooksecret' => ...];
-     *   MP_CHECKOUTPRO_ACCESS_TOKEN / MP_CHECKOUTPRO_PUBLIC_KEY / MP_CHECKOUTPRO_WEBHOOK_SECRET
+     *   MPCHECKOUTPRO_ACCESS_TOKEN / MPCHECKOUTPRO_PUBLIC_KEY / MPCHECKOUTPRO_WEBHOOK_SECRET
      *
      * @param string $environment
      * @return self|null null when nothing is configured at this level.
      */
-    private static function from_server_configuration(string $environment): ?self {
+    private static function from_server_configuration(string $environment): ?self
+    {
         global $CFG;
 
         $values = [];
@@ -241,9 +255,9 @@ final class credentials {
         }
 
         $map = [
-            'accesstoken' => 'MP_CHECKOUTPRO_ACCESS_TOKEN',
-            'publickey' => 'MP_CHECKOUTPRO_PUBLIC_KEY',
-            'webhooksecret' => 'MP_CHECKOUTPRO_WEBHOOK_SECRET',
+            'accesstoken' => 'MPCHECKOUTPRO_ACCESS_TOKEN',
+            'publickey' => 'MPCHECKOUTPRO_PUBLIC_KEY',
+            'webhooksecret' => 'MPCHECKOUTPRO_WEBHOOK_SECRET',
         ];
         foreach ($map as $key => $envname) {
             if (empty($values[$key])) {
@@ -273,7 +287,8 @@ final class credentials {
      * @param string $environment
      * @return self
      */
-    private static function from_site_settings(string $environment): self {
+    private static function from_site_settings(string $environment): self
+    {
         $prefix = $environment === self::ENV_TEST ? 'test' : '';
         return new self(
             trim((string)get_config('enrol_mpcheckoutpro', $prefix . 'accesstoken')),
@@ -290,7 +305,8 @@ final class credentials {
      * @param int $enrolid
      * @return array{accesstoken:string,publickey:string,webhooksecret:string,sellerid:?string}|null
      */
-    private static function load_instance_record(int $enrolid): ?array {
+    private static function load_instance_record(int $enrolid): ?array
+    {
         global $DB;
 
         $record = $DB->get_record(self::TABLE, ['enrolid' => $enrolid]);
@@ -391,7 +407,8 @@ final class credentials {
      * @param int $enrolid
      * @return void
      */
-    public static function delete_for_instance(int $enrolid): void {
+    public static function delete_for_instance(int $enrolid): void
+    {
         global $DB;
         $DB->delete_records(self::TABLE, ['enrolid' => $enrolid]);
     }
@@ -402,7 +419,8 @@ final class credentials {
      * @param int $enrolid
      * @return bool
      */
-    public static function instance_has_credentials(int $enrolid): bool {
+    public static function instance_has_credentials(int $enrolid): bool
+    {
         global $DB;
         return $DB->record_exists(self::TABLE, ['enrolid' => $enrolid]);
     }
@@ -414,7 +432,8 @@ final class credentials {
      * @return string
      * @throws \moodle_exception when the site has no encryption key available.
      */
-    public static function encrypt(string $value): string {
+    public static function encrypt(string $value): string
+    {
         if (!encryption::key_exists()) {
             // create_key() is safe to call repeatedly; it does nothing if the key exists.
             encryption::create_key();
@@ -428,7 +447,8 @@ final class credentials {
      * @param string|null $value
      * @return string
      */
-    public static function decrypt(?string $value): string {
+    public static function decrypt(?string $value): string
+    {
         if ($value === null || $value === '') {
             return '';
         }

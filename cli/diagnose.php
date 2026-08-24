@@ -86,7 +86,8 @@ $warnings = 0;
  * @param string $fix what to do about it
  * @return void
  */
-function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void {
+function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
+{
     global $failures, $warnings;
 
     if ($ok === true) {
@@ -415,7 +416,7 @@ if ($classloadable) {
             ? 'yes (source: ' . $credentials->get_source() . ', env: ' . $credentials->get_environment() . ')'
             : 'NO',
         'Set it in the plugin settings, in $CFG->enrol_mpcheckoutpro, or in '
-            . 'MP_CHECKOUTPRO_ACCESS_TOKEN. Remember that the Environment switch selects '
+            . 'MPCHECKOUTPRO_ACCESS_TOKEN. Remember that the Environment switch selects '
             . 'between the production and the test token.'
     );
     mpcp_report(
@@ -569,8 +570,8 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
                 'add_instance()',
                 $record !== null
                     ? 'created instance id ' . $newid . ', cost ' . $record->cost . ' ' . $record->currency
-                        . ', status ' . ((int)$record->status === ENROL_INSTANCE_ENABLED ? 'enabled' : 'disabled')
-                        . ' (rows ' . $before . ' -> ' . $after . ')'
+                    . ', status ' . ((int)$record->status === ENROL_INSTANCE_ENABLED ? 'enabled' : 'disabled')
+                    . ' (rows ' . $before . ' -> ' . $after . ')'
                     : 'RETURNED NOTHING'
             );
 

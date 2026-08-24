@@ -37,7 +37,7 @@ $string['mpcheckoutpro:reconcile'] = 'Re-check a payment against the Mercado Pag
 
 // -------------------------------------------------------------- Setting groups.
 $string['settings_credentials'] = 'Mercado Pago credentials';
-$string['settings_credentials_desc'] = 'Credentials come from <em>Your integrations</em> in the Mercado Pago developer dashboard. They can also be supplied from config.php as <code>$CFG->enrol_mpcheckoutpro</code> or from the <code>MP_CHECKOUTPRO_ACCESS_TOKEN</code>, <code>MP_CHECKOUTPRO_PUBLIC_KEY</code> and <code>MP_CHECKOUTPRO_WEBHOOK_SECRET</code> environment variables, which take precedence over the values stored here.';
+$string['settings_credentials_desc'] = 'Credentials come from <em>Your integrations</em> in the Mercado Pago developer dashboard. They can also be supplied from config.php as <code>$CFG->enrol_mpcheckoutpro</code> or from the <code>MPCHECKOUTPRO_ACCESS_TOKEN</code>, <code>MPCHECKOUTPRO_PUBLIC_KEY</code> and <code>MPCHECKOUTPRO_WEBHOOK_SECRET</code> environment variables, which take precedence over the values stored here.';
 $string['settings_webhooks'] = 'Webhooks';
 $string['settings_webhooks_desc'] = 'Mercado Pago signs every notification with the secret signature of your application. Keep signature validation enabled on production sites.';
 $string['settings_preference'] = 'Checkout Pro preference';

@@ -20,7 +20,7 @@ Uninstall the old plugin from *Plugins overview ▸ Uninstall* (export its
 transaction report first — uninstalling drops its tables), delete
 `enrol/mp_checkoutpro` from disk, then install this one. Note that the config.php
 key changes with the component name, from `$CFG->enrol_mp_checkoutpro` to
-`$CFG->enrol_mpcheckoutpro`. The `MP_CHECKOUTPRO_*` environment variable names
+`$CFG->enrol_mpcheckoutpro`. The `MPCHECKOUTPRO_*` environment variable names
 are unchanged, so a server already exporting them needs no edits.
 
 ## Install
@@ -63,9 +63,9 @@ Preferred, for production: keep them out of the database.
 ```php
 // config.php, before require_once(__DIR__.'/lib/setup.php');
 $CFG->enrol_mpcheckoutpro = [
-    'accesstoken'   => getenv('MP_CHECKOUTPRO_ACCESS_TOKEN'),
-    'publickey'     => getenv('MP_CHECKOUTPRO_PUBLIC_KEY'),
-    'webhooksecret' => getenv('MP_CHECKOUTPRO_WEBHOOK_SECRET'),
+    'accesstoken'   => getenv('MPCHECKOUTPRO_ACCESS_TOKEN'),
+    'publickey'     => getenv('MPCHECKOUTPRO_PUBLIC_KEY'),
+    'webhooksecret' => getenv('MPCHECKOUTPRO_WEBHOOK_SECRET'),
 ];
 ```
 

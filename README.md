@@ -110,9 +110,9 @@ recommended pattern when the database is shared with less trusted environments:
 ```php
 // config.php
 $CFG->enrol_mpcheckoutpro = [
-    'accesstoken'   => getenv('MP_CHECKOUTPRO_ACCESS_TOKEN'),
-    'publickey'     => getenv('MP_CHECKOUTPRO_PUBLIC_KEY'),
-    'webhooksecret' => getenv('MP_CHECKOUTPRO_WEBHOOK_SECRET'),
+    'accesstoken'   => getenv('MPCHECKOUTPRO_ACCESS_TOKEN'),
+    'publickey'     => getenv('MPCHECKOUTPRO_PUBLIC_KEY'),
+    'webhooksecret' => getenv('MPCHECKOUTPRO_WEBHOOK_SECRET'),
 ];
 ```
 

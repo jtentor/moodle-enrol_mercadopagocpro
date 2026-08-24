@@ -37,7 +37,7 @@ $string['mpcheckoutpro:reconcile'] = 'Reconsultar un pago contra la API de Merca
 
 // Grupos de ajustes.
 $string['settings_credentials'] = 'Credenciales de Mercado Pago';
-$string['settings_credentials_desc'] = 'Las credenciales se obtienen en <em>Tus integraciones</em>, en el panel de desarrolladores de Mercado Pago. También pueden definirse en config.php como <code>$CFG->enrol_mpcheckoutpro</code> o mediante las variables de entorno <code>MP_CHECKOUTPRO_ACCESS_TOKEN</code>, <code>MP_CHECKOUTPRO_PUBLIC_KEY</code> y <code>MP_CHECKOUTPRO_WEBHOOK_SECRET</code>, que tienen prioridad sobre los valores guardados aquí.';
+$string['settings_credentials_desc'] = 'Las credenciales se obtienen en <em>Tus integraciones</em>, en el panel de desarrolladores de Mercado Pago. También pueden definirse en config.php como <code>$CFG->enrol_mpcheckoutpro</code> o mediante las variables de entorno <code>MPCHECKOUTPRO_ACCESS_TOKEN</code>, <code>MPCHECKOUTPRO_PUBLIC_KEY</code> y <code>MPCHECKOUTPRO_WEBHOOK_SECRET</code>, que tienen prioridad sobre los valores guardados aquí.';
 $string['settings_webhooks'] = 'Webhooks';
 $string['settings_webhooks_desc'] = 'Mercado Pago firma cada notificación con la clave secreta de tu aplicación. Mantené activada la validación de firma en los sitios en producción.';
 $string['settings_preference'] = 'Preferencia de Checkout Pro';
