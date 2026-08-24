@@ -1,0 +1,10 @@
+{
+    "phpSniffer.standard": "moodle-extra",
+    "phpSniffer.executablesFolder": "/home/bitnami/.config/composer/vendor/bin/",
+    "[php]": {
+        "editor.defaultFormatter": "wongjn.php-sniffer",
+        "editor.formatOnSave": true
+    },
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+}
