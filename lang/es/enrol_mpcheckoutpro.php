@@ -401,3 +401,7 @@ $string['sendcoursewelcomemessage_desc'] = 'Valor por defecto para las instancia
 $string['sendcoursewelcomemessage_help'] = 'El mensaje de bienvenida se envía una sola vez, cuando el pago se aprueba y la matriculación queda activa. No se envía con un pago pendiente, ni se vuelve a enviar si un pago revertido se reactiva más adelante.
 
 La opción "De parte del poseedor de la clave" que ofrece el núcleo no está disponible acá: resuelve el remitente a través de la capacidad del poseedor de la clave de auto-matriculación, y una matriculación paga no tiene clave.';
+
+// ------------------------------------------- Solo con cuenta de Mercado Pago.
+$string['walletpurchase'] = 'Exigir cuenta de Mercado Pago';
+$string['walletpurchase_desc'] = 'Envía <code>purpose=wallet_purchase</code> en la preferencia, así solo pueden pagar quienes tengan sesión iniciada en Mercado Pago. Eso es lo que habilita el dinero en cuenta y las tarjetas guardadas en el checkout. La contrapartida es concreta: quien no tenga cuenta no puede pagar, y desaparecen el pago en efectivo y la transferencia bancaria. Dejalo desactivado para aceptar invitados pagando con tarjeta.';

@@ -61,6 +61,18 @@ payment.
 - **Redaction.** Tokens, card data, emails and identification numbers are
   stripped from anything written to the database or the log.
 
+## Replacing the earlier `enrol_mp_checkoutpro`
+
+This component supersedes `enrol_mp_checkoutpro`, whose plugin name contained an
+underscore that core cannot carry. Uninstall the old one first — *Site
+administration ▸ Plugins ▸ Plugins overview ▸ Uninstall* — and export its
+transaction report beforehand if you need the payment history, because
+uninstalling drops its tables. Then remove `enrol/mp_checkoutpro` from disk and
+install this plugin. There is no upgrade path and no shared data.
+
+If the old plugin left rows behind in the `enrol` table under the name `mp`,
+`php enrol/mpcheckoutpro/cli/diagnose.php --fixorphans` removes them.
+
 ## Installation
 
 1. Copy this directory to `enrol/mpcheckoutpro` inside your Moodle
@@ -86,7 +98,7 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full production checklist
 | --- | --- |
 | Credentials | Production and test access token, public key and webhook secret; environment switch; whether courses may supply their own credentials |
 | Webhooks | Signature enforcement and tolerance, deferred processing, rate limits, reconciliation limits |
-| Preference | `auto_return`, `binary_mode`, `statement_descriptor`, expiry, installments, excluded payment types and methods, custom metadata |
+| Preference | `auto_return`, `binary_mode`, `purpose` (require a Mercado Pago account), `statement_descriptor`, expiry, installments, excluded payment types and methods, custom metadata |
 | Split payments | Marketplace application client id/secret and the identifier sent as `marketplace` |
 | Behaviour | Holding enrolments for pending payments, refund/chargeback action, notifications, welcome message default, expiry action, retention |
 | Diagnostics | Verbose logging, API timeout and retries, integrator and platform ids |

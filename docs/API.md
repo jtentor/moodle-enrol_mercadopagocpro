@@ -47,6 +47,7 @@ Built by `enrol_mpcheckoutpro\local\preference_builder`. Fields marked
 | `payment_methods.default_payment_method_id` | *(conditional)* | |
 | `payment_methods.excluded_payment_types` | *(conditional)* | `[{"id": "ticket"}, …]` |
 | `payment_methods.excluded_payment_methods` | *(conditional)* | `[{"id": "amex"}, …]` |
+| `purpose` | *(conditional)* | `wallet_purchase` when the site requires a Mercado Pago account: only logged-in buyers can pay, no guests, no cash or bank transfer |
 | `metadata` | Moodle ids plus configured custom fields | See below |
 | `marketplace_fee` | *(conditional)* | Split payments only |
 | `marketplace` | *(conditional)* | Split payments only |
@@ -75,8 +76,11 @@ overwritten. **Never put personal data in custom metadata** — it leaves the si
 
 ### Response
 
-`init_point` is used in production, `sandbox_init_point` in the test
-environment. `id` is stored as `preferenceid` on the transaction.
+`init_point` is used in **every** environment. `sandbox_init_point` is a legacy
+field that still appears in the response but sends the buyer to
+sandbox.mercadopago.com, which redirect-loops; the plugin never uses it. A test
+checkout is one created with test credentials and paid by a test user, not one
+opened at a different URL. `id` is stored as `preferenceid` on the transaction.
 
 ## Payment statuses
 

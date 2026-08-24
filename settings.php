@@ -211,6 +211,13 @@ if ($ADMIN->fulltree) {
         0
     ));
 
+    $settings->add(new admin_setting_configcheckbox(
+        'enrol_mpcheckoutpro/walletpurchase',
+        get_string('walletpurchase', 'enrol_mpcheckoutpro'),
+        get_string('walletpurchase_desc', 'enrol_mpcheckoutpro'),
+        0
+    ));
+
     $settings->add(new admin_setting_configtext(
         'enrol_mpcheckoutpro/statementdescriptor',
         get_string('statementdescriptor', 'enrol_mpcheckoutpro'),

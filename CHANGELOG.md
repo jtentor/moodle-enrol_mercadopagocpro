@@ -8,6 +8,12 @@ the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
 
+> **Replaces the unreleased `enrol_mp_checkoutpro`.** That component name put an
+> underscore inside the plugin name, which core cannot carry: `enrol_plugin::get_name()`
+> derives the name from the second word of the class, so every instance was stored
+> under a plugin called `mp` and disappeared from its course. There is no upgrade
+> path and none is needed — uninstall the old plugin, then install this one.
+
 ### Added
 
 - Checkout Pro enrolment method (`enrol_mpcheckoutpro_plugin`) with per course
@@ -26,6 +32,8 @@ First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
   preselected installments, preselected payment method, binary mode, statement
   descriptor, preference expiry, item description and category, and custom
   metadata fields on top of the Moodle ids the plugin always sends.
+- Optional `purpose=wallet_purchase`, restricting the checkout to buyers logged
+  in to a Mercado Pago account so account money and saved cards are offered.
 - Split payments (marketplace): OAuth seller connection per enrolment instance
   and `marketplace_fee` on the preference.
 - Webhook endpoint with `x-signature` HMAC-SHA256 validation, rate limiting,
@@ -63,3 +71,7 @@ First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
   false)` while concatenating the result, producing invalid SQL.
 - `webhook.php` defined `ABORT_AFTER_CONFIG` as `false`. Moodle tests it with
   `defined()`, so the endpoint aborted during setup.
+- The buyer was redirected to `sandbox_init_point` when the environment was set
+  to Test. That legacy URL redirect-loops (`ERR_TOO_MANY_REDIRECTS`). The plugin
+  now always uses `init_point`; test mode is a matter of credentials and test
+  users, per the official testing guide.

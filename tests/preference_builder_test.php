@@ -185,4 +185,17 @@ final class preference_builder_test extends \advanced_testcase {
         $this->assertSame(15.0, $request['marketplace_fee']);
         $this->assertSame('MOODLE-MP', $request['marketplace']);
     }
+
+    /**
+     * purpose is only sent when the site requires a Mercado Pago account.
+     *
+     * @return void
+     */
+    public function test_wallet_purchase_purpose(): void {
+        $request = $this->build();
+        $this->assertArrayNotHasKey('purpose', $request);
+
+        $request = $this->build([], ['walletpurchase' => 1]);
+        $this->assertSame('wallet_purchase', $request['purpose']);
+    }
 }

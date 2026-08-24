@@ -91,6 +91,36 @@ settings page shows the detected version when it is found.
 **"The enrolment fee must be greater than zero"**
 An enabled instance needs a price. Use `self` enrolment for free courses.
 
+## ERR_TOO_MANY_REDIRECTS on sandbox.mercadopago.com
+
+The buyer is being sent to `sandbox_init_point` instead of `init_point`. That URL
+is a legacy field: it still comes back in the API response, but it redirect-loops.
+
+The plugin always uses `init_point` now, in every environment. If you see this,
+you are running an old build of `checkout_service::pick_init_point()`.
+
+Test mode is decided by **the credentials the preference was created with**, plus
+a **test buyer account** - never by a different URL. The official testing guide
+says to create test users, log in as the test buyer, and open the ordinary
+checkout **in an incognito window** so your real Mercado Pago session does not
+collide with the test one.
+
+## The checkout only offers card entry, no account money
+
+The buyer has no Mercado Pago session. Checkout Pro shows account money and saved
+cards only to a buyer who is already logged in; everyone else gets guest checkout,
+which is card-entry only.
+
+Signing in from inside the payment flow is unreliable, and from a fresh incognito
+window it generally fails. The buyer has to establish the Mercado Pago session
+*first*, then start the purchase from Moodle.
+
+To make the account requirement explicit rather than leaving it to chance, turn on
+**Require a Mercado Pago account**. It sends `purpose=wallet_purchase`, so only
+authenticated buyers reach the checkout. Weigh it carefully: buyers without an
+account then cannot pay at all, and cash coupons and bank transfer are no longer
+offered.
+
 ## The student cannot start a payment
 
 **The pay button is missing**

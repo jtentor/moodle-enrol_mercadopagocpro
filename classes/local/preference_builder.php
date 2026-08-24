@@ -33,6 +33,9 @@ class preference_builder {
     /** @var string Only value documented for auto_return. */
     public const AUTO_RETURN_APPROVED = 'approved';
 
+    /** @var string purpose value that restricts the checkout to logged in Mercado Pago accounts. */
+    public const PURPOSE_WALLET_PURCHASE = 'wallet_purchase';
+
     /**
      * Constructor.
      *
@@ -80,6 +83,13 @@ class preference_builder {
         $descriptor = $this->sanitise_descriptor($this->settings->statementdescriptor);
         if ($descriptor !== '') {
             $request['statement_descriptor'] = $descriptor;
+        }
+
+        // Restricting the checkout to registered Mercado Pago accounts is what
+        // makes account money and saved cards available. The cost is that guests
+        // cannot pay at all, and cash and bank transfer disappear.
+        if ($this->settings->walletpurchase) {
+            $request['purpose'] = self::PURPOSE_WALLET_PURCHASE;
         }
 
         $paymentmethods = $this->build_payment_methods();

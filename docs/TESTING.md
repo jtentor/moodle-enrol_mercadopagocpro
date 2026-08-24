@@ -71,6 +71,36 @@ Your site must be reachable from the internet over HTTPS for notifications to
 arrive. For local work, tunnel it (`ngrok`, `cloudflared`) and set `$CFG->wwwroot`
 to the tunnel URL — Mercado Pago rejects `localhost` and `127.0.0.1`.
 
+**Always test in an incognito window** (or a separate browser profile), logged in
+as the test buyer. Mixing your real Mercado Pago session with a test user's is
+what produces cookie errors and redirect loops. The plugin sends the buyer to
+`init_point` in every environment; `sandbox_init_point` is a legacy field that
+redirect-loops and is never used.
+
+### 1b. The buyer's Mercado Pago session decides what they can pay with
+
+This catches everyone out, so get it straight before you start:
+
+- **Log the test buyer into Mercado Pago first**, in the same incognito window,
+  *before* going to the Moodle course. Only then does the checkout offer **money
+  in the Mercado Pago account and saved cards**. Without a session it falls back
+  to guest checkout, which is card-entry only.
+- **Do not expect to log in from inside the payment flow.** Once Moodle has
+  redirected to the checkout, signing in there is unreliable, and in a fresh
+  incognito window it generally does not work at all. Establish the session
+  first, then start the purchase.
+
+So the working order in an incognito window is:
+
+1. Open mercadopago.com.ar and sign in as the **test buyer**.
+2. In the same window, open the Moodle site and log in as the student.
+3. Go to the course and press **Pay with Mercado Pago**.
+
+If you need buyers to always have account money and saved cards available, turn
+on **Require a Mercado Pago account** in the plugin settings. That sends
+`purpose=wallet_purchase` and restricts the checkout to logged-in accounts —
+but then guests cannot pay at all, and cash coupons and bank transfer disappear.
+
 ### 2. Test cards
 
 Log in as the **buyer** test user before paying.

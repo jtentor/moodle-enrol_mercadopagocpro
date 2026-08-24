@@ -79,6 +79,8 @@ class instance_settings {
     public array $excludedpaymentmethods = [];
     /** @var bool binary_mode. */
     public bool $binarymode = false;
+    /** @var bool Send purpose=wallet_purchase, restricting checkout to Mercado Pago accounts. */
+    public bool $walletpurchase = false;
     /** @var bool Whether to send auto_return=approved. */
     public bool $autoreturn = true;
     /** @var string statement_descriptor. */
@@ -164,6 +166,7 @@ class instance_settings {
             : $reversal;
 
         $s->binarymode = (bool)$config('binarymode', 0);
+        $s->walletpurchase = (bool)$config('walletpurchase', 0);
         $s->autoreturn = (bool)$config('autoreturn', 1);
         $s->statementdescriptor = trim((string)$config('statementdescriptor', ''));
         $s->preferenceexpiry = (int)$config('preferenceexpiry', 0);

@@ -108,11 +108,12 @@ final class checkout_service_test extends \advanced_testcase {
     }
 
     /**
-     * In the test environment the buyer is sent to the sandbox checkout.
+     * The buyer always goes to init_point, never to the legacy sandbox URL,
+     * whatever the environment. Test mode is a matter of credentials, not URLs.
      *
      * @return void
      */
-    public function test_test_environment_uses_sandbox_init_point(): void {
+    public function test_test_environment_still_uses_init_point(): void {
         $this->setup_plugin();
         set_config('environment', credentials::ENV_TEST, 'enrol_mpcheckoutpro');
         set_config('testaccesstoken', 'TEST-TOKEN', 'enrol_mpcheckoutpro');
@@ -124,7 +125,8 @@ final class checkout_service_test extends \advanced_testcase {
         $this->mpclient->push_preference('PREF-T', 'https://mp.test/checkout/PREF-T');
         $result = (new checkout_service())->start($instance, $user);
 
-        $this->assertStringContainsString('sandbox=1', $result['redirecturl']);
+        $this->assertSame('https://mp.test/checkout/PREF-T', $result['redirecturl']);
+        $this->assertStringNotContainsString('sandbox', $result['redirecturl']);
         $this->assertEquals(0, transaction::get((int)$result['transaction']->id)->livemode);
     }
 

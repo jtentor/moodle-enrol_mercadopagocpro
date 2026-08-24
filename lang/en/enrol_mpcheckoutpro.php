@@ -401,3 +401,7 @@ $string['sendcoursewelcomemessage_desc'] = 'Default for new enrolment instances.
 $string['sendcoursewelcomemessage_help'] = 'The welcome message is sent once, when the payment is approved and the enrolment becomes active. It is not sent for a pending payment, and not sent again if a reversed payment is later reinstated.
 
 Core\'s "From the key holder" option is not offered here: it resolves the sender through the self enrolment key holder capability, and a paid enrolment has no key holder.';
+
+// --------------------------------------------------- Mercado Pago account only.
+$string['walletpurchase'] = 'Require a Mercado Pago account';
+$string['walletpurchase_desc'] = 'Sends <code>purpose=wallet_purchase</code> in the preference, so only buyers logged in to a Mercado Pago account can pay. That is what makes account money and saved cards available at the checkout. The trade-off is real: buyers without an account cannot pay at all, and cash coupons and bank transfer disappear. Leave this off to accept guests paying by card.';
