@@ -61,18 +61,6 @@ payment.
 - **Redaction.** Tokens, card data, emails and identification numbers are
   stripped from anything written to the database or the log.
 
-## Replacing the earlier `enrol_mp_checkoutpro`
-
-This component supersedes `enrol_mp_checkoutpro`, whose plugin name contained an
-underscore that core cannot carry. Uninstall the old one first — *Site
-administration ▸ Plugins ▸ Plugins overview ▸ Uninstall* — and export its
-transaction report beforehand if you need the payment history, because
-uninstalling drops its tables. Then remove `enrol/mp_checkoutpro` from disk and
-install this plugin. There is no upgrade path and no shared data.
-
-If the old plugin left rows behind in the `enrol` table under the name `mp`,
-`php enrol/mpcheckoutpro/cli/diagnose.php --fixorphans` removes them.
-
 ## Installation
 
 1. Copy this directory to `enrol/mpcheckoutpro` inside your Moodle

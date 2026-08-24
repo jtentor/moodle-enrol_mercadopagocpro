@@ -8,12 +8,6 @@ the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
 
-> **Replaces the unreleased `enrol_mp_checkoutpro`.** That component name put an
-> underscore inside the plugin name, which core cannot carry: `enrol_plugin::get_name()`
-> derives the name from the second word of the class, so every instance was stored
-> under a plugin called `mp` and disappeared from its course. There is no upgrade
-> path and none is needed — uninstall the old plugin, then install this one.
-
 ### Added
 
 - Checkout Pro enrolment method (`enrol_mpcheckoutpro_plugin`) with per course

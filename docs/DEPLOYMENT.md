@@ -14,15 +14,6 @@
 `localhost` and bare IP addresses are rejected by Mercado Pago for
 `notification_url` and `back_urls`.
 
-## Coming from `enrol_mp_checkoutpro`
-
-Uninstall the old plugin from *Plugins overview ▸ Uninstall* (export its
-transaction report first — uninstalling drops its tables), delete
-`enrol/mp_checkoutpro` from disk, then install this one. Note that the config.php
-key changes with the component name, from `$CFG->enrol_mp_checkoutpro` to
-`$CFG->enrol_mpcheckoutpro`. The `MPCHECKOUTPRO_*` environment variable names
-are unchanged, so a server already exporting them needs no edits.
-
 ## Install
 
 ```bash
