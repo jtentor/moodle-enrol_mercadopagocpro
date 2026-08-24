@@ -26,7 +26,9 @@ use MercadoPago\Exceptions\SignatureFailureReason;
  */
 final class WebhookSignatureValidator
 {
-    /** @var string[] Default signature versions accepted by the validator. */
+    /**
+     * @var string[] Default signature versions accepted by the validator. 
+     */
     private const DEFAULT_SUPPORTED_VERSIONS = ['v1'];
 
     private const VERSION_KEY_REGEX = '/^v\d+$/';
@@ -39,19 +41,21 @@ final class WebhookSignatureValidator
     /**
      * Validates the signature of a MercadoPago webhook notification.
      *
-     * @param string|null     $xSignature        Raw value of the `x-signature` request header.
-     * @param string|null     $xRequestId        Value of the `x-request-id` request header. May be null/empty;
-     *                                           in that case the `request-id:` pair is omitted from the manifest.
-     * @param string|null     $dataId            Value of the `data.id` query parameter. May be null/empty;
-     *                                           in that case the `id:` pair is omitted. Lowercased before HMAC.
-     * @param string          $secret            Secret signature configured in Tus Integraciones (HMAC key).
-     * @param int|null        $toleranceSeconds  Optional maximum allowed drift in seconds between the timestamp
-     *                                           in the header and the current clock. Omit to skip the check.
-     * @param string[]|null   $supportedVersions Optional ordered list of signature versions to accept.
-     *                                           Defaults to `['v1']`. The validator iterates in order and uses
-     *                                           the first version found in the header.
-     * @param callable|null   $nowProvider       Optional callable returning the current time in milliseconds
-     *                                           since the Unix epoch. Intended for tests.
+     * @param string|null   $xSignature        Raw value of the `x-signature` request header.
+     * @param string|null   $xRequestId        Value of the `x-request-id` request header. May be null/empty;
+     *                                         in that case the `request-id:` pair is omitted from the
+     *                                         manifest.
+     * @param string|null   $dataId            Value of the `data.id` query parameter. May be null/empty;
+     *                                         in that case the `id:` pair is omitted. Lowercased before
+     *                                         HMAC.
+     * @param string        $secret            Secret signature configured in Tus Integraciones (HMAC key).
+     * @param int|null      $toleranceSeconds  Optional maximum allowed drift in seconds between the timestamp
+     *                                         in the header and the current clock. Omit to skip the check.
+     * @param string[]|null $supportedVersions Optional ordered list of signature versions to accept.
+     *                                         Defaults to `['v1']`. The validator iterates in order
+     *                                         and uses the first version found in the header.
+     * @param callable|null $nowProvider       Optional callable returning the current time in milliseconds
+     *                                         since the Unix epoch. Intended for tests.
      *
      * @throws InvalidWebhookSignatureException On any signature verification failure.
      * @throws InvalidArgumentException         When `$secret` is null or empty.

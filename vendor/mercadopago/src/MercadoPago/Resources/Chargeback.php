@@ -15,30 +15,48 @@ use MercadoPago\Net\MPResource;
  */
 class Chargeback extends MPResource
 {
-    /** The chargeback ID. */
+    /**
+     * The chargeback ID. 
+     */
     public ?string $id;
 
-    /** The ID of the payment that originated the dispute. */
+    /**
+     * The ID of the payment that originated the dispute. 
+     */
     public ?int $payment_id;
 
-    /** The current status of the chargeback. */
+    /**
+     * The current status of the chargeback. 
+     */
     public ?string $status;
 
-    /** The disputed amount. */
+    /**
+     * The disputed amount. 
+     */
     public ?float $amount;
 
-    /** The ISO 4217 currency code of the disputed amount. */
+    /**
+     * The ISO 4217 currency code of the disputed amount. 
+     */
     public ?string $currency_id;
 
-    /** The reason code provided by the card network. */
+    /**
+     * The reason code provided by the card network. 
+     */
     public ?string $reason_id;
 
-    /** The textual description of the dispute reason. */
+    /**
+     * The textual description of the dispute reason. 
+     */
     public ?string $reason;
 
-    /** The date and time when the chargeback was created. */
+    /**
+     * The date and time when the chargeback was created. 
+     */
     public ?string $date_created;
 
-    /** The date and time of the last modification. */
+    /**
+     * The date and time of the last modification. 
+     */
     public ?string $last_modified;
 }

@@ -9,9 +9,13 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ReceiverAddressState
 {
-    /** State ID. */
+    /**
+     * State ID. 
+     */
     public ?string $id;
 
-    /** State name. */
+    /**
+     * State name. 
+     */
     public ?string $name;
 }

@@ -22,32 +22,37 @@ use enrol_mpcheckoutpro\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->libdir . '/tablelib.php');
+require_once $CFG->libdir . '/tablelib.php';
 
 /**
  * Transaction report table.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class transactions_table extends \core_table\sql_table {
+class transactions_table extends \core_table\sql_table
+{
 
-    /** @var \context_course */
+    /**
+     * @var \context_course 
+     */
     protected \context_course $context;
 
-    /** @var bool Whether the viewer may trigger a manual reconciliation. */
+    /**
+     * @var bool Whether the viewer may trigger a manual reconciliation. 
+     */
     protected bool $canreconcile;
 
     /**
      * Constructor.
      *
-     * @param string $uniqueid
+     * @param string          $uniqueid
      * @param \context_course $context
-     * @param int $courseid
-     * @param int $instanceid 0 for all instances of the course
-     * @param int $userid 0 for all users
-     * @param string $statusfilter empty for all statuses
+     * @param int             $courseid
+     * @param int             $instanceid   0 for all instances of the course
+     * @param int             $userid       0 for all users
+     * @param string          $statusfilter empty for all statuses
      */
     public function __construct(
         string $uniqueid,
@@ -114,20 +119,22 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Creation date column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_timecreated($row) {
+    public function col_timecreated($row)
+    {
         return userdate($row->timecreated);
     }
 
     /**
      * User column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_user($row) {
+    public function col_user($row)
+    {
         if (empty($row->uid)) {
             return get_string('deleteduser', 'enrol_mpcheckoutpro');
         }
@@ -138,19 +145,24 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Amount column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_amount($row) {
+    public function col_amount($row)
+    {
         $text = $row->currency . ' ' . format_float((float)$row->amount, 2);
         if (!empty($row->marketplacefee)) {
-            $text .= ' ' . \html_writer::tag('small',
+            $text .= ' ' . \html_writer::tag(
+                'small',
                 '(' . get_string('marketplacefee', 'enrol_mpcheckoutpro') . ': '
-                . format_float((float)$row->marketplacefee, 2) . ')');
+                . format_float((float)$row->marketplacefee, 2) . ')'
+            );
         }
         if (empty($row->livemode)) {
-            $text .= ' ' . \html_writer::tag('span', get_string('testmode', 'enrol_mpcheckoutpro'),
-                ['class' => 'badge bg-warning text-dark']);
+            $text .= ' ' . \html_writer::tag(
+                'span', get_string('testmode', 'enrol_mpcheckoutpro'),
+                ['class' => 'badge bg-warning text-dark']
+            );
         }
         return $text;
     }
@@ -158,10 +170,11 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Payment status column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_status($row) {
+    public function col_status($row)
+    {
         $classes = [
             status::APPROVED => 'bg-success',
             status::PENDING => 'bg-info',
@@ -184,24 +197,28 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Enrolment state column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_enrolmentstate($row) {
+    public function col_enrolmentstate($row)
+    {
         return get_string('enrolmentstate_' . $row->enrolmentstate, 'enrol_mpcheckoutpro');
     }
 
     /**
      * Payment method column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentmethod($row) {
-        $parts = array_filter([
+    public function col_paymentmethod($row)
+    {
+        $parts = array_filter(
+            [
             (string)$row->paymenttypeid,
             (string)$row->paymentmethodid,
-        ]);
+            ]
+        );
         $text = $parts ? s(implode(' / ', $parts)) : '-';
         if (!empty($row->installments) && $row->installments > 1) {
             $text .= ' ' . get_string('installmentsx', 'enrol_mpcheckoutpro', $row->installments);
@@ -212,10 +229,11 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Payment id column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentid($row) {
+    public function col_paymentid($row)
+    {
         $text = $row->paymentid ? s($row->paymentid) : '-';
         return $text . \html_writer::empty_tag('br')
             . \html_writer::tag('small', s($row->externalreference));
@@ -224,21 +242,24 @@ class transactions_table extends \core_table\sql_table {
     /**
      * Actions column.
      *
-     * @param \stdClass $row
+     * @param  \stdClass $row
      * @return string
      */
-    public function col_actions($row) {
+    public function col_actions($row)
+    {
         global $OUTPUT;
 
         if (in_array($row->status, status::terminal(), true) && $row->status !== status::APPROVED) {
             return '';
         }
-        $url = util::plugin_url('transactions.php', [
+        $url = util::plugin_url(
+            'transactions.php', [
             'courseid' => $row->courseid,
             'action' => 'reconcile',
             'txn' => $row->id,
             'sesskey' => sesskey(),
-        ]);
+            ]
+        );
         return $OUTPUT->action_icon(
             $url,
             new \pix_icon('t/reload', get_string('reconcilenow', 'enrol_mpcheckoutpro'))

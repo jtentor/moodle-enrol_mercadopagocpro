@@ -21,17 +21,17 @@
  * possible before the x-signature header has been verified: rate limiting, size
  * checks and writing the audit row.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks
  */
 
 // No session, no login, no cookies: this is a machine to machine endpoint.
 define('NO_MOODLE_COOKIES', true);
 define('NO_DEBUG_DISPLAY', true);
 
-require(__DIR__ . '/../../config.php');
+require __DIR__ . '/../../config.php';
 
 use enrol_mpcheckoutpro\local\util;
 use enrol_mpcheckoutpro\local\webhook_handler;
@@ -39,11 +39,12 @@ use enrol_mpcheckoutpro\local\webhook_handler;
 /**
  * Send a plain response and stop.
  *
- * @param int $status HTTP status code
- * @param string $body response body
+ * @param  int    $status HTTP status code
+ * @param  string $body   response body
  * @return void
  */
-function enrol_mpcheckoutpro_respond(int $status, string $body): void {
+function enrol_mpcheckoutpro_respond(int $status, string $body): void
+{
     if (!headers_sent()) {
         http_response_code($status);
         header('Content-Type: text/plain; charset=utf-8');

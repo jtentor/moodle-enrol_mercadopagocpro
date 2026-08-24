@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order\Transaction;
 
@@ -17,10 +19,14 @@ use MercadoPago\Serialization\Mapper;
  */
 class UpdateTransaction extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Updated payment method details for the transaction. Maps to {@see \MercadoPago\Resources\Order\PaymentMethod}. */
+    /**
+     * Updated payment method details for the transaction. Maps to {@see \MercadoPago\Resources\Order\PaymentMethod}. 
+     */
     public array|object|null $payment_method;
 
     private $map = [

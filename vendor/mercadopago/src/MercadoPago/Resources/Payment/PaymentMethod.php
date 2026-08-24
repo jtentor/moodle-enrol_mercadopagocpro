@@ -13,19 +13,29 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethod
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var PaymentMethodData|array|null Method-specific data including references and rules. */
+    /**
+     * @var PaymentMethodData|array|null Method-specific data including references and rules. 
+     */
     public array|object|null $data;
 
-    /** Payment method identifier (e.g. "visa", "pix", "bolbradesco"). */
+    /**
+     * Payment method identifier (e.g. "visa", "pix", "bolbradesco"). 
+     */
     public ?string $id;
 
-    /** Payment method type (e.g. "credit_card", "debit_card", "ticket", "bank_transfer"). */
+    /**
+     * Payment method type (e.g. "credit_card", "debit_card", "ticket", "bank_transfer"). 
+     */
     public ?string $type;
 
-    /** Identifier of the card issuer or financial institution. */
+    /**
+     * Identifier of the card issuer or financial institution. 
+     */
     public ?string $issuer_id;
 
     private $map = [

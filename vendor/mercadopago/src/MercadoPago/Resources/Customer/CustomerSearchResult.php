@@ -17,64 +17,104 @@ class CustomerSearchResult
 {
     use Mapper;
 
-    /** Unique customer identifier assigned by MercadoPago. */
+    /**
+     * Unique customer identifier assigned by MercadoPago. 
+     */
     public ?string $id;
 
-    /** Customer's email address. */
+    /**
+     * Customer's email address. 
+     */
     public ?string $email;
 
-    /** Customer's first name. */
+    /**
+     * Customer's first name. 
+     */
     public ?string $first_name;
 
-    /** Customer's last name. */
+    /**
+     * Customer's last name. 
+     */
     public ?string $last_name;
 
-    /** Date when the customer registered on the merchant's platform (ISO 8601). */
+    /**
+     * Date when the customer registered on the merchant's platform (ISO 8601). 
+     */
     public ?string $date_registered;
 
-    /** Free-text description or notes about the customer. */
+    /**
+     * Free-text description or notes about the customer. 
+     */
     public ?string $description;
 
-    /** Timestamp when this customer record was created in MercadoPago (ISO 8601). */
+    /**
+     * Timestamp when this customer record was created in MercadoPago (ISO 8601). 
+     */
     public ?string $date_created;
 
-    /** Timestamp of the last update to this customer record (ISO 8601). */
+    /**
+     * Timestamp of the last update to this customer record (ISO 8601). 
+     */
     public ?string $date_last_updated;
 
-    /** ID of the customer's default card used for payments. */
+    /**
+     * ID of the customer's default card used for payments. 
+     */
     public ?string $default_card;
 
-    /** ID of the customer's default shipping/billing address. */
+    /**
+     * ID of the customer's default shipping/billing address. 
+     */
     public ?string $default_address;
 
-    /** Whether this record belongs to a production (true) or test (false) environment. */
+    /**
+     * Whether this record belongs to a production (true) or test (false) environment. 
+     */
     public ?bool $live_mode;
 
-    /** Internal MercadoPago user ID linked to this customer. */
+    /**
+     * Internal MercadoPago user ID linked to this customer. 
+     */
     public ?int $user_id;
 
-    /** ID of the merchant (seller) who owns this customer record. */
+    /**
+     * ID of the merchant (seller) who owns this customer record. 
+     */
     public ?int $merchant_id;
 
-    /** ID of the OAuth application that created this customer. */
+    /**
+     * ID of the OAuth application that created this customer. 
+     */
     public ?int $client_id;
 
-    /** Customer status (e.g., "active"). */
+    /**
+     * Customer status (e.g., "active"). 
+     */
     public ?string $status;
 
-    /** Saved payment cards associated with this customer. */
+    /**
+     * Saved payment cards associated with this customer. 
+     */
     public array $cards;
 
-    /** Registered addresses associated with this customer. */
+    /**
+     * Registered addresses associated with this customer. 
+     */
     public array $addresses;
 
-    /** Customer's phone number details. */
+    /**
+     * Customer's phone number details. 
+     */
     public array|object|null $phone;
 
-    /** Customer's personal identification document (e.g., CPF, DNI). */
+    /**
+     * Customer's personal identification document (e.g., CPF, DNI). 
+     */
     public array|object|null $identification;
 
-    /** Customer's primary address. */
+    /**
+     * Customer's primary address. 
+     */
     public array|object|null $address;
 
     /**

@@ -24,17 +24,18 @@ use enrol_mpcheckoutpro\local\transaction;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php');
+require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php';
 
 /**
  * Tests for starting a checkout.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers     \enrol_mpcheckoutpro\local\checkout_service
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \enrol_mpcheckoutpro\local\checkout_service
  */
-final class checkout_service_test extends \advanced_testcase {
+final class checkout_service_test extends \advanced_testcase
+{
 
     use helper_trait;
 
@@ -43,7 +44,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_start_creates_transaction_and_preference(): void {
+    public function test_start_creates_transaction_and_preference(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
@@ -71,7 +73,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_idempotency_key_is_sent(): void {
+    public function test_idempotency_key_is_sent(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
@@ -82,8 +85,10 @@ final class checkout_service_test extends \advanced_testcase {
 
         $headers = $this->mpclient->requests[0]['headers'];
         $joined = implode("\n", (array)$headers);
-        $this->assertStringContainsString('X-Idempotency-Key: enrol_mpcheckoutpro-' . $result['transaction']->id,
-            $joined);
+        $this->assertStringContainsString(
+            'X-Idempotency-Key: enrol_mpcheckoutpro-' . $result['transaction']->id,
+            $joined
+        );
     }
 
     /**
@@ -91,7 +96,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_second_start_reuses_the_preference(): void {
+    public function test_second_start_reuses_the_preference(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
@@ -113,7 +119,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_test_environment_still_uses_init_point(): void {
+    public function test_test_environment_still_uses_init_point(): void
+    {
         $this->setup_plugin();
         set_config('environment', credentials::ENV_TEST, 'enrol_mpcheckoutpro');
         set_config('testaccesstoken', 'TEST-TOKEN', 'enrol_mpcheckoutpro');
@@ -135,7 +142,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_disabled_instance_is_refused(): void {
+    public function test_disabled_instance_is_refused(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(['status' => ENROL_INSTANCE_DISABLED]);
         $user = $this->getDataGenerator()->create_user();
@@ -150,7 +158,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_zero_cost_is_refused(): void {
+    public function test_zero_cost_is_refused(): void
+    {
         $this->setup_plugin();
         set_config('cost', 0, 'enrol_mpcheckoutpro');
         [, $instance] = $this->create_course_with_instance(['cost' => 0]);
@@ -166,7 +175,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_already_enrolled_is_refused(): void {
+    public function test_already_enrolled_is_refused(): void
+    {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
@@ -185,7 +195,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_missing_credentials_is_refused(): void {
+    public function test_missing_credentials_is_refused(): void
+    {
         $this->setup_plugin();
         set_config('accesstoken', '', 'enrol_mpcheckoutpro');
         [, $instance] = $this->create_course_with_instance();
@@ -201,7 +212,8 @@ final class checkout_service_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_api_failure_is_recorded(): void {
+    public function test_api_failure_is_recorded(): void
+    {
         global $DB;
 
         $this->setup_plugin();

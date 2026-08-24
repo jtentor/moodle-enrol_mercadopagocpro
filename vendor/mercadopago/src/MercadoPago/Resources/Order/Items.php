@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 */
+/**
+ * API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -17,46 +19,74 @@ use MercadoPago\Serialization\Mapper;
  */
 class Items
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Unique identifier of the item within the order. */
+    /**
+     * Unique identifier of the item within the order. 
+     */
     public ?string $id;
 
-    /** Display name of the product or service. */
+    /**
+     * Display name of the product or service. 
+     */
     public ?string $title;
 
-    /** Price per unit in the order's currency. */
+    /**
+     * Price per unit in the order's currency. 
+     */
     public ?string $unit_price;
 
-    /** Number of units of this item being purchased. */
+    /**
+     * Number of units of this item being purchased. 
+     */
     public ?int $quantity;
 
-    /** Unit of measure for the item (e.g., "unit", "kg"). */
+    /**
+     * Unit of measure for the item (e.g., "unit", "kg"). 
+     */
     public ?string $unit_measure;
 
-    /** Seller-defined code to identify the item in an external system (e.g., SKU). */
+    /**
+     * Seller-defined code to identify the item in an external system (e.g., SKU). 
+     */
     public ?string $external_code;
 
-    /** External category classifications for the item. Each element maps to {@see ExternalCategory}. */
+    /**
+     * External category classifications for the item. Each element maps to {@see ExternalCategory}. 
+     */
     public ?array $external_categories;
 
-    /** MercadoPago category identifier used for fraud analysis and processing rules. */
+    /**
+     * MercadoPago category identifier used for fraud analysis and processing rules. 
+     */
     public ?string $category_id;
 
-    /** Detailed description of the product or service. */
+    /**
+     * Detailed description of the product or service. 
+     */
     public ?string $description;
 
-    /** URL of the item's product image. */
+    /**
+     * URL of the item's product image. 
+     */
     public ?string $picture_url;
 
-    /** Item type classification (e.g., "physical", "digital", "service"). */
+    /**
+     * Item type classification (e.g., "physical", "digital", "service"). 
+     */
     public ?string $type;
 
-    /** Whether the item includes a warranty. */
+    /**
+     * Whether the item includes a warranty. 
+     */
     public ?bool $warranty;
 
-    /** ISO 8601 date of the event associated with the item (e.g., for ticket sales). */
+    /**
+     * ISO 8601 date of the event associated with the item (e.g., for ticket sales). 
+     */
     public ?string $event_date;
 
     private $map = [

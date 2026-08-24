@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\User;
  */
 class Sales
 {
-    /** The sales period (e.g., "365 days"). */
+    /**
+     * The sales period (e.g., "365 days"). 
+     */
     public ?string $period;
 
-    /** The number of completed sales. */
+    /**
+     * The number of completed sales. 
+     */
     public ?int $completed;
 }

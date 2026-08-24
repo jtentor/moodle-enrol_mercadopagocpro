@@ -18,13 +18,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class PreApprovalPlanSearch extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Search paging. */
+    /**
+     * Search paging. 
+     */
     public array|object|null $paging;
 
-    /** Search results. */
+    /**
+     * Search results. 
+     */
     public array|object|null $results;
 
     private $map = [

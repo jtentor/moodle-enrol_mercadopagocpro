@@ -32,7 +32,9 @@ use MercadoPago\MercadoPagoConfig;
  */
 class MPDefaultHttpClient implements MPHttpClient
 {
-    /** Microseconds per millisecond, used to convert retry delay to usleep units. */
+    /**
+     * Microseconds per millisecond, used to convert retry delay to usleep units. 
+     */
     private const ONE_MILLISECOND = 1000;
 
     private const RETRY_AFTER_HEADER = 'Retry-After';
@@ -53,7 +55,7 @@ class MPDefaultHttpClient implements MPHttpClient
      * Retries use exponential backoff: delay = 2^attempt × base_delay.
      * Client errors (4xx) are thrown immediately without retrying.
      *
-     * @param MPRequest $request The fully-built API request.
+     * @param  MPRequest $request The fully-built API request.
      * @return MPResponse Parsed response on success (2xx).
      * @throws MPApiException When the API returns a non-2xx status code after exhausting retries.
      * @throws \Exception On transport-level errors (e.g., DNS failure, timeout) after exhausting retries.

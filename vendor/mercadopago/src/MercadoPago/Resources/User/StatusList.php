@@ -15,16 +15,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class StatusList
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Indicates whether buying is allowed (true/false). */
+    /**
+     * Indicates whether buying is allowed (true/false). 
+     */
     public ?bool $allow;
 
-    /** Buy status codes. */
+    /**
+     * Buy status codes. 
+     */
     public array|object|null $codes;
 
-    /** User immediate payment data for buying. */
+    /**
+     * User immediate payment data for buying. 
+     */
     public array|object|null $immediate_payment;
 
     public $map = [

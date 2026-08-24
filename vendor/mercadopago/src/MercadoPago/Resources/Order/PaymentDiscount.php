@@ -12,6 +12,8 @@ namespace MercadoPago\Resources\Order;
  */
 class PaymentDiscount
 {
-    /** Discount classification (e.g., "campaign", "coupon"). */
+    /**
+     * Discount classification (e.g., "campaign", "coupon"). 
+     */
     public ?string $type = null;
 }

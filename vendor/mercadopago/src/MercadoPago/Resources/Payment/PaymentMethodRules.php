@@ -12,16 +12,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethodRules
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var PaymentDiscounts[]|null Early-payment discount rules. */
+    /**
+     * @var PaymentDiscounts[]|null Early-payment discount rules. 
+     */
     public ?array $discounts;
 
-    /** @var PaymentFee|array|null Late-payment fine configuration. */
+    /**
+     * @var PaymentFee|array|null Late-payment fine configuration. 
+     */
     public array|object|null $fine;
 
-    /** @var PaymentFee|array|null Interest charge configuration for overdue payments. */
+    /**
+     * @var PaymentFee|array|null Interest charge configuration for overdue payments. 
+     */
     public array|object|null $interest;
 
     private $map = [

@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\User;
  */
 class BuyerReputationCancelled
 {
-    /** The number of paid canceled transactions. */
+    /**
+     * The number of paid canceled transactions. 
+     */
     public $paid;
 
-    /** The total number of canceled transactions. */
+    /**
+     * The total number of canceled transactions. 
+     */
     public $total;
 }

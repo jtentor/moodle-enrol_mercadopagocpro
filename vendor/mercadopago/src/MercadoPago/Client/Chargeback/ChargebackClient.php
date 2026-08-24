@@ -26,7 +26,9 @@ final class ChargebackClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/v1/chargebacks/search";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -35,8 +37,8 @@ final class ChargebackClient extends MercadoPagoClient
     /**
      * Retrieves a chargeback by its ID.
      *
-     * @param string $id Chargeback ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $id              Chargeback ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Chargeback The found chargeback resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -52,8 +54,8 @@ final class ChargebackClient extends MercadoPagoClient
     /**
      * Searches chargebacks with pagination and filters.
      *
-     * @param MPSearchRequest $request Search criteria (limit, offset, filters like payment_id, status).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  MPSearchRequest     $request         Search criteria (limit, offset, filters like payment_id, status).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return ChargebackSearch Paginated search results containing matching chargebacks.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

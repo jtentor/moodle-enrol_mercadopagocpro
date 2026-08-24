@@ -22,13 +22,13 @@
  * processing_mode and merchant_account_id to this URL. None of those values are
  * trusted: the page always re-queries the API before deciding anything.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
  */
 
-require(__DIR__ . '/../../config.php');
+require __DIR__ . '/../../config.php';
 
 use enrol_mpcheckoutpro\local\payment_processor;
 use enrol_mpcheckoutpro\local\status;
@@ -130,7 +130,8 @@ unset($result);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
-echo $OUTPUT->render_from_template('enrol_mpcheckoutpro/status_page', [
+echo $OUTPUT->render_from_template(
+    'enrol_mpcheckoutpro/status_page', [
     'tone' => $tone,
     'message' => $message,
     'statuslabel' => status::label($paymentstatus),
@@ -140,6 +141,7 @@ echo $OUTPUT->render_from_template('enrol_mpcheckoutpro/status_page', [
     'date' => userdate($transaction->timemodified),
     'isenrolled' => $isenrolled,
     'coursename' => format_string($course->fullname, true, ['context' => $context]),
-]);
+    ]
+);
 echo $OUTPUT->continue_button($continueurl);
 echo $OUTPUT->footer();

@@ -14,28 +14,44 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ShippingOption
 {
-    /** Shipping option ID. */
+    /**
+     * Shipping option ID. 
+     */
     public ?int $id;
 
-    /** Net cost absorbed by the receiver. */
+    /**
+     * Net cost absorbed by the receiver. 
+     */
     public ?float $cost;
 
-    /** Currency ID. */
+    /**
+     * Currency ID. 
+     */
     public ?string $currency_id;
 
-    /** Estimated delivery time information. */
+    /**
+     * Estimated delivery time information. 
+     */
     public array|object|null $estimated_delivery;
 
-    /** Net cost of the shipping. */
+    /**
+     * Net cost of the shipping. 
+     */
     public ?float $list_cost;
 
-    /** Option name. */
+    /**
+     * Option name. 
+     */
     public ?string $name;
 
-    /** Shipping method ID. */
+    /**
+     * Shipping method ID. 
+     */
     public ?int $shipping_method_id;
 
-    /** Shipping time information. */
+    /**
+     * Shipping time information. 
+     */
     public array|object|null $speed;
 
     private $map = [

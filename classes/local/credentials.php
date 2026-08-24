@@ -33,46 +33,65 @@ use core\encryption;
  * Secrets are never returned by __toString(), never logged, and per instance
  * secrets are encrypted at rest with \core\encryption.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class credentials
 {
 
-    /** @var string Production environment. */
+    /**
+     * @var string Production environment. 
+     */
     public const ENV_PRODUCTION = 'production';
 
-    /** @var string Test environment (test credentials + sandbox_init_point). */
+    /**
+     * @var string Test environment (test credentials + sandbox_init_point). 
+     */
     public const ENV_TEST = 'test';
 
-    /** @var string The table holding per instance credentials. */
+    /**
+     * @var string The table holding per instance credentials. 
+     */
     public const TABLE = 'enrol_mpcheckoutpro_cred';
 
     /**
      * Constructor.
      *
-     * @param string $accesstoken Mercado Pago access token (Bearer token).
-     * @param string $publickey Mercado Pago public key.
-     * @param string $webhooksecret Secret signature used to validate webhook x-signature headers.
-     * @param string $environment self::ENV_PRODUCTION or self::ENV_TEST.
-     * @param string $source Where the credentials came from ('instance', 'server', 'site').
-     * @param string|null $sellerid Mercado Pago collector id when known (marketplace mode).
+     * @param string      $accesstoken   Mercado Pago access token (Bearer token).
+     * @param string      $publickey     Mercado Pago public key.
+     * @param string      $webhooksecret Secret signature used to validate webhook x-signature headers.
+     * @param string      $environment   self::ENV_PRODUCTION or self::ENV_TEST.
+     * @param string      $source        Where the credentials came from ('instance', 'server', 'site').
+     * @param string|null $sellerid      Mercado Pago collector id when known (marketplace mode).
      */
     private function __construct(
-        /** @var string */
+        /**
+         * @var string 
+         */
         private string $accesstoken,
-        /** @var string */
+        /**
+         * @var string 
+         */
         private string $publickey,
-        /** @var string */
+        /**
+         * @var string 
+         */
         private string $webhooksecret,
-        /** @var string */
+        /**
+         * @var string 
+         */
         private string $environment,
-        /** @var string */
+        /**
+         * @var string 
+         */
         private string $source,
-        /** @var string|null */
+        /**
+         * @var string|null 
+         */
         private ?string $sellerid = null,
-    ) {}
+    ) {
+    }
 
     /**
      * Access token used as Bearer token against api.mercadopago.com.
@@ -185,7 +204,7 @@ final class credentials
     /**
      * Resolve the credentials to use for an enrolment instance.
      *
-     * @param \stdClass|null $instance enrol instance record, or null for site level operations.
+     * @param  \stdClass|null $instance enrol instance record, or null for site level operations.
      * @return self
      */
     public static function resolve(?\stdClass $instance = null): self
@@ -242,7 +261,7 @@ final class credentials
      *   $CFG->enrol_mpcheckoutpro = ['accesstoken' => ..., 'publickey' => ..., 'webhooksecret' => ...];
      *   MPCHECKOUTPRO_ACCESS_TOKEN / MPCHECKOUTPRO_PUBLIC_KEY / MPCHECKOUTPRO_WEBHOOK_SECRET
      *
-     * @param string $environment
+     * @param  string $environment
      * @return self|null null when nothing is configured at this level.
      */
     private static function from_server_configuration(string $environment): ?self
@@ -284,7 +303,7 @@ final class credentials
     /**
      * Read credentials from the plugin admin settings.
      *
-     * @param string $environment
+     * @param  string $environment
      * @return self
      */
     private static function from_site_settings(string $environment): self
@@ -302,7 +321,7 @@ final class credentials
     /**
      * Load and decrypt the per instance credential record.
      *
-     * @param int $enrolid
+     * @param  int $enrolid
      * @return array{accesstoken:string,publickey:string,webhooksecret:string,sellerid:?string}|null
      */
     private static function load_instance_record(int $enrolid): ?array
@@ -328,13 +347,13 @@ final class credentials
      * Passing null for a value leaves the stored value untouched; passing an empty
      * string clears it.
      *
-     * @param int $enrolid
-     * @param string|null $accesstoken
-     * @param string|null $publickey
-     * @param string|null $webhooksecret
-     * @param string|null $sellerid
-     * @param string|null $refreshtoken
-     * @param int|null $tokenexpires
+     * @param  int         $enrolid
+     * @param  string|null $accesstoken
+     * @param  string|null $publickey
+     * @param  string|null $webhooksecret
+     * @param  string|null $sellerid
+     * @param  string|null $refreshtoken
+     * @param  int|null    $tokenexpires
      * @return void
      */
     public static function store_for_instance(
@@ -404,7 +423,7 @@ final class credentials
     /**
      * Delete the credentials attached to an enrolment instance.
      *
-     * @param int $enrolid
+     * @param  int $enrolid
      * @return void
      */
     public static function delete_for_instance(int $enrolid): void
@@ -416,7 +435,7 @@ final class credentials
     /**
      * Whether an instance currently has its own credentials stored.
      *
-     * @param int $enrolid
+     * @param  int $enrolid
      * @return bool
      */
     public static function instance_has_credentials(int $enrolid): bool
@@ -428,7 +447,7 @@ final class credentials
     /**
      * Encrypt a secret for storage.
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      * @throws \moodle_exception when the site has no encryption key available.
      */
@@ -444,7 +463,7 @@ final class credentials
     /**
      * Decrypt a stored secret, returning an empty string when it cannot be read.
      *
-     * @param string|null $value
+     * @param  string|null $value
      * @return string
      */
     public static function decrypt(?string $value): string
@@ -463,11 +482,11 @@ final class credentials
     /**
      * Build a credentials object explicitly. Used by unit tests and by the OAuth flow.
      *
-     * @param string $accesstoken
-     * @param string $publickey
-     * @param string $webhooksecret
-     * @param string $environment
-     * @param string|null $sellerid
+     * @param  string      $accesstoken
+     * @param  string      $publickey
+     * @param  string      $webhooksecret
+     * @param  string      $environment
+     * @param  string|null $sellerid
      * @return self
      */
     public static function create(

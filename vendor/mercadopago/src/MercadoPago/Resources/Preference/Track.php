@@ -15,13 +15,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class Track
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Track type (google_ad or facebook_ad). */
+    /**
+     * Track type (google_ad or facebook_ad). 
+     */
     public ?string $type;
 
-    /** Values according the track type. */
+    /**
+     * Values according the track type. 
+     */
     public array|object|null $values;
 
 

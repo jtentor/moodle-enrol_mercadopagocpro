@@ -19,16 +19,21 @@ namespace enrol_mpcheckoutpro\local;
 /**
  * Small shared helpers: signed external references, redaction and logging.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class util {
+final class util
+{
 
-    /** @var string Prefix of every external_reference this plugin generates. */
+    /**
+     * @var string Prefix of every external_reference this plugin generates. 
+     */
     public const REFERENCE_PREFIX = 'mpcp';
 
-    /** @var string[] Keys that must never be written to the database or the log. */
+    /**
+     * @var string[] Keys that must never be written to the database or the log. 
+     */
     private const REDACT_KEYS = [
         'access_token', 'refresh_token', 'client_secret', 'public_key', 'authorization',
         'card', 'token', 'security_code', 'cvv', 'password', 'secret',
@@ -42,12 +47,13 @@ final class util {
      * The HMAC lets return.php and the webhook trust that a reference actually came
      * from this site before any database lookup takes place.
      *
-     * @param int $txnid local transaction id
-     * @param int $enrolid enrolment instance id
-     * @param int $userid buyer id
+     * @param  int $txnid   local transaction id
+     * @param  int $enrolid enrolment instance id
+     * @param  int $userid  buyer id
      * @return string
      */
-    public static function build_external_reference(int $txnid, int $enrolid, int $userid): string {
+    public static function build_external_reference(int $txnid, int $enrolid, int $userid): string
+    {
         $body = sprintf('%s-%d-%d-%d', self::REFERENCE_PREFIX, $enrolid, $userid, $txnid);
         return $body . '-' . substr(self::sign($body), 0, 16);
     }
@@ -55,10 +61,11 @@ final class util {
     /**
      * Parse and verify an external reference produced by this plugin.
      *
-     * @param string|null $reference
+     * @param  string|null $reference
      * @return array{enrolid:int,userid:int,txnid:int}|null null when it is not ours or the signature fails.
      */
-    public static function parse_external_reference(?string $reference): ?array {
+    public static function parse_external_reference(?string $reference): ?array
+    {
         if ($reference === null || $reference === '') {
             return null;
         }
@@ -85,10 +92,11 @@ final class util {
     /**
      * HMAC of a value with a plugin owned secret derived from the site's salt.
      *
-     * @param string $value
+     * @param  string $value
      * @return string hex digest
      */
-    private static function sign(string $value): string {
+    private static function sign(string $value): string
+    {
         return hash_hmac('sha256', $value, self::get_reference_secret());
     }
 
@@ -97,7 +105,8 @@ final class util {
      *
      * @return string
      */
-    private static function get_reference_secret(): string {
+    private static function get_reference_secret(): string
+    {
         $secret = get_config('enrol_mpcheckoutpro', 'referencesecret');
         if (empty($secret)) {
             $secret = bin2hex(random_bytes(32));
@@ -109,11 +118,12 @@ final class util {
     /**
      * Recursively remove sensitive values from an array before it is stored or logged.
      *
-     * @param mixed $data
-     * @param int $depth internal guard against pathological structures
+     * @param  mixed $data
+     * @param  int   $depth internal guard against pathological structures
      * @return mixed
      */
-    public static function redact($data, int $depth = 0) {
+    public static function redact($data, int $depth = 0)
+    {
         if ($depth > 12) {
             return '(truncated)';
         }
@@ -138,11 +148,12 @@ final class util {
     /**
      * JSON encode a payload for storage, redacted and length capped.
      *
-     * @param mixed $data
-     * @param int $maxlength
+     * @param  mixed $data
+     * @param  int   $maxlength
      * @return string
      */
-    public static function encode_for_storage($data, int $maxlength = 60000): string {
+    public static function encode_for_storage($data, int $maxlength = 60000): string
+    {
         $json = json_encode(self::redact($data), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($json === false) {
             return '{"error":"json_encode failed"}';
@@ -156,11 +167,12 @@ final class util {
     /**
      * Write a debug line to the Moodle error log when plugin logging is enabled.
      *
-     * @param string $message
-     * @param array $context
+     * @param  string $message
+     * @param  array  $context
      * @return void
      */
-    public static function log_debug(string $message, array $context = []): void {
+    public static function log_debug(string $message, array $context = []): void
+    {
         if (!get_config('enrol_mpcheckoutpro', 'debuglogging')) {
             return;
         }
@@ -170,23 +182,25 @@ final class util {
     /**
      * Write an error line to the Moodle error log. Always emitted.
      *
-     * @param string $message
-     * @param array $context
+     * @param  string $message
+     * @param  array  $context
      * @return void
      */
-    public static function log_error(string $message, array $context = []): void {
+    public static function log_error(string $message, array $context = []): void
+    {
         self::write_log('ERROR', $message, $context);
     }
 
     /**
      * Emit one log line.
      *
-     * @param string $level
-     * @param string $message
-     * @param array $context
+     * @param  string $level
+     * @param  string $message
+     * @param  array  $context
      * @return void
      */
-    private static function write_log(string $level, string $message, array $context): void {
+    private static function write_log(string $level, string $message, array $context): void
+    {
         $line = '[enrol_mpcheckoutpro][' . $level . '] ' . $message;
         if ($context) {
             $line .= ' ' . self::encode_for_storage($context, 4000);
@@ -199,11 +213,12 @@ final class util {
     /**
      * Absolute https URL of one of the plugin end points.
      *
-     * @param string $script file name inside the plugin directory
-     * @param array $params query parameters
+     * @param  string $script file name inside the plugin directory
+     * @param  array  $params query parameters
      * @return \moodle_url
      */
-    public static function plugin_url(string $script, array $params = []): \moodle_url {
+    public static function plugin_url(string $script, array $params = []): \moodle_url
+    {
         return new \moodle_url('/enrol/mpcheckoutpro/' . $script, $params);
     }
 
@@ -213,7 +228,8 @@ final class util {
      *
      * @return bool
      */
-    public static function site_is_https(): bool {
+    public static function site_is_https(): bool
+    {
         global $CFG;
         return strpos((string)$CFG->wwwroot, 'https://') === 0;
     }
@@ -221,10 +237,11 @@ final class util {
     /**
      * Format an amount the way Mercado Pago expects it in a preference item.
      *
-     * @param float $amount
+     * @param  float $amount
      * @return float
      */
-    public static function normalise_amount(float $amount): float {
+    public static function normalise_amount(float $amount): float
+    {
         return round($amount, 2);
     }
 
@@ -233,7 +250,8 @@ final class util {
      *
      * @return string[] ISO-4217 codes
      */
-    public static function supported_currencies(): array {
+    public static function supported_currencies(): array
+    {
         return ['ARS', 'BRL', 'CLP', 'COP', 'MXN', 'PEN', 'UYU'];
     }
 }

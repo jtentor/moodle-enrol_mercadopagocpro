@@ -11,7 +11,9 @@ namespace MercadoPago\Net;
  */
 class MPResource
 {
-    /** @var MPResponse The raw API response that produced this resource. */
+    /**
+     * @var MPResponse The raw API response that produced this resource. 
+     */
     private MPResponse $response;
 
     /**

@@ -11,10 +11,14 @@ namespace MercadoPago\Resources\Payment;
  */
 class Order
 {
-    /** Unique identifier of the associated order. */
+    /**
+     * Unique identifier of the associated order. 
+     */
     public ?int $id;
 
-    /** Order type (e.g. "mercadolibre", "mercadopago"). */
+    /**
+     * Order type (e.g. "mercadolibre", "mercadopago"). 
+     */
     public ?string $type;
 
 }

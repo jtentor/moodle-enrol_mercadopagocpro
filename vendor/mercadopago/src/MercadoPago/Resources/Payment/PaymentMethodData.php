@@ -12,19 +12,29 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethodData
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var PaymentMethodRules|array|null Business rules applied to the payment method (discounts, fine, interest). */
+    /**
+     * @var PaymentMethodRules|array|null Business rules applied to the payment method (discounts, fine, interest). 
+     */
     public array|object|null $rules;
 
-    /** Internal reference identifier for the payment method transaction. */
+    /**
+     * Internal reference identifier for the payment method transaction. 
+     */
     public ?string $reference_id;
 
-    /** External reference identifier for cross-system reconciliation. */
+    /**
+     * External reference identifier for cross-system reconciliation. 
+     */
     public ?string $external_reference_id;
 
-    /** URL to an external resource related to the payment (e.g. boleto PDF, ticket page). */
+    /**
+     * URL to an external resource related to the payment (e.g. boleto PDF, ticket page). 
+     */
     public ?string $external_resource_url;
 
     private $map = [

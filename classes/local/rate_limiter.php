@@ -22,25 +22,32 @@ namespace enrol_mpcheckoutpro\local;
  * Used on the two endpoints that can be reached without a Moodle session
  * (webhook.php) or that cost an outbound API call (checkout.php).
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class rate_limiter {
+class rate_limiter
+{
 
     /**
      * Constructor.
      *
      * @param string $bucket logical bucket name, e.g. 'webhook'
-     * @param int $limit maximum number of hits allowed per window
-     * @param int $window window length in seconds
+     * @param int    $limit  maximum number of hits allowed per window
+     * @param int    $window window length in seconds
      */
     public function __construct(
-        /** @var string */
+        /**
+         * @var string 
+         */
         protected string $bucket,
-        /** @var int */
+        /**
+         * @var int 
+         */
         protected int $limit,
-        /** @var int */
+        /**
+         * @var int 
+         */
         protected int $window = 60,
     ) {
     }
@@ -51,10 +58,11 @@ class rate_limiter {
      * Fails open: if the cache is unavailable the request is allowed through,
      * because dropping a Mercado Pago notification is worse than serving it.
      *
-     * @param string $key caller identity, typically the remote IP
+     * @param  string $key caller identity, typically the remote IP
      * @return bool true when the request may proceed
      */
-    public function allow(string $key): bool {
+    public function allow(string $key): bool
+    {
         if ($this->limit <= 0) {
             return true;
         }
@@ -80,7 +88,8 @@ class rate_limiter {
      *
      * @return self
      */
-    public static function for_webhook(): self {
+    public static function for_webhook(): self
+    {
         $limit = (int)get_config('enrol_mpcheckoutpro', 'webhookratelimit');
         return new self('webhook', $limit > 0 ? $limit : 120, 60);
     }
@@ -90,7 +99,8 @@ class rate_limiter {
      *
      * @return self
      */
-    public static function for_checkout(): self {
+    public static function for_checkout(): self
+    {
         $limit = (int)get_config('enrol_mpcheckoutpro', 'checkoutratelimit');
         return new self('checkout', $limit > 0 ? $limit : 10, 60);
     }
@@ -100,7 +110,8 @@ class rate_limiter {
      *
      * @return string
      */
-    public static function client_key(): string {
+    public static function client_key(): string
+    {
         $ip = getremoteaddr();
         return $ip !== null && $ip !== '' ? $ip : 'unknown';
     }

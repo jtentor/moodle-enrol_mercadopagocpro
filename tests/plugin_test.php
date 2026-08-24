@@ -23,17 +23,18 @@ use enrol_mpcheckoutpro\local\transaction;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php');
+require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php';
 
 /**
  * Tests for the enrolment plugin class itself.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers     \enrol_mpcheckoutpro_plugin
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \enrol_mpcheckoutpro_plugin
  */
-final class plugin_test extends \advanced_testcase {
+final class plugin_test extends \advanced_testcase
+{
 
     use helper_trait;
 
@@ -42,7 +43,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_basics(): void {
+    public function test_basics(): void
+    {
         $this->resetAfterTest();
 
         $plugin = enrol_get_plugin('mpcheckoutpro');
@@ -56,13 +58,16 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_add_instance(): void {
+    public function test_add_instance(): void
+    {
         $this->setup_plugin();
-        [, $instance] = $this->create_course_with_instance([
+        [, $instance] = $this->create_course_with_instance(
+            [
             'cost' => '250.50',
             'customint2' => 6,
             'customchar1' => 'Full access',
-        ]);
+            ]
+        );
 
         $this->assertEquals(250.5, (float)$instance->cost);
         $this->assertEquals(6, $instance->customint2);
@@ -74,7 +79,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_advanced_options_roundtrip(): void {
+    public function test_advanced_options_roundtrip(): void
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -105,7 +111,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_edit_instance_validation(): void {
+    public function test_edit_instance_validation(): void
+    {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
         $context = \context_course::instance($course->id);
@@ -175,7 +182,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_instance_credentials(): void {
+    public function test_instance_credentials(): void
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -202,7 +210,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_instance_credentials_can_be_forbidden(): void {
+    public function test_instance_credentials_can_be_forbidden(): void
+    {
         $this->setup_plugin();
         set_config('allowinstancecredentials', 0, 'enrol_mpcheckoutpro');
         [, $instance] = $this->create_course_with_instance();
@@ -217,7 +226,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_delete_instance_keeps_transactions(): void {
+    public function test_delete_instance_keeps_transactions(): void
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -240,7 +250,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_settings_fall_back_to_site_defaults(): void {
+    public function test_settings_fall_back_to_site_defaults(): void
+    {
         $this->setup_plugin();
         set_config('installments', 12, 'enrol_mpcheckoutpro');
         set_config('pendingholding', 1, 'enrol_mpcheckoutpro');
@@ -263,7 +274,8 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_sync_expires_enrolments(): void {
+    public function test_sync_expires_enrolments(): void
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -273,8 +285,10 @@ final class plugin_test extends \advanced_testcase {
         $user = $this->getDataGenerator()->create_user();
         $plugin = enrol_get_plugin('mpcheckoutpro');
 
-        $plugin->enrol_user($instance, $user->id, $instance->roleid, time() - DAYSECS * 3,
-            time() - DAYSECS, ENROL_USER_ACTIVE);
+        $plugin->enrol_user(
+            $instance, $user->id, $instance->roleid, time() - DAYSECS * 3,
+            time() - DAYSECS, ENROL_USER_ACTIVE
+        );
 
         $trace = new \null_progress_trace();
         $plugin->sync($trace);
@@ -288,14 +302,17 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_welcome_message_settings_roundtrip(): void {
+    public function test_welcome_message_settings_roundtrip(): void
+    {
         global $DB;
 
         $this->setup_plugin();
-        [, $instance] = $this->create_course_with_instance([
+        [, $instance] = $this->create_course_with_instance(
+            [
             'customint4' => ENROL_SEND_EMAIL_FROM_COURSE_CONTACT,
             'customtext1' => 'Hi {$a->firstname}, welcome to {$a->coursename}.',
-        ]);
+            ]
+        );
 
         $reloaded = $DB->get_record('enrol', ['id' => $instance->id], '*', MUST_EXIST);
         $settings = instance_settings::from_instance($reloaded);
@@ -309,26 +326,33 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_welcome_message_is_sent_on_approval(): void {
+    public function test_welcome_message_is_sent_on_approval(): void
+    {
         $this->setup_plugin();
-        [$course, $instance] = $this->create_course_with_instance([
+        [$course, $instance] = $this->create_course_with_instance(
+            [
             'customint4' => ENROL_SEND_EMAIL_FROM_NOREPLY,
             'customtext1' => 'Welcome to {$a->coursename}!',
-        ]);
+            ]
+        );
         $user = $this->getDataGenerator()->create_user();
         $txn = transaction::create($instance, $user, instance_settings::from_instance($instance));
 
         $sink = $this->redirectMessages();
-        $this->mpclient->push_payment([
+        $this->mpclient->push_payment(
+            [
             'external_reference' => $txn->externalreference,
             'status' => 'approved',
-        ]);
+            ]
+        );
         (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
 
-        $welcome = array_values($sink->get_messages_by_component_and_type(
-            'moodle',
-            'enrolcoursewelcomemessage'
-        ));
+        $welcome = array_values(
+            $sink->get_messages_by_component_and_type(
+                'moodle',
+                'enrolcoursewelcomemessage'
+            )
+        );
         $this->assertCount(1, $welcome);
         $this->assertEquals($user->id, $welcome[0]->useridto);
         $this->assertStringContainsString(format_string($course->fullname), $welcome[0]->fullmessage);
@@ -339,17 +363,20 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_welcome_message_can_be_disabled(): void {
+    public function test_welcome_message_can_be_disabled(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(['customint4' => ENROL_DO_NOT_SEND_EMAIL]);
         $user = $this->getDataGenerator()->create_user();
         $txn = transaction::create($instance, $user, instance_settings::from_instance($instance));
 
         $sink = $this->redirectMessages();
-        $this->mpclient->push_payment([
+        $this->mpclient->push_payment(
+            [
             'external_reference' => $txn->externalreference,
             'status' => 'approved',
-        ]);
+            ]
+        );
         (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
 
         $welcome = $sink->get_messages_by_component_and_type('moodle', 'enrolcoursewelcomemessage');
@@ -361,20 +388,25 @@ final class plugin_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_welcome_message_not_sent_while_pending(): void {
+    public function test_welcome_message_not_sent_while_pending(): void
+    {
         $this->setup_plugin();
         set_config('pendingholding', 1, 'enrol_mpcheckoutpro');
-        [, $instance] = $this->create_course_with_instance([
+        [, $instance] = $this->create_course_with_instance(
+            [
             'customint4' => ENROL_SEND_EMAIL_FROM_NOREPLY,
-        ]);
+            ]
+        );
         $user = $this->getDataGenerator()->create_user();
         $txn = transaction::create($instance, $user, instance_settings::from_instance($instance));
 
         $sink = $this->redirectMessages();
-        $this->mpclient->push_payment([
+        $this->mpclient->push_payment(
+            [
             'external_reference' => $txn->externalreference,
             'status' => 'pending',
-        ]);
+            ]
+        );
         (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
 
         $welcome = $sink->get_messages_by_component_and_type('moodle', 'enrolcoursewelcomemessage');

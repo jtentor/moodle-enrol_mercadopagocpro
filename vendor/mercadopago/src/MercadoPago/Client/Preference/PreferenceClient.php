@@ -29,7 +29,9 @@ final class PreferenceClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/checkout/preferences/search";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -38,12 +40,12 @@ final class PreferenceClient extends MercadoPagoClient
     /**
      * Creates a new checkout preference.
      *
-     * @param array<string,mixed> $request Preference data (items, payer, back_urls, payment_methods, etc.).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  array<string,mixed> $request         Preference data (items, payer, back_urls, payment_methods, etc.).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Preference The created preference with init_point URLs.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/create-preference/post
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/create-preference/post
      */
     public function create(array $request, ?RequestOptions $request_options = null): Preference
     {
@@ -56,12 +58,12 @@ final class PreferenceClient extends MercadoPagoClient
     /**
      * Retrieves a preference by its ID.
      *
-     * @param string $id Preference ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $id              Preference ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Preference The found preference resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/get-preference/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/get-preference/get
      */
     public function get(string $id, ?RequestOptions $request_options = null): Preference
     {
@@ -74,13 +76,13 @@ final class PreferenceClient extends MercadoPagoClient
     /**
      * Updates an existing preference.
      *
-     * @param string $id Preference ID.
-     * @param array<string,mixed> $request Fields to update.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $id              Preference ID.
+     * @param  array<string,mixed> $request         Fields to update.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Preference The updated preference resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/update-preference/put
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/update-preference/put
      */
     public function update(string $id, array $request, ?RequestOptions $request_options = null): Preference
     {
@@ -93,12 +95,12 @@ final class PreferenceClient extends MercadoPagoClient
     /**
      * Searches preferences with pagination and filters.
      *
-     * @param MPSearchRequest $request Search criteria (limit, offset, filters).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  MPSearchRequest     $request         Search criteria (limit, offset, filters).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return PreferenceSearch Paginated search results.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/search-preferences/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-pro/preferences/search-preferences/get
      */
     public function search(MPSearchRequest $request, ?RequestOptions $request_options = null): PreferenceSearch
     {

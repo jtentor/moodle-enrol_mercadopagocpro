@@ -12,16 +12,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class Shipments
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var ReceiverAddress|array|null Delivery address where the purchased items will be shipped. */
+    /**
+     * @var ReceiverAddress|array|null Delivery address where the purchased items will be shipped. 
+     */
     public array|object|null $receiver_address;
 
-    /** Whether the shipment uses express delivery. */
+    /**
+     * Whether the shipment uses express delivery. 
+     */
     public ?bool $express_shipment;
 
-    /** Whether the buyer picks up the item locally. */
+    /**
+     * Whether the buyer picks up the item locally. 
+     */
     public ?bool $local_pickup;
 
     private $map = [

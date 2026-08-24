@@ -17,12 +17,12 @@
 /**
  * Payment transaction report for a course.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__ . '/../../config.php');
+require __DIR__ . '/../../config.php';
 
 use enrol_mpcheckoutpro\local\payment_processor;
 use enrol_mpcheckoutpro\local\status;
@@ -44,12 +44,16 @@ $context = context_course::instance($course->id, MUST_EXIST);
 require_login($course);
 require_capability('enrol/mpcheckoutpro:viewtransactions', $context);
 
-$pageurl = util::plugin_url('transactions.php', array_filter([
-    'courseid' => $courseid,
-    'instanceid' => $instanceid ?: null,
-    'userid' => $userid ?: null,
-    'status' => $statusfilter ?: null,
-]));
+$pageurl = util::plugin_url(
+    'transactions.php', array_filter(
+        [
+        'courseid' => $courseid,
+        'instanceid' => $instanceid ?: null,
+        'userid' => $userid ?: null,
+        'status' => $statusfilter ?: null,
+        ]
+    )
+);
 
 $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
@@ -100,22 +104,30 @@ if (!$table->is_downloading()) {
     echo $OUTPUT->heading(get_string('transactions', 'enrol_mpcheckoutpro'));
 
     // Simple status filter.
-    echo html_writer::start_tag('form', ['method' => 'get', 'action' => $pageurl->out_omit_querystring(),
-        'class' => 'mb-3 d-flex gap-2 align-items-end flex-wrap']);
+    echo html_writer::start_tag(
+        'form', ['method' => 'get', 'action' => $pageurl->out_omit_querystring(),
+        'class' => 'mb-3 d-flex gap-2 align-items-end flex-wrap']
+    );
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'courseid', 'value' => $courseid]);
     if ($instanceid) {
         echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'instanceid', 'value' => $instanceid]);
     }
-    echo html_writer::tag('label', get_string('paymentstatus', 'enrol_mpcheckoutpro'),
-        ['for' => 'mpstatusfilter', 'class' => 'me-1']);
+    echo html_writer::tag(
+        'label', get_string('paymentstatus', 'enrol_mpcheckoutpro'),
+        ['for' => 'mpstatusfilter', 'class' => 'me-1']
+    );
     echo html_writer::select($statusoptions, 'status', $statusfilter, false, ['id' => 'mpstatusfilter']);
-    echo html_writer::empty_tag('input', ['type' => 'submit', 'class' => 'btn btn-secondary',
-        'value' => get_string('filter')]);
+    echo html_writer::empty_tag(
+        'input', ['type' => 'submit', 'class' => 'btn btn-secondary',
+        'value' => get_string('filter')]
+    );
     echo html_writer::end_tag('form');
 
-    echo $OUTPUT->render_from_template('enrol_mpcheckoutpro/summary', [
+    echo $OUTPUT->render_from_template(
+        'enrol_mpcheckoutpro/summary', [
         'stats' => enrol_mpcheckoutpro_summary_rows((int)$course->id, (int)$instanceid),
-    ]);
+        ]
+    );
 }
 
 $table->out(50, true);
@@ -127,11 +139,12 @@ if (!$table->is_downloading()) {
 /**
  * Aggregate counts and totals per payment status for the summary block.
  *
- * @param int $courseid
- * @param int $instanceid
+ * @param  int $courseid
+ * @param  int $instanceid
  * @return array
  */
-function enrol_mpcheckoutpro_summary_rows(int $courseid, int $instanceid): array {
+function enrol_mpcheckoutpro_summary_rows(int $courseid, int $instanceid): array
+{
     global $DB;
 
     $where = 'courseid = :courseid';

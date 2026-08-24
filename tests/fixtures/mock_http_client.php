@@ -25,26 +25,32 @@ use MercadoPago\Net\MPResponse;
  * In-memory HTTP client that answers Mercado Pago API calls from a queue of
  * canned responses, so the test suite never reaches the network.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mock_http_client implements MPHttpClient {
+class mock_http_client implements MPHttpClient
+{
 
-    /** @var array<int,array{status:int,body:array}> Queued responses. */
+    /**
+     * @var array<int,array{status:int,body:array}> Queued responses. 
+     */
     protected array $queue = [];
 
-    /** @var array<int,array{method:string,uri:string,payload:?array,headers:?array}> Requests seen. */
+    /**
+     * @var array<int,array{method:string,uri:string,payload:?array,headers:?array}> Requests seen. 
+     */
     public array $requests = [];
 
     /**
      * Queue one response.
      *
-     * @param array $body decoded JSON body
-     * @param int $status HTTP status
+     * @param  array $body   decoded JSON body
+     * @param  int   $status HTTP status
      * @return self
      */
-    public function push(array $body, int $status = 200): self {
+    public function push(array $body, int $status = 200): self
+    {
         $this->queue[] = ['status' => $status, 'body' => $body];
         return $this;
     }
@@ -52,51 +58,60 @@ class mock_http_client implements MPHttpClient {
     /**
      * Queue a Checkout Pro preference response.
      *
-     * @param string $id preference id
-     * @param string $initpoint
+     * @param  string $id        preference id
+     * @param  string $initpoint
      * @return self
      */
-    public function push_preference(string $id = 'PREF-1', string $initpoint = 'https://mp.test/checkout/PREF-1'): self {
-        return $this->push([
+    public function push_preference(string $id = 'PREF-1', string $initpoint = 'https://mp.test/checkout/PREF-1'): self
+    {
+        return $this->push(
+            [
             'id' => $id,
             'init_point' => $initpoint,
             'sandbox_init_point' => $initpoint . '?sandbox=1',
             'collector_id' => 1234567,
             'date_created' => '2026-08-21T10:00:00.000-03:00',
-        ]);
+            ]
+        );
     }
 
     /**
      * Queue a payment response.
      *
-     * @param array $overrides fields to override on the default payment body
+     * @param  array $overrides fields to override on the default payment body
      * @return self
      */
-    public function push_payment(array $overrides = []): self {
-        return $this->push(array_merge([
-            'id' => 1122334455,
-            'status' => 'approved',
-            'status_detail' => 'accredited',
-            'external_reference' => '',
-            'transaction_amount' => 100.00,
-            'currency_id' => 'ARS',
-            'payment_method_id' => 'visa',
-            'payment_type_id' => 'credit_card',
-            'installments' => 1,
-            'live_mode' => true,
-            'date_approved' => '2026-08-21T10:05:00.000-03:00',
-            'order' => ['id' => 99887766, 'type' => 'mercadopago'],
-        ], $overrides));
+    public function push_payment(array $overrides = []): self
+    {
+        return $this->push(
+            array_merge(
+                [
+                'id' => 1122334455,
+                'status' => 'approved',
+                'status_detail' => 'accredited',
+                'external_reference' => '',
+                'transaction_amount' => 100.00,
+                'currency_id' => 'ARS',
+                'payment_method_id' => 'visa',
+                'payment_type_id' => 'credit_card',
+                'installments' => 1,
+                'live_mode' => true,
+                'date_approved' => '2026-08-21T10:05:00.000-03:00',
+                'order' => ['id' => 99887766, 'type' => 'mercadopago'],
+                ], $overrides
+            )
+        );
     }
 
     /**
      * Answer a request from the queue.
      *
-     * @param MPRequest $request
+     * @param  MPRequest $request
      * @return MPResponse
      * @throws MPApiException when the queued status is not 2xx
      */
-    public function send(MPRequest $request): MPResponse {
+    public function send(MPRequest $request): MPResponse
+    {
         $payload = $request->getPayload();
         $this->requests[] = [
             'method' => $request->getMethod(),
@@ -124,7 +139,8 @@ class mock_http_client implements MPHttpClient {
      *
      * @return array|null
      */
-    public function last_payload(): ?array {
+    public function last_payload(): ?array
+    {
         $last = end($this->requests);
         return $last ? $last['payload'] : null;
     }
@@ -134,7 +150,8 @@ class mock_http_client implements MPHttpClient {
      *
      * @return string
      */
-    public function last_uri(): string {
+    public function last_uri(): string
+    {
         $last = end($this->requests);
         return $last ? $last['uri'] : '';
     }

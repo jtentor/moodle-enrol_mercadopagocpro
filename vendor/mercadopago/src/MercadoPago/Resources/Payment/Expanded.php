@@ -12,10 +12,14 @@ use MercadoPago\Serialization\Mapper;
  */
 class Expanded
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var ExpandedGateway|null Gateway-specific response data including network references. */
+    /**
+     * @var ExpandedGateway|null Gateway-specific response data including network references. 
+     */
     public ?object $gateway;
 
     private $map = [
@@ -38,10 +42,14 @@ class Expanded
  */
 class ExpandedGateway
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var ExpandedGatewayReference|null Reference identifiers returned by the gateway. */
+    /**
+     * @var ExpandedGatewayReference|null Reference identifiers returned by the gateway. 
+     */
     public ?object $reference;
 
     private $map = [
@@ -65,6 +73,8 @@ class ExpandedGateway
  */
 class ExpandedGatewayReference
 {
-    /** Unique transaction identifier assigned by the card network (e.g. Visa, Mastercard). */
+    /**
+     * Unique transaction identifier assigned by the card network (e.g. Visa, Mastercard). 
+     */
     public ?string $network_transaction_id;
 }

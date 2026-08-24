@@ -14,6 +14,8 @@ use MercadoPago\Net\MPResource;
  */
 class PaymentIntentCancel extends MPResource
 {
-    /** ID of the payment intent.*/
+    /**
+     * ID of the payment intent.
+     */
     public ?string $id;
 }

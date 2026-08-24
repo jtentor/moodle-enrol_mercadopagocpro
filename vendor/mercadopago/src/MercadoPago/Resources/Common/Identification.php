@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\Common;
  */
 class Identification
 {
-    /** Document type code (e.g. "CPF", "CNPJ", "DNI", "CC"). */
+    /**
+     * Document type code (e.g. "CPF", "CNPJ", "DNI", "CC"). 
+     */
     public ?string $type;
 
-    /** Document number corresponding to the identification type. */
+    /**
+     * Document number corresponding to the identification type. 
+     */
     public ?string $number;
 }

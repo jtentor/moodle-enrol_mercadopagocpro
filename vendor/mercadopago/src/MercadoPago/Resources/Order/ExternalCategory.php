@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 */
+/**
+ * API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -14,6 +16,8 @@ namespace MercadoPago\Resources\Order;
  */
 class ExternalCategory
 {
-    /** Seller-defined category identifier for the item. */
+    /**
+     * Seller-defined category identifier for the item. 
+     */
     public ?string $id;
 }

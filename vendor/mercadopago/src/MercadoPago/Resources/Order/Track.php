@@ -12,7 +12,9 @@ namespace MercadoPago\Resources\Order;
  */
 class Track
 {
-    /** Tracking pixel type. Accepted values: "google_ad" or "facebook_ad". */
+    /**
+     * Tracking pixel type. Accepted values: "google_ad" or "facebook_ad". 
+     */
     public ?string $type;
 
     /**

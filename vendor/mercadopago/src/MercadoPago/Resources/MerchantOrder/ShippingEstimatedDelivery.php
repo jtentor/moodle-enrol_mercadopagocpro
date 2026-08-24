@@ -10,12 +10,18 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ShippingEstimatedDelivery
 {
-    /** Estimated delivery date. */
+    /**
+     * Estimated delivery date. 
+     */
     public ?string $date;
 
-    /** Estimated lower delivery time. */
+    /**
+     * Estimated lower delivery time. 
+     */
     public ?string $time_from;
 
-    /** Estimated upper delivery time. */
+    /**
+     * Estimated upper delivery time. 
+     */
     public ?string $time_to;
 }

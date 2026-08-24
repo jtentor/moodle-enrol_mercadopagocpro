@@ -17,12 +17,12 @@
 /**
  * Creates the Checkout Pro preference and sends the buyer to Mercado Pago.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__ . '/../../config.php');
+require __DIR__ . '/../../config.php';
 
 use enrol_mpcheckoutpro\local\checkout_service;
 use enrol_mpcheckoutpro\local\util;
@@ -52,11 +52,13 @@ if (isguestuser()) {
 try {
     $result = (new checkout_service())->start($instance, $USER);
 } catch (moodle_exception $e) {
-    util::log_debug('Checkout could not be started', [
+    util::log_debug(
+        'Checkout could not be started', [
         'instanceid' => $instanceid,
         'userid' => $USER->id,
         'message' => $e->getMessage(),
-    ]);
+        ]
+    );
     // The user gets a friendly page with the reason and a way back to the course.
     echo $OUTPUT->header();
     echo $OUTPUT->notification($e->getMessage(), \core\output\notification::NOTIFY_ERROR);

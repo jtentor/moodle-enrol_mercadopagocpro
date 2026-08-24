@@ -19,16 +19,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class MerchantOrderSearch extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Search elements. */
+    /**
+     * Search elements. 
+     */
     public array|object|null $elements;
 
-    /** Search next offset. */
+    /**
+     * Search next offset. 
+     */
     public ?int $next_offset;
 
-    /** Search total. */
+    /**
+     * Search total. 
+     */
     public ?int $total;
 
     private $map = [

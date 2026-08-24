@@ -25,16 +25,16 @@
  *   php enrol/mpcheckoutpro/cli/diagnose.php
  *   php enrol/mpcheckoutpro/cli/diagnose.php --courseid=12 --username=jperez
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 define('CLI_SCRIPT', true);
 
-require(__DIR__ . '/../../../config.php');
-require_once($CFG->libdir . '/clilib.php');
-require_once($CFG->libdir . '/ddllib.php');
+require __DIR__ . '/../../../config.php';
+require_once $CFG->libdir . '/clilib.php';
+require_once $CFG->libdir . '/ddllib.php';
 
 [$options, $unrecognised] = cli_get_params(
     [
@@ -72,18 +72,22 @@ EOT;
     exit(0);
 }
 
-/** @var int Number of blocking problems found. */
+/**
+ * @var int Number of blocking problems found. 
+*/
 $failures = 0;
-/** @var int Number of warnings found. */
+/**
+ * @var int Number of warnings found. 
+*/
 $warnings = 0;
 
 /**
  * Print one check result.
  *
- * @param bool|null $ok true = pass, false = fail, null = warning
- * @param string $label what was checked
- * @param string $detail what was found
- * @param string $fix what to do about it
+ * @param  bool|null $ok     true = pass, false = fail, null = warning
+ * @param  string    $label  what was checked
+ * @param  string    $detail what was found
+ * @param  string    $fix    what to do about it
  * @return void
  */
 function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
@@ -131,7 +135,7 @@ mpcp_report(
 $diskversion = null;
 if (file_exists($expecteddir . '/version.php')) {
     $plugin = new stdClass();
-    require($expecteddir . '/version.php');
+    include $expecteddir . '/version.php';
     $diskversion = $plugin->version ?? null;
     $requires = $plugin->requires ?? null;
 
@@ -447,7 +451,7 @@ mpcp_report(
 if ($options['courseid'] && $instance !== null) {
     echo PHP_EOL . '9. Instance form smoke test' . PHP_EOL;
 
-    require_once($CFG->libdir . '/formslib.php');
+    include_once $CFG->libdir . '/formslib.php';
 
     $course = $DB->get_record('course', ['id' => (int)$options['courseid']], '*', MUST_EXIST);
     $coursecontext = context_course::instance($course->id);

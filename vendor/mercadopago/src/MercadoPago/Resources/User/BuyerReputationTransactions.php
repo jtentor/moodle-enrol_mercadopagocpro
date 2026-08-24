@@ -17,25 +17,39 @@ use MercadoPago\Serialization\Mapper;
  */
 class BuyerReputationTransactions
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** User metrics for canceled transactions. */
+    /**
+     * User metrics for canceled transactions. 
+     */
     public array|object|null $canceled;
 
-    /** The number of completed transactions. */
+    /**
+     * The number of completed transactions. 
+     */
     public $completed;
 
-    /** User metrics for transactions not yet rated. */
+    /**
+     * User metrics for transactions not yet rated. 
+     */
     public array|object|null $not_yet_rated;
 
-    /** The transaction period (e.g., "historic"). */
+    /**
+     * The transaction period (e.g., "historic"). 
+     */
     public ?string $period;
 
-    /** User metrics for unrated transactions. */
+    /**
+     * User metrics for unrated transactions. 
+     */
     public array|object|null $unrated;
 
-    /** Total of transactions. */
+    /**
+     * Total of transactions. 
+     */
     public $total;
 
     public $map = [

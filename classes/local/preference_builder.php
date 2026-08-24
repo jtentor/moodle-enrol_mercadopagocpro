@@ -22,39 +22,54 @@ namespace enrol_mpcheckoutpro\local;
  * Every field emitted here appears in the official Create preference reference for
  * Checkout Pro. Nothing else is sent.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.br/developers/en/reference/online-payments/checkout-pro/preferences/create-preference/post
- * @see        https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.br/developers/en/reference/online-payments/checkout-pro/preferences/create-preference/post
+ * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
  */
-class preference_builder {
+class preference_builder
+{
 
-    /** @var string Only value documented for auto_return. */
+    /**
+     * @var string Only value documented for auto_return. 
+     */
     public const AUTO_RETURN_APPROVED = 'approved';
 
-    /** @var string purpose value that restricts the checkout to logged in Mercado Pago accounts. */
+    /**
+     * @var string purpose value that restricts the checkout to logged in Mercado Pago accounts. 
+     */
     public const PURPOSE_WALLET_PURCHASE = 'wallet_purchase';
 
     /**
      * Constructor.
      *
-     * @param \stdClass $instance enrol instance record
-     * @param \stdClass $course course record
-     * @param \stdClass $user buyer
-     * @param \stdClass $transaction the local transaction record (already has an id)
-     * @param instance_settings $settings resolved instance settings
+     * @param \stdClass         $instance    enrol instance record
+     * @param \stdClass         $course      course record
+     * @param \stdClass         $user        buyer
+     * @param \stdClass         $transaction the local transaction record (already has an id)
+     * @param instance_settings $settings    resolved instance settings
      */
     public function __construct(
-        /** @var \stdClass */
+        /**
+         * @var \stdClass 
+         */
         protected \stdClass $instance,
-        /** @var \stdClass */
+        /**
+         * @var \stdClass 
+         */
         protected \stdClass $course,
-        /** @var \stdClass */
+        /**
+         * @var \stdClass 
+         */
         protected \stdClass $user,
-        /** @var \stdClass */
+        /**
+         * @var \stdClass 
+         */
         protected \stdClass $transaction,
-        /** @var instance_settings */
+        /**
+         * @var instance_settings 
+         */
         protected instance_settings $settings,
     ) {
     }
@@ -64,7 +79,8 @@ class preference_builder {
      *
      * @return array
      */
-    public function build(): array {
+    public function build(): array
+    {
         $request = [
             'items' => [$this->build_item()],
             'payer' => $this->build_payer(),
@@ -119,7 +135,8 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_item(): array {
+    protected function build_item(): array
+    {
         $context = \context_course::instance($this->course->id);
         $title = format_string($this->course->fullname, true, ['context' => $context]);
         $description = $this->settings->itemdescription !== ''
@@ -142,7 +159,8 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_payer(): array {
+    protected function build_payer(): array
+    {
         $payer = [
             'email' => $this->user->email,
         ];
@@ -161,7 +179,8 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_back_urls(): array {
+    protected function build_back_urls(): array
+    {
         $base = util::plugin_url('return.php', ['txn' => $this->transaction->id]);
         return [
             'success' => (new \moodle_url($base, ['result' => 'success']))->out(false),
@@ -178,7 +197,8 @@ class preference_builder {
      *
      * @return string
      */
-    protected function build_notification_url(): string {
+    protected function build_notification_url(): string
+    {
         return util::plugin_url('webhook.php', ['enrolid' => (int)$this->instance->id])->out(false);
     }
 
@@ -187,23 +207,28 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_payment_methods(): array {
+    protected function build_payment_methods(): array
+    {
         $block = [];
 
         $excludedtypes = $this->settings->excludedpaymenttypes;
         if ($excludedtypes) {
-            $block['excluded_payment_types'] = array_values(array_map(
-                static fn(string $id): array => ['id' => $id],
-                $excludedtypes
-            ));
+            $block['excluded_payment_types'] = array_values(
+                array_map(
+                    static fn(string $id): array => ['id' => $id],
+                    $excludedtypes
+                )
+            );
         }
 
         $excludedmethods = $this->settings->excludedpaymentmethods;
         if ($excludedmethods) {
-            $block['excluded_payment_methods'] = array_values(array_map(
-                static fn(string $id): array => ['id' => $id],
-                $excludedmethods
-            ));
+            $block['excluded_payment_methods'] = array_values(
+                array_map(
+                    static fn(string $id): array => ['id' => $id],
+                    $excludedmethods
+                )
+            );
         }
 
         if ($this->settings->installments > 0) {
@@ -224,7 +249,8 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_expiration(): array {
+    protected function build_expiration(): array
+    {
         if ($this->settings->preferenceexpiry <= 0) {
             return [];
         }
@@ -244,7 +270,8 @@ class preference_builder {
      *
      * @return array
      */
-    protected function build_metadata(): array {
+    protected function build_metadata(): array
+    {
         global $CFG;
 
         $metadata = [
@@ -276,10 +303,11 @@ class preference_builder {
      * Format a unix timestamp the way Mercado Pago expects expiration dates
      * (ISO 8601 with milliseconds and an explicit offset).
      *
-     * @param int $timestamp
+     * @param  int $timestamp
      * @return string
      */
-    public static function format_datetime(int $timestamp): string {
+    public static function format_datetime(int $timestamp): string
+    {
         $date = new \DateTimeImmutable('@' . $timestamp);
         $date = $date->setTimezone(\core_date::get_server_timezone_object());
         return $date->format('Y-m-d\TH:i:s.v') . $date->format('P');
@@ -288,10 +316,11 @@ class preference_builder {
     /**
      * statement_descriptor accepts a short alphanumeric string.
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
-    protected function sanitise_descriptor(string $value): string {
+    protected function sanitise_descriptor(string $value): string
+    {
         $value = preg_replace('/[^A-Za-z0-9 ]/', '', $value);
         return $this->truncate(trim((string)$value), 22);
     }
@@ -299,11 +328,12 @@ class preference_builder {
     /**
      * Multibyte safe truncation.
      *
-     * @param string $value
-     * @param int $length
+     * @param  string $value
+     * @param  int    $length
      * @return string
      */
-    protected function truncate(string $value, int $length): string {
+    protected function truncate(string $value, int $length): string
+    {
         return \core_text::substr($value, 0, $length);
     }
 }

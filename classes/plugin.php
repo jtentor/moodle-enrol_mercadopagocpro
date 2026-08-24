@@ -17,9 +17,9 @@
 /**
  * Mercado Pago Checkout Pro enrolment plugin.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core\output\single_button;
@@ -34,19 +34,21 @@ use enrol_mpcheckoutpro\local\util;
 /**
  * Mercado Pago Checkout Pro enrolment plugin implementation.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class enrol_mpcheckoutpro_plugin extends enrol_plugin {
+class enrol_mpcheckoutpro_plugin extends enrol_plugin
+{
 
     /**
      * How the method is displayed on the "Enrolment methods" page.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return string
      */
-    public function get_instance_name_for_management_page(stdClass $instance): string {
+    public function get_instance_name_for_management_page(stdClass $instance): string
+    {
         $result = $this->get_instance_name($instance);
         if (strlen((string)$instance->customchar1)) {
             $context = context_course::instance($instance->courseid);
@@ -61,7 +63,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array currencycode => localised name
      */
-    public function get_possible_currencies(): array {
+    public function get_possible_currencies(): array
+    {
         $currencies = [];
         foreach (util::supported_currencies() as $code) {
             $currencies[$code] = new lang_string($code, 'core_currencies');
@@ -73,10 +76,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Optional enrolment information icons for the course listing.
      *
-     * @param array $instances all instances of this type in one course
+     * @param  array $instances all instances of this type in one course
      * @return array of pix_icon
      */
-    public function get_info_icons(array $instances) {
+    public function get_info_icons(array $instances)
+    {
         $now = time();
         foreach ($instances as $instance) {
             if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > $now) {
@@ -95,51 +99,57 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return bool
      */
-    public function roles_protected() {
+    public function roles_protected()
+    {
         return false;
     }
 
     /**
      * Users with the unenrol capability may unenrol other users manually.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return bool
      */
-    public function allow_unenrol(stdClass $instance) {
+    public function allow_unenrol(stdClass $instance)
+    {
         return true;
     }
 
     /**
      * Users with the manage capability may tweak period and status.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return bool
      */
-    public function allow_manage(stdClass $instance) {
+    public function allow_manage(stdClass $instance)
+    {
         return true;
     }
 
     /**
      * Show the "Enrol me" link when the instance is enabled.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return bool
      */
-    public function show_enrolme_link(stdClass $instance) {
+    public function show_enrolme_link(stdClass $instance)
+    {
         return (int)$instance->status === ENROL_INSTANCE_ENABLED;
     }
 
     /**
      * Whether an instance can be added to a course.
      *
-     * @param int $courseid
+     * @param  int $courseid
      * @return bool
      */
-    public function can_add_instance($courseid) {
+    public function can_add_instance($courseid)
+    {
         $context = context_course::instance($courseid, MUST_EXIST);
 
         if (!has_capability('moodle/course:enrolconfig', $context)
-                || !has_capability('enrol/mpcheckoutpro:config', $context)) {
+            || !has_capability('enrol/mpcheckoutpro:config', $context)
+        ) {
             return false;
         }
         // Multiple instances are supported: different price for different audiences.
@@ -151,17 +161,19 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return bool
      */
-    public function use_standard_editing_ui() {
+    public function use_standard_editing_ui()
+    {
         return true;
     }
 
     /**
      * Whether the instance can be deleted through the standard UI.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return bool
      */
-    public function can_delete_instance($instance) {
+    public function can_delete_instance($instance)
+    {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/mpcheckoutpro:config', $context);
     }
@@ -169,10 +181,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Whether the instance can be hidden or shown through the standard UI.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return bool
      */
-    public function can_hide_show_instance($instance) {
+    public function can_hide_show_instance($instance)
+    {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/mpcheckoutpro:config', $context);
     }
@@ -180,11 +193,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Add a new instance, normalising the money fields first.
      *
-     * @param object $course
-     * @param array|null $fields
+     * @param  object     $course
+     * @param  array|null $fields
      * @return int|null
      */
-    public function add_instance($course, ?array $fields = null) {
+    public function add_instance($course, ?array $fields = null)
+    {
         if ($fields) {
             $fields = $this->normalise_fields($fields);
         }
@@ -204,11 +218,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Update an instance, normalising the money fields first.
      *
-     * @param stdClass $instance
-     * @param stdClass $data
+     * @param  stdClass $instance
+     * @param  stdClass $data
      * @return bool
      */
-    public function update_instance($instance, $data) {
+    public function update_instance($instance, $data)
+    {
         if ($data) {
             $fields = $this->normalise_fields((array)$data);
             foreach ($fields as $key => $value) {
@@ -222,7 +237,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
                 $secret = trim((string)($data->mpwebhooksecret ?? ''));
 
                 if ($accesstoken === '' && $publickey === '' && $secret === ''
-                        && empty($data->mpkeepcredentials)) {
+                    && empty($data->mpkeepcredentials)
+                ) {
                     credentials::delete_for_instance((int)$instance->id);
                 } else if ($accesstoken !== '' || $publickey !== '' || $secret !== '') {
                     credentials::store_for_instance(
@@ -240,10 +256,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Convert form values into what the enrol table expects.
      *
-     * @param array $fields
+     * @param  array $fields
      * @return array
      */
-    protected function normalise_fields(array $fields): array {
+    protected function normalise_fields(array $fields): array
+    {
         if (isset($fields['cost'])) {
             $fields['cost'] = unformat_float($fields['cost']);
         }
@@ -258,9 +275,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
             $extra['excludedpaymenttypes'] = array_values((array)$fields['mpexcludedtypes']);
         }
         if (isset($fields['mpexcludedmethods'])) {
-            $extra['excludedpaymentmethods'] = array_values(array_filter(
-                array_map('trim', explode(',', (string)$fields['mpexcludedmethods']))
-            ));
+            $extra['excludedpaymentmethods'] = array_values(
+                array_filter(
+                    array_map('trim', explode(',', (string)$fields['mpexcludedmethods']))
+                )
+            );
         }
         if (isset($fields['mpitemdescription'])) {
             $extra['itemdescription'] = trim((string)$fields['mpitemdescription']);
@@ -307,10 +326,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Remove the plugin owned data when an instance is deleted.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return void
      */
-    public function delete_instance($instance) {
+    public function delete_instance($instance)
+    {
         global $DB;
 
         // Transactions are kept for accounting but detached from the instance,
@@ -324,11 +344,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * The enrolment page block shown to a user who is not enrolled yet.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return string html
      */
     #[\Override]
-    public function enrol_page_hook(stdClass $instance) {
+    public function enrol_page_hook(stdClass $instance)
+    {
         global $USER, $OUTPUT, $DB;
 
         $now = time();
@@ -355,16 +376,19 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         // Anything that makes the purchase impossible is shown as a plain notice.
         $blocker = $this->get_blocking_notice($instance, $settings, $context);
         if ($blocker !== null) {
-            return $OUTPUT->render(new enrol_page(
-                instance: $instance,
-                header: $name,
-                body: $OUTPUT->render($blocker),
-            ));
+            return $OUTPUT->render(
+                new enrol_page(
+                    instance: $instance,
+                    header: $name,
+                    body: $OUTPUT->render($blocker),
+                )
+            );
         }
 
         $pending = $this->get_pending_transaction($instance, (int)$USER->id);
 
-        $body = $OUTPUT->render_from_template('enrol_mpcheckoutpro/enrol_page', [
+        $body = $OUTPUT->render_from_template(
+            'enrol_mpcheckoutpro/enrol_page', [
             'cost' => $this->format_cost($settings),
             'currency' => $settings->currency,
             'description' => $settings->itemdescription !== ''
@@ -374,7 +398,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
             'testmode' => credentials::get_environment_setting() === credentials::ENV_TEST,
             'haspending' => $pending !== null,
             'pendingstatus' => $pending !== null ? status::label($pending->status) : '',
-        ]);
+            ]
+        );
 
         if (isguestuser() || !isloggedin()) {
             $button = new single_button(
@@ -392,23 +417,26 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
             );
         }
 
-        return $OUTPUT->render(new enrol_page(
-            instance: $instance,
-            header: $name,
-            body: $body,
-            buttons: [$button],
-        ));
+        return $OUTPUT->render(
+            new enrol_page(
+                instance: $instance,
+                header: $name,
+                body: $body,
+                buttons: [$button],
+            )
+        );
     }
 
     /**
      * Build the notification explaining why the purchase cannot proceed, if any.
      *
-     * @param stdClass $instance
-     * @param instance_settings $settings
-     * @param context $context
+     * @param  stdClass          $instance
+     * @param  instance_settings $settings
+     * @param  context           $context
      * @return \core\output\notification|null
      */
-    protected function get_blocking_notice(stdClass $instance, instance_settings $settings, context $context) {
+    protected function get_blocking_notice(stdClass $instance, instance_settings $settings, context $context)
+    {
         $message = null;
 
         if ($settings->cost <= 0) {
@@ -440,11 +468,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * The most recent transaction of a user that is still waiting to settle.
      *
-     * @param stdClass $instance
-     * @param int $userid
+     * @param  stdClass $instance
+     * @param  int      $userid
      * @return stdClass|null
      */
-    protected function get_pending_transaction(stdClass $instance, int $userid): ?stdClass {
+    protected function get_pending_transaction(stdClass $instance, int $userid): ?stdClass
+    {
         foreach (transaction::get_for_user((int)$instance->id, $userid) as $record) {
             if (in_array($record->status, [status::PENDING, status::IN_PROCESS, status::AUTHORIZED], true)) {
                 return $record;
@@ -456,10 +485,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Format the cost for display.
      *
-     * @param instance_settings $settings
+     * @param  instance_settings $settings
      * @return string
      */
-    protected function format_cost(instance_settings $settings): string {
+    protected function format_cost(instance_settings $settings): string
+    {
         $locale = get_string('localecldr', 'langconfig');
         if (class_exists('\NumberFormatter')) {
             $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
@@ -474,23 +504,28 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Add the transaction report to the enrolment method action icons.
      *
-     * @param stdClass $instance
+     * @param  stdClass $instance
      * @return array
      */
-    public function get_action_icons(stdClass $instance) {
+    public function get_action_icons(stdClass $instance)
+    {
         global $OUTPUT;
 
         $icons = parent::get_action_icons($instance);
         $context = context_course::instance($instance->courseid);
         if (has_capability('enrol/mpcheckoutpro:viewtransactions', $context)) {
-            $url = util::plugin_url('transactions.php', [
+            $url = util::plugin_url(
+                'transactions.php', [
                 'courseid' => $instance->courseid,
                 'instanceid' => $instance->id,
-            ]);
+                ]
+            );
             $icons[] = $OUTPUT->action_icon(
                 $url,
-                new pix_icon('i/report', get_string('transactions', 'enrol_mpcheckoutpro'), 'core',
-                    ['class' => 'iconsmall'])
+                new pix_icon(
+                    'i/report', get_string('transactions', 'enrol_mpcheckoutpro'), 'core',
+                    ['class' => 'iconsmall']
+                )
             );
         }
         return $icons;
@@ -499,12 +534,13 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Add elements to the edit instance form.
      *
-     * @param stdClass $instance
-     * @param MoodleQuickForm $mform
-     * @param context $context
+     * @param  stdClass        $instance
+     * @param  MoodleQuickForm $mform
+     * @param  context         $context
      * @return void
      */
-    public function edit_instance_form($instance, MoodleQuickForm $mform, $context) {
+    public function edit_instance_form($instance, MoodleQuickForm $mform, $context)
+    {
 
         // Merge the two expiry notification columns into one selector.
         if (!empty($instance->notifyall) && !empty($instance->expirynotify)) {
@@ -519,14 +555,18 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
-        $mform->addElement('text', 'customchar1', get_string('instancedescription', 'enrol_mpcheckoutpro'),
-            ['size' => 40]);
+        $mform->addElement(
+            'text', 'customchar1', get_string('instancedescription', 'enrol_mpcheckoutpro'),
+            ['size' => 40]
+        );
         $mform->setType('customchar1', PARAM_TEXT);
         $mform->addHelpButton('customchar1', 'instancedescription', 'enrol_mpcheckoutpro');
         $mform->addRule('customchar1', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
-        $mform->addElement('select', 'status', get_string('status', 'enrol_mpcheckoutpro'),
-            $this->get_status_options());
+        $mform->addElement(
+            'select', 'status', get_string('status', 'enrol_mpcheckoutpro'),
+            $this->get_status_options()
+        );
         $mform->addHelpButton('status', 'status', 'enrol_mpcheckoutpro');
         $mform->setDefault('status', $this->get_config('status'));
 
@@ -536,13 +576,17 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         $mform->setDefault('cost', format_float((float)$this->get_config('cost'), 2, true));
         $mform->addHelpButton('cost', 'cost', 'enrol_mpcheckoutpro');
 
-        $mform->addElement('select', 'currency', get_string('currency', 'enrol_mpcheckoutpro'),
-            $this->get_possible_currencies());
+        $mform->addElement(
+            'select', 'currency', get_string('currency', 'enrol_mpcheckoutpro'),
+            $this->get_possible_currencies()
+        );
         $mform->setDefault('currency', $this->get_config('currency'));
 
         // ------------------------------------------------------------- Enrolment.
-        $mform->addElement('select', 'roleid', get_string('assignrole', 'enrol_mpcheckoutpro'),
-            $this->get_roleid_options($instance, $context));
+        $mform->addElement(
+            'select', 'roleid', get_string('assignrole', 'enrol_mpcheckoutpro'),
+            $this->get_roleid_options($instance, $context)
+        );
         $mform->setDefault('roleid', $this->get_config('roleid'));
 
         $groups = [0 => get_string('none')];
@@ -552,26 +596,36 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         $mform->addElement('select', 'customint1', get_string('assigngroup', 'enrol_mpcheckoutpro'), $groups);
         $mform->addHelpButton('customint1', 'assigngroup', 'enrol_mpcheckoutpro');
 
-        $mform->addElement('duration', 'enrolperiod', get_string('enrolperiod', 'enrol_mpcheckoutpro'),
-            ['optional' => true, 'defaultunit' => DAYSECS]);
+        $mform->addElement(
+            'duration', 'enrolperiod', get_string('enrolperiod', 'enrol_mpcheckoutpro'),
+            ['optional' => true, 'defaultunit' => DAYSECS]
+        );
         $mform->setDefault('enrolperiod', $this->get_config('enrolperiod'));
         $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_mpcheckoutpro');
 
-        $mform->addElement('select', 'expirynotify', get_string('expirynotify', 'core_enrol'),
-            $this->get_expirynotify_options());
+        $mform->addElement(
+            'select', 'expirynotify', get_string('expirynotify', 'core_enrol'),
+            $this->get_expirynotify_options()
+        );
         $mform->addHelpButton('expirynotify', 'expirynotify', 'core_enrol');
 
-        $mform->addElement('duration', 'expirythreshold', get_string('expirythreshold', 'core_enrol'),
-            ['optional' => false, 'defaultunit' => DAYSECS]);
+        $mform->addElement(
+            'duration', 'expirythreshold', get_string('expirythreshold', 'core_enrol'),
+            ['optional' => false, 'defaultunit' => DAYSECS]
+        );
         $mform->addHelpButton('expirythreshold', 'expirythreshold', 'core_enrol');
         $mform->disabledIf('expirythreshold', 'expirynotify', 'eq', 0);
 
-        $mform->addElement('date_time_selector', 'enrolstartdate',
-            get_string('enrolstartdate', 'enrol_mpcheckoutpro'), ['optional' => true]);
+        $mform->addElement(
+            'date_time_selector', 'enrolstartdate',
+            get_string('enrolstartdate', 'enrol_mpcheckoutpro'), ['optional' => true]
+        );
         $mform->setDefault('enrolstartdate', 0);
 
-        $mform->addElement('date_time_selector', 'enrolenddate',
-            get_string('enrolenddate', 'enrol_mpcheckoutpro'), ['optional' => true]);
+        $mform->addElement(
+            'date_time_selector', 'enrolenddate',
+            get_string('enrolenddate', 'enrol_mpcheckoutpro'), ['optional' => true]
+        );
         $mform->setDefault('enrolenddate', 0);
 
         $mform->addElement('text', 'customint5', get_string('maxenrolled', 'enrol_mpcheckoutpro'), ['size' => 6]);
@@ -591,8 +645,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         $mform->addHelpButton('customint3', 'pendingholding', 'enrol_mpcheckoutpro');
         $mform->setDefault('customint3', -1);
 
-        $mform->addElement('select', 'mpnotifications', get_string('notifications', 'enrol_mpcheckoutpro'),
-            $trilean);
+        $mform->addElement(
+            'select', 'mpnotifications', get_string('notifications', 'enrol_mpcheckoutpro'),
+            $trilean
+        );
         $mform->addHelpButton('mpnotifications', 'notifications', 'enrol_mpcheckoutpro');
         $mform->setDefault('mpnotifications', $settings->notificationsraw);
 
@@ -609,14 +665,18 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         // ------------------------------------------------- Course welcome message.
         // Same behaviour and the same enrol table columns as enrol_self, so the
         // message and its placeholders work exactly as course staff already expect.
-        $mform->addElement('select', 'customint4',
+        $mform->addElement(
+            'select', 'customint4',
             get_string('sendcoursewelcomemessage', 'enrol_mpcheckoutpro'),
-            $this->get_welcome_email_options());
+            $this->get_welcome_email_options()
+        );
         $mform->addHelpButton('customint4', 'sendcoursewelcomemessage', 'enrol_mpcheckoutpro');
         $mform->setDefault('customint4', $this->get_config('sendcoursewelcomemessage', ENROL_DO_NOT_SEND_EMAIL));
 
-        $mform->addElement('textarea', 'customtext1', get_string('customwelcomemessage', 'core_enrol'),
-            ['cols' => '60', 'rows' => '8']);
+        $mform->addElement(
+            'textarea', 'customtext1', get_string('customwelcomemessage', 'core_enrol'),
+            ['cols' => '60', 'rows' => '8']
+        );
         $mform->setType('customtext1', PARAM_RAW);
         $mform->setDefault('customtext1', get_string('customwelcomemessageplaceholder', 'core_enrol'));
         $mform->hideIf(
@@ -651,30 +711,40 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         $mform->addHelpButton('customint2', 'installments', 'enrol_mpcheckoutpro');
         $mform->setDefault('customint2', 0);
 
-        $mform->addElement('text', 'customint7', get_string('defaultinstallments', 'enrol_mpcheckoutpro'),
-            ['size' => 4]);
+        $mform->addElement(
+            'text', 'customint7', get_string('defaultinstallments', 'enrol_mpcheckoutpro'),
+            ['size' => 4]
+        );
         $mform->setType('customint7', PARAM_INT);
         $mform->addHelpButton('customint7', 'defaultinstallments', 'enrol_mpcheckoutpro');
         $mform->setDefault('customint7', 0);
 
-        $mform->addElement('select', 'mpexcludedtypes', get_string('excludedpaymenttypes', 'enrol_mpcheckoutpro'),
-            $this->get_payment_type_options(), ['multiple' => true, 'size' => 6]);
+        $mform->addElement(
+            'select', 'mpexcludedtypes', get_string('excludedpaymenttypes', 'enrol_mpcheckoutpro'),
+            $this->get_payment_type_options(), ['multiple' => true, 'size' => 6]
+        );
         $mform->addHelpButton('mpexcludedtypes', 'excludedpaymenttypes', 'enrol_mpcheckoutpro');
         $mform->setDefault('mpexcludedtypes', $settings->excludedpaymenttypes);
 
-        $mform->addElement('text', 'mpexcludedmethods', get_string('excludedpaymentmethods', 'enrol_mpcheckoutpro'),
-            ['size' => 40]);
+        $mform->addElement(
+            'text', 'mpexcludedmethods', get_string('excludedpaymentmethods', 'enrol_mpcheckoutpro'),
+            ['size' => 40]
+        );
         $mform->setType('mpexcludedmethods', PARAM_TEXT);
         $mform->addHelpButton('mpexcludedmethods', 'excludedpaymentmethods', 'enrol_mpcheckoutpro');
         $mform->setDefault('mpexcludedmethods', implode(',', $settings->excludedpaymentmethods));
 
-        $mform->addElement('text', 'customchar2', get_string('defaultpaymentmethodid', 'enrol_mpcheckoutpro'),
-            ['size' => 20]);
+        $mform->addElement(
+            'text', 'customchar2', get_string('defaultpaymentmethodid', 'enrol_mpcheckoutpro'),
+            ['size' => 20]
+        );
         $mform->setType('customchar2', PARAM_ALPHANUMEXT);
         $mform->addHelpButton('customchar2', 'defaultpaymentmethodid', 'enrol_mpcheckoutpro');
 
-        $mform->addElement('textarea', 'mpitemdescription', get_string('itemdescription', 'enrol_mpcheckoutpro'),
-            ['rows' => 3, 'cols' => 50]);
+        $mform->addElement(
+            'textarea', 'mpitemdescription', get_string('itemdescription', 'enrol_mpcheckoutpro'),
+            ['rows' => 3, 'cols' => 50]
+        );
         $mform->setType('mpitemdescription', PARAM_TEXT);
         $mform->addHelpButton('mpitemdescription', 'itemdescription', 'enrol_mpcheckoutpro');
         $mform->setDefault('mpitemdescription', $settings->itemdescription);
@@ -688,8 +758,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         foreach ($settings->custommetadata as $key => $value) {
             $metadatalines[] = $key . '=' . $value;
         }
-        $mform->addElement('textarea', 'mpmetadata', get_string('custommetadata', 'enrol_mpcheckoutpro'),
-            ['rows' => 4, 'cols' => 50]);
+        $mform->addElement(
+            'textarea', 'mpmetadata', get_string('custommetadata', 'enrol_mpcheckoutpro'),
+            ['rows' => 4, 'cols' => 50]
+        );
         $mform->setType('mpmetadata', PARAM_TEXT);
         $mform->addHelpButton('mpmetadata', 'custommetadata', 'enrol_mpcheckoutpro');
         $mform->setDefault('mpmetadata', implode("\n", $metadatalines));
@@ -701,8 +773,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
             $mform->addElement('advcheckbox', 'customint8', get_string('splitenabled', 'enrol_mpcheckoutpro'));
             $mform->addHelpButton('customint8', 'splitenabled', 'enrol_mpcheckoutpro');
 
-            $mform->addElement('text', 'customdec1', get_string('marketplacefee', 'enrol_mpcheckoutpro'),
-                ['size' => 8]);
+            $mform->addElement(
+                'text', 'customdec1', get_string('marketplacefee', 'enrol_mpcheckoutpro'),
+                ['size' => 8]
+            );
             $mform->setType('customdec1', PARAM_RAW);
             $mform->addHelpButton('customdec1', 'marketplacefee', 'enrol_mpcheckoutpro');
             $mform->disabledIf('customdec1', 'customint8', 'notchecked');
@@ -713,61 +787,78 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
             $mform->disabledIf('customchar3', 'customint8', 'notchecked');
 
             if (!empty($instance->id) && \enrol_mpcheckoutpro\local\oauth_helper::is_enabled()) {
-                $connecturl = util::plugin_url('oauth.php', [
+                $connecturl = util::plugin_url(
+                    'oauth.php', [
                     'action' => 'connect',
                     'instanceid' => $instance->id,
                     'sesskey' => sesskey(),
-                ]);
+                    ]
+                );
                 $connected = credentials::instance_has_credentials((int)$instance->id);
-                $mform->addElement('static', 'mpconnect', get_string('sellerconnection', 'enrol_mpcheckoutpro'),
-                    html_writer::link($connecturl, get_string(
-                        $connected ? 'reconnectseller' : 'connectseller',
-                        'enrol_mpcheckoutpro'
-                    )));
+                $mform->addElement(
+                    'static', 'mpconnect', get_string('sellerconnection', 'enrol_mpcheckoutpro'),
+                    html_writer::link(
+                        $connecturl, get_string(
+                            $connected ? 'reconnectseller' : 'connectseller',
+                            'enrol_mpcheckoutpro'
+                        )
+                    )
+                );
             }
         }
 
         // ---------------------------------------------- Per instance credentials.
         if (credentials::instance_override_allowed()) {
             $mform->addElement('header', 'mpcredentials', get_string('instancecredentials', 'enrol_mpcheckoutpro'));
-            $mform->addElement('static', 'mpcredentialsinfo', '',
-                get_string('instancecredentials_desc', 'enrol_mpcheckoutpro'));
+            $mform->addElement(
+                'static', 'mpcredentialsinfo', '',
+                get_string('instancecredentials_desc', 'enrol_mpcheckoutpro')
+            );
 
-            $mform->addElement('passwordunmask', 'mpaccesstoken',
-                get_string('accesstoken', 'enrol_mpcheckoutpro'));
+            $mform->addElement(
+                'passwordunmask', 'mpaccesstoken',
+                get_string('accesstoken', 'enrol_mpcheckoutpro')
+            );
             $mform->setType('mpaccesstoken', PARAM_RAW_TRIMMED);
 
             $mform->addElement('passwordunmask', 'mppublickey', get_string('publickey', 'enrol_mpcheckoutpro'));
             $mform->setType('mppublickey', PARAM_RAW_TRIMMED);
 
-            $mform->addElement('passwordunmask', 'mpwebhooksecret',
-                get_string('webhooksecret', 'enrol_mpcheckoutpro'));
+            $mform->addElement(
+                'passwordunmask', 'mpwebhooksecret',
+                get_string('webhooksecret', 'enrol_mpcheckoutpro')
+            );
             $mform->setType('mpwebhooksecret', PARAM_RAW_TRIMMED);
 
             if (!empty($instance->id) && credentials::instance_has_credentials((int)$instance->id)) {
-                $mform->addElement('advcheckbox', 'mpkeepcredentials',
-                    get_string('keepcredentials', 'enrol_mpcheckoutpro'));
+                $mform->addElement(
+                    'advcheckbox', 'mpkeepcredentials',
+                    get_string('keepcredentials', 'enrol_mpcheckoutpro')
+                );
                 $mform->setDefault('mpkeepcredentials', 1);
                 $mform->addHelpButton('mpkeepcredentials', 'keepcredentials', 'enrol_mpcheckoutpro');
             }
         }
 
         if (enrol_accessing_via_instance($instance)) {
-            $mform->addElement('static', 'selfwarn', get_string('instanceeditselfwarning', 'core_enrol'),
-                get_string('instanceeditselfwarningtext', 'core_enrol'));
+            $mform->addElement(
+                'static', 'selfwarn', get_string('instanceeditselfwarning', 'core_enrol'),
+                get_string('instanceeditselfwarningtext', 'core_enrol')
+            );
         }
     }
 
     /**
      * Validate the instance edit form.
      *
-     * @param array $data
-     * @param array $files
-     * @param object $instance
-     * @param context $context
+     * @param  array   $data
+     * @param  array   $files
+     * @param  object  $instance
+     * @param  context $context
      * @return array
      */
-    public function edit_instance_validation($data, $files, $instance, $context) {
+    public function edit_instance_validation($data, $files, $instance, $context)
+    {
         $errors = [];
 
         $cost = str_replace(get_string('decsep', 'langconfig'), '.', (string)($data['cost'] ?? ''));
@@ -778,7 +869,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
         }
 
         if (!empty($data['enrolenddate']) && !empty($data['enrolstartdate'])
-                && $data['enrolenddate'] < $data['enrolstartdate']) {
+            && $data['enrolenddate'] < $data['enrolstartdate']
+        ) {
             $errors['enrolenddate'] = get_string('error:enrolenddate', 'enrol_mpcheckoutpro');
         }
 
@@ -857,7 +949,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array
      */
-    protected function get_welcome_email_options(): array {
+    protected function get_welcome_email_options(): array
+    {
         $options = enrol_send_welcome_email_options();
         unset($options[ENROL_SEND_EMAIL_FROM_KEY_HOLDER]);
         return $options;
@@ -868,7 +961,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array
      */
-    public function get_instance_defaults() {
+    public function get_instance_defaults()
+    {
         return [
             'status' => $this->get_config('status', ENROL_INSTANCE_DISABLED),
             'roleid' => $this->get_config('roleid'),
@@ -886,7 +980,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array
      */
-    protected function get_status_options() {
+    protected function get_status_options()
+    {
         return [
             ENROL_INSTANCE_ENABLED => get_string('yes'),
             ENROL_INSTANCE_DISABLED => get_string('no'),
@@ -896,11 +991,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Options for the role selector.
      *
-     * @param object $instance
-     * @param context $context
+     * @param  object  $instance
+     * @param  context $context
      * @return array
      */
-    protected function get_roleid_options($instance, $context) {
+    protected function get_roleid_options($instance, $context)
+    {
         if (!empty($instance->id)) {
             return get_default_enrol_roles($context, $instance->roleid);
         }
@@ -912,7 +1008,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array
      */
-    protected function get_expirynotify_options() {
+    protected function get_expirynotify_options()
+    {
         return [
             0 => get_string('no'),
             1 => get_string('expirynotifyenroller', 'core_enrol'),
@@ -929,7 +1026,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      *
      * @return array
      */
-    protected function get_payment_type_options(): array {
+    protected function get_payment_type_options(): array
+    {
         return [
             'credit_card' => get_string('paymenttype_credit_card', 'enrol_mpcheckoutpro'),
             'debit_card' => get_string('paymenttype_debit_card', 'enrol_mpcheckoutpro'),
@@ -946,13 +1044,14 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
      * Credentials are deliberately not restored: they never leave the site they
      * were entered on.
      *
-     * @param restore_enrolments_structure_step $step
-     * @param stdClass $data
-     * @param stdClass $course
-     * @param int $oldid
+     * @param  restore_enrolments_structure_step $step
+     * @param  stdClass                          $data
+     * @param  stdClass                          $course
+     * @param  int                               $oldid
      * @return void
      */
-    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid) {
+    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid)
+    {
         global $DB;
 
         if ($step->get_task()->get_target() == backup::TARGET_NEW_COURSE) {
@@ -980,15 +1079,16 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Restore a user enrolment.
      *
-     * @param restore_enrolments_structure_step $step
-     * @param stdClass $data
-     * @param stdClass $instance
-     * @param int $userid
-     * @param int $oldinstancestatus
+     * @param  restore_enrolments_structure_step $step
+     * @param  stdClass                          $data
+     * @param  stdClass                          $instance
+     * @param  int                               $userid
+     * @param  int                               $oldinstancestatus
      * @return void
      */
     public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid,
-            $oldinstancestatus) {
+        $oldinstancestatus
+    ) {
         $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $data->status);
         unset($step, $oldinstancestatus);
     }
@@ -996,14 +1096,15 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Restore group membership.
      *
-     * @param stdClass $instance
-     * @param int $groupid
-     * @param int $userid
+     * @param  stdClass $instance
+     * @param  int      $groupid
+     * @param  int      $userid
      * @return void
      */
-    public function restore_group_member($instance, $groupid, $userid) {
+    public function restore_group_member($instance, $groupid, $userid)
+    {
         global $CFG;
-        require_once($CFG->dirroot . '/group/lib.php');
+        include_once $CFG->dirroot . '/group/lib.php';
         groups_add_member($groupid, $userid);
         unset($instance);
     }
@@ -1011,10 +1112,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Scheduled synchronisation: expire enrolments that ran out.
      *
-     * @param progress_trace $trace
+     * @param  progress_trace $trace
      * @return int exit code, 0 means ok
      */
-    public function sync(progress_trace $trace) {
+    public function sync(progress_trace $trace)
+    {
         $this->process_expirations($trace);
         return 0;
     }
@@ -1022,19 +1124,22 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin {
     /**
      * Let the participants page offer a link to the payment behind an enrolment.
      *
-     * @param course_enrolment_manager $manager
-     * @param stdClass $ue
+     * @param  course_enrolment_manager $manager
+     * @param  stdClass                 $ue
      * @return array
      */
-    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
+    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue)
+    {
         $actions = parent::get_user_enrolment_actions($manager, $ue);
         $context = $manager->get_context();
 
         if (has_capability('enrol/mpcheckoutpro:viewtransactions', $context)) {
-            $url = util::plugin_url('transactions.php', [
+            $url = util::plugin_url(
+                'transactions.php', [
                 'courseid' => $context->instanceid,
                 'userid' => $ue->userid,
-            ]);
+                ]
+            );
             $actions[] = new user_enrolment_action(
                 new pix_icon('i/report', get_string('transactions', 'enrol_mpcheckoutpro')),
                 get_string('transactions', 'enrol_mpcheckoutpro'),

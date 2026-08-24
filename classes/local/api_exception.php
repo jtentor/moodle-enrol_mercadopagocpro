@@ -19,27 +19,33 @@ namespace enrol_mpcheckoutpro\local;
 /**
  * Raised when a call to the Mercado Pago API fails.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class api_exception extends \moodle_exception {
+class api_exception extends \moodle_exception
+{
 
-    /** @var int HTTP status returned by the API, 0 for transport level failures. */
+    /**
+     * @var int HTTP status returned by the API, 0 for transport level failures. 
+     */
     protected int $statuscode;
 
-    /** @var string The operation that failed. */
+    /**
+     * @var string The operation that failed. 
+     */
     protected string $operation;
 
     /**
      * Constructor.
      *
-     * @param string $message raw message from the API or the transport
-     * @param int $statuscode HTTP status, 0 when the request never completed
-     * @param string $operation human readable operation name
+     * @param string          $message    raw message from the API or the transport
+     * @param int             $statuscode HTTP status, 0 when the request never completed
+     * @param string          $operation  human readable operation name
      * @param \Throwable|null $previous
      */
-    public function __construct(string $message, int $statuscode, string $operation, ?\Throwable $previous = null) {
+    public function __construct(string $message, int $statuscode, string $operation, ?\Throwable $previous = null)
+    {
         $this->statuscode = $statuscode;
         $this->operation = $operation;
         $a = (object)[
@@ -58,7 +64,8 @@ class api_exception extends \moodle_exception {
      *
      * @return int
      */
-    public function get_status_code(): int {
+    public function get_status_code(): int
+    {
         return $this->statuscode;
     }
 
@@ -67,7 +74,8 @@ class api_exception extends \moodle_exception {
      *
      * @return string
      */
-    public function get_operation(): string {
+    public function get_operation(): string
+    {
         return $this->operation;
     }
 
@@ -76,7 +84,8 @@ class api_exception extends \moodle_exception {
      *
      * @return bool
      */
-    public function is_retryable(): bool {
+    public function is_retryable(): bool
+    {
         return $this->statuscode === 0
             || $this->statuscode === 408
             || $this->statuscode === 429

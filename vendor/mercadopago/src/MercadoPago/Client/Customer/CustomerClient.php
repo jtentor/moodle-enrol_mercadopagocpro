@@ -29,7 +29,9 @@ final class CustomerClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/v1/customers/search";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -38,12 +40,12 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Creates a new customer from a data array.
      *
-     * @param array<string,mixed> $request Customer data (email, first_name, last_name, identification, etc.).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  array<string,mixed> $request         Customer data (email, first_name, last_name, identification, etc.).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Customer The created customer resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/create-customer/post
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/create-customer/post
      */
     public function create(array $request, ?RequestOptions $request_options = null): Customer
     {
@@ -58,12 +60,12 @@ final class CustomerClient extends MercadoPagoClient
      *
      * Convenience shortcut for {@see create()} when only the email is known.
      *
-     * @param string $email Customer's email address.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $email           Customer's email address.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Customer The created customer resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/create-customer/post
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/create-customer/post
      */
     public function createByEmail(string $email, ?RequestOptions $request_options = null): Customer
     {
@@ -78,12 +80,12 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Retrieves an existing customer by ID.
      *
-     * @param string $id Customer ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $id              Customer ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Customer The found customer resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/get-customer/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/get-customer/get
      */
     public function get(string $id, ?RequestOptions $request_options = null): Customer
     {
@@ -96,13 +98,13 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Updates an existing customer's data.
      *
-     * @param string $id Customer ID.
-     * @param array<string,mixed> $request Fields to update.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $id              Customer ID.
+     * @param  array<string,mixed> $request         Fields to update.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Customer The updated customer resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/update-customer/put
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/update-customer/put
      */
     public function update(string $id, array $request, ?RequestOptions $request_options = null): Customer
     {
@@ -115,8 +117,8 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Deletes a customer by ID.
      *
-     * @param string $id Customer ID.
-     * @param RequestOptions|null $request_options Request options.
+     * @param  string              $id              Customer ID.
+     * @param  RequestOptions|null $request_options Request options.
      * @return Customer The deleted customer resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      */
@@ -131,12 +133,12 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Searches customers with pagination and filters.
      *
-     * @param MPSearchRequest|null $request Search criteria (limit, offset, filters like email).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  MPSearchRequest|null $request         Search criteria (limit, offset, filters like email).
+     * @param  RequestOptions|null  $request_options Per-request configuration overrides.
      * @return CustomerSearch Paginated search results containing matching customers.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/search-customer/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api/customers/search-customer/get
      */
     public function search(?MPSearchRequest $request  = null, ?RequestOptions $request_options = null): CustomerSearch
     {
@@ -150,8 +152,8 @@ final class CustomerClient extends MercadoPagoClient
     /**
      * Returns a Generator that lazily fetches all pages of customers matching the search criteria.
      *
-     * @param MPSearchRequest|null $request Search filters and pagination seed.
-     * @param RequestOptions|null $request_options Per-request overrides.
+     * @param  MPSearchRequest|null $request         Search filters and pagination seed.
+     * @param  RequestOptions|null  $request_options Per-request overrides.
      * @return \Generator Yields individual Customer items.
      */
     public function searchAll(?MPSearchRequest $request = null, ?RequestOptions $request_options = null): \Generator

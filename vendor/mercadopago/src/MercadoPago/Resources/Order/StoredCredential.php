@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -15,16 +17,24 @@ namespace MercadoPago\Resources\Order;
  */
 class StoredCredential
 {
-    /** Who initiated the payment: "cardholder" or "merchant". */
+    /**
+     * Who initiated the payment: "cardholder" or "merchant". 
+     */
     public ?string $payment_initiator;
 
-    /** Reason for using stored credentials (e.g., "recurring", "installment", "unscheduled"). */
+    /**
+     * Reason for using stored credentials (e.g., "recurring", "installment", "unscheduled"). 
+     */
     public ?string $reason;
 
-    /** Whether to store the payment method for future transactions. */
+    /**
+     * Whether to store the payment method for future transactions. 
+     */
     public ?bool $store_payment_method;
 
-    /** Whether this is the first payment in a series using these credentials. */
+    /**
+     * Whether this is the first payment in a series using these credentials. 
+     */
     public ?bool $first_payment;
 
     /**

@@ -17,10 +17,14 @@ use MercadoPago\Serialization\Mapper;
  */
 class DisbursementRefundList extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** List of disbursement refunds. */
+    /**
+     * List of disbursement refunds. 
+     */
     public array|object|null $refunds;
 
     private $map = [

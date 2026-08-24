@@ -11,6 +11,8 @@ namespace MercadoPago\Resources\Common;
  */
 class DifferentialPricing
 {
-    /** Unique identifier of the differential pricing configuration. */
+    /**
+     * Unique identifier of the differential pricing configuration. 
+     */
     public ?int $id;
 }

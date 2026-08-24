@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,19 +18,29 @@ use MercadoPago\Serialization\Mapper;
  */
 class Config
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Text shown on the buyer's credit card statement. Approximately 10 characters max depending on the card issuer. */
+    /**
+     * Text shown on the buyer's credit card statement. Approximately 10 characters max depending on the card issuer. 
+     */
     public ?string $statement_descriptor;
 
-    /** Offline payment expiration duration in ISO 8601 format (e.g. "P1D" = 1 day). */
+    /**
+     * Offline payment expiration duration in ISO 8601 format (e.g. "P1D" = 1 day). 
+     */
     public ?string $default_payment_due_date;
 
-    /** Payment method restrictions, defaults, and installment settings. Maps to {@see PaymentMethodConfig}. */
+    /**
+     * Payment method restrictions, defaults, and installment settings. Maps to {@see PaymentMethodConfig}. 
+     */
     public array|object|null $payment_method;
 
-    /** Online checkout configuration (redirect URLs, security). Maps to {@see OnlineConfig}. */
+    /**
+     * Online checkout configuration (redirect URLs, security). Maps to {@see OnlineConfig}. 
+     */
     public array|object|null $online;
 
     private $map = [

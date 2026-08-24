@@ -14,16 +14,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class Passenger
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Passenger's first name. */
+    /**
+     * Passenger's first name. 
+     */
     public ?string $first_name;
 
-    /** Passenger's last name. */
+    /**
+     * Passenger's last name. 
+     */
     public ?string $last_name;
 
-    /** @var \MercadoPago\Resources\Common\Identification|array|null Passenger's identification document. */
+    /**
+     * @var \MercadoPago\Resources\Common\Identification|array|null Passenger's identification document. 
+     */
     public array|object|null $identification;
 
     private $map = [

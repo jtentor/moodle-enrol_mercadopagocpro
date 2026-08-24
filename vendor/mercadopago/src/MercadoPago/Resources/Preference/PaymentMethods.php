@@ -17,25 +17,39 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentMethods
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Default payment method ID to pre-select in checkout. */
+    /**
+     * Default payment method ID to pre-select in checkout. 
+     */
     public ?string $default_payment_method_id;
 
-    /** Maximum number of installments allowed. */
+    /**
+     * Maximum number of installments allowed. 
+     */
     public ?int $installments;
 
-    /** Default number of installments pre-selected in checkout. */
+    /**
+     * Default number of installments pre-selected in checkout. 
+     */
     public ?int $default_installments;
 
-    /** Payment methods not allowed in payment process (except account_money). */
+    /**
+     * Payment methods not allowed in payment process (except account_money). 
+     */
     public ?array $excluded_payment_methods;
 
-    /** Payment types not allowed in payment process. */
+    /**
+     * Payment types not allowed in payment process. 
+     */
     public ?array $excluded_payment_types;
 
-    /** Default card ID. */
+    /**
+     * Default card ID. 
+     */
     public ?string $default_card_id;
 
     private $map = [

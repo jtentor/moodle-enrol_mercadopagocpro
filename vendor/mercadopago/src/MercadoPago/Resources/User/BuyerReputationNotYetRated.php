@@ -10,12 +10,18 @@ namespace MercadoPago\Resources\User;
  */
 class BuyerReputationNotYetRated
 {
-    /** The number of paid transactions not yet rated. */
+    /**
+     * The number of paid transactions not yet rated. 
+     */
     public $paid;
 
-    /** The total number of transactions not yet rated. */
+    /**
+     * The total number of transactions not yet rated. 
+     */
     public $total;
 
-    /** The number of units not yet rated. */
+    /**
+     * The number of units not yet rated. 
+     */
     public $units;
 }

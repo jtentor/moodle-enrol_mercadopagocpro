@@ -10,12 +10,18 @@ namespace MercadoPago\Resources\Payment;
  */
 class FeeDetails
 {
-    /** Type of fee (e.g. "mercadopago_fee", "coupon_fee", "financing_fee"). */
+    /**
+     * Type of fee (e.g. "mercadopago_fee", "coupon_fee", "financing_fee"). 
+     */
     public ?string $type;
 
-    /** Party that absorbs the fee cost (e.g. "collector", "payer"). */
+    /**
+     * Party that absorbs the fee cost (e.g. "collector", "payer"). 
+     */
     public ?string $fee_payer;
 
-    /** Fee amount in the payment's currency. */
+    /**
+     * Fee amount in the payment's currency. 
+     */
     public ?float $amount;
 }

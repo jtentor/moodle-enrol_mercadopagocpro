@@ -11,9 +11,13 @@ namespace MercadoPago\Resources\Customer;
  */
 class Issuer
 {
-    /** MercadoPago identifier for this card issuer. */
+    /**
+     * MercadoPago identifier for this card issuer. 
+     */
     public ?int $id;
 
-    /** Display name of the card issuer (e.g., "Banco Nacion", "BBVA"). */
+    /**
+     * Display name of the card issuer (e.g., "Banco Nacion", "BBVA"). 
+     */
     public ?string $name;
 }

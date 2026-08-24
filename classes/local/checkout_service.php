@@ -21,11 +21,12 @@ use enrol_mpcheckoutpro\event\preference_created;
 /**
  * Creates the Checkout Pro preference and hands back the URL the buyer is sent to.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class checkout_service {
+class checkout_service
+{
 
     /**
      * Constructor.
@@ -33,7 +34,9 @@ class checkout_service {
      * @param api_client|null $client injected in tests
      */
     public function __construct(
-        /** @var api_client|null */
+        /**
+         * @var api_client|null 
+         */
         protected ?api_client $client = null,
     ) {
     }
@@ -41,12 +44,13 @@ class checkout_service {
     /**
      * Start (or resume) a checkout for a user on an enrolment instance.
      *
-     * @param \stdClass $instance enrol instance
-     * @param \stdClass $user buyer
+     * @param  \stdClass $instance enrol instance
+     * @param  \stdClass $user     buyer
      * @return array{transaction:\stdClass,redirecturl:string}
      * @throws \moodle_exception on any condition that prevents the purchase
      */
-    public function start(\stdClass $instance, \stdClass $user): array {
+    public function start(\stdClass $instance, \stdClass $user): array
+    {
         global $DB;
 
         $settings = instance_settings::from_instance($instance);
@@ -112,12 +116,13 @@ class checkout_service {
      * still returned by the API but sends the buyer to sandbox.mercadopago.com,
      * which redirect-loops (ERR_TOO_MANY_REDIRECTS).
      *
-     * @param object $preference
-     * @param credentials $credentials
+     * @param  object      $preference
+     * @param  credentials $credentials
      * @return string
-     * @see https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/integration-test/test-purchases
+     * @see    https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/integration-test/test-purchases
      */
-    protected function pick_init_point(object $preference, credentials $credentials): string {
+    protected function pick_init_point(object $preference, credentials $credentials): string
+    {
         unset($credentials);
         return (string)($preference->init_point ?? '');
     }
@@ -125,13 +130,14 @@ class checkout_service {
     /**
      * Refuse to start a checkout that could not result in a valid enrolment.
      *
-     * @param \stdClass $instance
-     * @param \stdClass $user
-     * @param instance_settings $settings
+     * @param  \stdClass         $instance
+     * @param  \stdClass         $user
+     * @param  instance_settings $settings
      * @return void
      * @throws \moodle_exception
      */
-    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void {
+    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void
+    {
         global $DB;
 
         if ((int)$instance->status !== ENROL_INSTANCE_ENABLED) {
@@ -171,7 +177,8 @@ class checkout_service {
         }
 
         if ($settings->marketplaceenabled && $settings->marketplacefee > 0
-                && $settings->marketplacefee >= $settings->cost) {
+            && $settings->marketplacefee >= $settings->cost
+        ) {
             throw new \moodle_exception('error:feetoolarge', 'enrol_mpcheckoutpro');
         }
     }

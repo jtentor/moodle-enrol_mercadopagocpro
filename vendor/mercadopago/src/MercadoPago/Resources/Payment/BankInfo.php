@@ -12,22 +12,34 @@ use MercadoPago\Serialization\Mapper;
  */
 class BankInfo
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** @var BankInfoPayer|array|null Bank account details of the payer (buyer). */
+    /**
+     * @var BankInfoPayer|array|null Bank account details of the payer (buyer). 
+     */
     public array|object|null $payer;
 
-    /** @var BankInfoCollector|array|null Bank account details of the collector (seller). */
+    /**
+     * @var BankInfoCollector|array|null Bank account details of the collector (seller). 
+     */
     public array|object|null $collector;
 
-    /** Whether the payer and collector share the same bank account ownership. */
+    /**
+     * Whether the payer and collector share the same bank account ownership. 
+     */
     public ?string $is_same_bank_account_owner;
 
-    /** Identifier of the originating bank in the transfer. */
+    /**
+     * Identifier of the originating bank in the transfer. 
+     */
     public ?string $origin_bank_id;
 
-    /** Identifier of the originating digital wallet in the transfer. */
+    /**
+     * Identifier of the originating digital wallet in the transfer. 
+     */
     public ?string $origin_wallet_id;
 
     private $map = [

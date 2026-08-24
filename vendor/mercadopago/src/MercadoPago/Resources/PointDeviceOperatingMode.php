@@ -15,6 +15,8 @@ use MercadoPago\Net\MPResource;
  */
 class PointDeviceOperatingMode extends MPResource
 {
-    /** Operating mode. */
+    /**
+     * Operating mode. 
+     */
     public string $operating_mode;
 }

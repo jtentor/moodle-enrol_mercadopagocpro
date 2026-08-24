@@ -23,7 +23,9 @@ final class OrderTransactionClient extends MercadoPagoClient
     private const URL = "/v1/orders/%s/transactions";
     private const URL_WITH_ID = self::URL . "/%s";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -32,9 +34,9 @@ final class OrderTransactionClient extends MercadoPagoClient
     /**
      * Creates a new transaction within an order.
      *
-     * @param string $order_id Order ID.
-     * @param array<string,mixed> $request Transaction data (payment method, amount, etc.).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $order_id        Order ID.
+     * @param  array<string,mixed> $request         Transaction data (payment method, amount, etc.).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Transactions The created transaction resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -51,10 +53,10 @@ final class OrderTransactionClient extends MercadoPagoClient
     /**
      * Updates an existing transaction within an order.
      *
-     * @param string $order_id Order ID.
-     * @param string $transaction_id Transaction ID to update.
-     * @param array<string,mixed> $request Fields to update.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $order_id        Order ID.
+     * @param  string              $transaction_id  Transaction ID to update.
+     * @param  array<string,mixed> $request         Fields to update.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return UpdateTransaction The updated transaction resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -71,9 +73,9 @@ final class OrderTransactionClient extends MercadoPagoClient
     /**
      * Deletes a transaction from an order.
      *
-     * @param string $order_id Order ID.
-     * @param string $transaction_id Transaction ID to delete.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  string              $order_id        Order ID.
+     * @param  string              $transaction_id  Transaction ID to delete.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return MPResponse Raw API response (typically empty body with 204 status).
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

@@ -9,6 +9,8 @@ namespace MercadoPago\Client\Payment;
  */
 class PaymentCancelRequest
 {
-    /** Target payment status. Always "cancelled" for this request type. */
+    /**
+     * Target payment status. Always "cancelled" for this request type. 
+     */
     public string $status = "cancelled";
 }

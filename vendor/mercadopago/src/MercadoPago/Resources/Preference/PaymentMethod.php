@@ -11,6 +11,8 @@ namespace MercadoPago\Resources\Preference;
  */
 class PaymentMethod
 {
-    /** Payment method ID. */
+    /**
+     * Payment method ID. 
+     */
     public ?string $id;
 }

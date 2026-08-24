@@ -13,13 +13,19 @@ use Exception;
  */
 class InvalidWebhookSignatureException extends Exception
 {
-    /** @var string One of the {@see SignatureFailureReason} constants. */
+    /**
+     * @var string One of the {@see SignatureFailureReason} constants. 
+     */
     private string $reason;
 
-    /** @var string|null The `x-request-id` header value, when available. */
+    /**
+     * @var string|null The `x-request-id` header value, when available. 
+     */
     private ?string $requestId;
 
-    /** @var string|null The `ts` value extracted from the signature header, when available. */
+    /**
+     * @var string|null The `ts` value extracted from the signature header, when available. 
+     */
     private ?string $timestamp;
 
     /**
@@ -35,19 +41,25 @@ class InvalidWebhookSignatureException extends Exception
         $this->timestamp = $timestamp;
     }
 
-    /** Returns the specific failure reason ({@see SignatureFailureReason}). */
+    /**
+     * Returns the specific failure reason ({@see SignatureFailureReason}). 
+     */
     public function getReason(): string
     {
         return $this->reason;
     }
 
-    /** Returns the `x-request-id` header value associated with the request, or null. */
+    /**
+     * Returns the `x-request-id` header value associated with the request, or null. 
+     */
     public function getRequestId(): ?string
     {
         return $this->requestId;
     }
 
-    /** Returns the `ts` value extracted from the signature header, or null. */
+    /**
+     * Returns the `ts` value extracted from the signature header, or null. 
+     */
     public function getTimestamp(): ?string
     {
         return $this->timestamp;

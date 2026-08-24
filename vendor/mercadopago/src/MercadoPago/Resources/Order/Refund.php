@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -18,28 +20,44 @@ use MercadoPago\Serialization\Mapper;
  */
 class Refund
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Unique identifier of the refund assigned by MercadoPago. */
+    /**
+     * Unique identifier of the refund assigned by MercadoPago. 
+     */
     public ?string $id;
 
-    /** Identifier of the original payment transaction being refunded. */
+    /**
+     * Identifier of the original payment transaction being refunded. 
+     */
     public ?string $transaction_id;
 
-    /** Seller-defined reference to correlate this refund with an external system. */
+    /**
+     * Seller-defined reference to correlate this refund with an external system. 
+     */
     public ?string $reference_id;
 
-    /** Refund amount in the order's currency (partial or full). */
+    /**
+     * Refund amount in the order's currency (partial or full). 
+     */
     public ?string $amount;
 
-    /** Current refund status (e.g., "approved", "pending"). */
+    /**
+     * Current refund status (e.g., "approved", "pending"). 
+     */
     public ?string $status;
 
-    /** End-to-end transaction identifier for Pix refunds. */
+    /**
+     * End-to-end transaction identifier for Pix refunds. 
+     */
     public ?string $e2e_id;
 
-    /** Items being refunded. Each element maps to {@see Items}. */
+    /**
+     * Items being refunded. Each element maps to {@see Items}. 
+     */
     public ?array $items;
 
     private $map = [

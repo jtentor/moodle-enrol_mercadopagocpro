@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -13,9 +15,13 @@ namespace MercadoPago\Resources\Order;
  */
 class InvoicePeriod
 {
-    /** Number of units in the billing cycle (e.g., 1 for monthly, 7 for weekly). */
+    /**
+     * Number of units in the billing cycle (e.g., 1 for monthly, 7 for weekly). 
+     */
     public ?int  $period;
 
-    /** Unit type of the billing period (e.g., "monthly", "daily"). */
+    /**
+     * Unit type of the billing period (e.g., "monthly", "daily"). 
+     */
     public ?string $type;
 }

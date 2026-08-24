@@ -32,11 +32,12 @@ class MPAutoPaginationGenerator
     /**
      * Creates a Generator that lazily fetches all pages.
      *
-     * @param callable $searchFn function(MPSearchRequest $req, ?RequestOptions $opts): object
-     *        The callable must return an object with a results/data/elements array and
-     *        a paging object having a total property (int or string).
-     * @param MPSearchRequest $request Initial search parameters.
-     * @param RequestOptions|null $options Per-request overrides.
+     * @param  callable            $searchFn function(MPSearchRequest $req, ?RequestOptions $opts): object
+     *                                       The callable must return an object with a
+     *                                       results/data/elements array and a paging object having a
+     *                                       total property (int or string).
+     * @param  MPSearchRequest     $request  Initial search parameters.
+     * @param  RequestOptions|null $options  Per-request overrides.
      * @return Generator<mixed> Yields individual items from each page.
      */
     public static function of(callable $searchFn, MPSearchRequest $request, ?RequestOptions $options = null): Generator

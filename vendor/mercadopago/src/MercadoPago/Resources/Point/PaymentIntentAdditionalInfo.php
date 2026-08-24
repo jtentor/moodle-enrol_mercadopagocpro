@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\Point;
  */
 class PaymentIntentAdditionalInfo
 {
-    /** External reference of the payment. */
+    /**
+     * External reference of the payment. 
+     */
     public ?string $external_reference;
 
-    /** Print on terminal flag. */
+    /**
+     * Print on terminal flag. 
+     */
     public ?bool $print_on_terminal;
 }

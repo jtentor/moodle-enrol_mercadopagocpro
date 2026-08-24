@@ -13,13 +13,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class Cardholder
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** Full name of the cardholder as it appears on the card. */
+    /**
+     * Full name of the cardholder as it appears on the card. 
+     */
     public ?string $name;
 
-    /** @var \MercadoPago\Resources\Common\Identification|array|null Cardholder's identification document (type and number). */
+    /**
+     * @var \MercadoPago\Resources\Common\Identification|array|null Cardholder's identification document (type and number). 
+     */
     public array|object|null $identification;
 
     private $map = [

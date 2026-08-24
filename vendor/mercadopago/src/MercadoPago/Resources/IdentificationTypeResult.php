@@ -18,7 +18,9 @@ class IdentificationTypeResult extends MPResource
 {
     use Mapper;
 
-    /** Array of identification type entries returned by the API. */
+    /**
+     * Array of identification type entries returned by the API. 
+     */
     public array|object|null $data;
 
     /**

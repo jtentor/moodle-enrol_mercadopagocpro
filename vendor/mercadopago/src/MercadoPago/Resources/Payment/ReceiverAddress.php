@@ -13,18 +13,28 @@ use MercadoPago\Resources\Common\Address;
  */
 class ReceiverAddress extends Address
 {
-    /** Name of the street at the delivery address. */
+    /**
+     * Name of the street at the delivery address. 
+     */
     public ?string $street_name;
 
-    /** Name of the state/province at the delivery address. */
+    /**
+     * Name of the state/province at the delivery address. 
+     */
     public ?string $state_name;
 
-    /** Apartment or unit number at the delivery address. */
+    /**
+     * Apartment or unit number at the delivery address. 
+     */
     public ?string $apartment;
 
-    /** City name at the delivery address. */
+    /**
+     * City name at the delivery address. 
+     */
     public ?string $city_name;
 
-    /** Floor number within the building at the delivery address. */
+    /**
+     * Floor number within the building at the delivery address. 
+     */
     public ?string $floor;
 }

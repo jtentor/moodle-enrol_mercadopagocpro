@@ -10,15 +10,23 @@ namespace MercadoPago\Resources\Common;
  */
 class Paging
 {
-    /** Total number of results matching the search criteria. */
+    /**
+     * Total number of results matching the search criteria. 
+     */
     public ?int $total;
 
-    /** Total number of pages available. */
+    /**
+     * Total number of pages available. 
+     */
     public ?int $total_pages;
 
-    /** Maximum number of results returned per page. */
+    /**
+     * Maximum number of results returned per page. 
+     */
     public ?int $limit;
 
-    /** Number of results skipped from the beginning of the result set. */
+    /**
+     * Number of results skipped from the beginning of the result set. 
+     */
     public ?int $offset;
 }

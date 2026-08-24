@@ -18,7 +18,9 @@ class MPRateLimitException extends MPApiException
         $this->retry_after = $retry_after;
     }
 
-    /** Returns seconds to wait before retrying, or null if the Retry-After header was absent. */
+    /**
+     * Returns seconds to wait before retrying, or null if the Retry-After header was absent. 
+     */
     public function getRetryAfter(): ?int
     {
         return $this->retry_after;

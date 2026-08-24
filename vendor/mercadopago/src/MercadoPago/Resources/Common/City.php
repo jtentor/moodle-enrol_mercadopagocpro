@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\Common;
  */
 class City
 {
-    /** MercadoPago internal identifier for the city. */
+    /**
+     * MercadoPago internal identifier for the city. 
+     */
     public ?string $id;
 
-    /** Human-readable name of the city. */
+    /**
+     * Human-readable name of the city. 
+     */
     public ?string $name;
 }

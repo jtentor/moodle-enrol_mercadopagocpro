@@ -17,10 +17,14 @@ use MercadoPago\Serialization\Mapper;
  */
 class PaymentIntentList extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Events. */
+    /**
+     * Events. 
+     */
     public array|object|null $events;
 
     private $map = [

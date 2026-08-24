@@ -23,21 +23,26 @@ use MercadoPago\MercadoPagoConfig;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/enrol/mpcheckoutpro/tests/fixtures/mock_http_client.php');
+require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/fixtures/mock_http_client.php';
 
 /**
  * Shared setup for the enrol_mpcheckoutpro test suite.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-trait helper_trait {
+trait helper_trait
+{
 
-    /** @var mock_http_client|null */
+    /**
+     * @var mock_http_client|null 
+     */
     protected ?mock_http_client $mpclient = null;
 
-    /** @var bool Whether message redirection has already been started in this test. */
+    /**
+     * @var bool Whether message redirection has already been started in this test. 
+     */
     protected bool $messagesredirected = false;
 
     /**
@@ -45,7 +50,8 @@ trait helper_trait {
      *
      * @return mock_http_client
      */
-    protected function setup_plugin(): mock_http_client {
+    protected function setup_plugin(): mock_http_client
+    {
         global $CFG;
 
         $this->resetAfterTest();
@@ -79,22 +85,25 @@ trait helper_trait {
     /**
      * Create a course with one Mercado Pago enrolment instance.
      *
-     * @param array $fields instance overrides
+     * @param  array $fields instance overrides
      * @return array{0:\stdClass,1:\stdClass} course and enrol instance
      */
-    protected function create_course_with_instance(array $fields = []): array {
+    protected function create_course_with_instance(array $fields = []): array
+    {
         global $DB;
 
         $course = $this->getDataGenerator()->create_course();
         $plugin = enrol_get_plugin('mpcheckoutpro');
 
         $studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
-        $fields = array_merge([
+        $fields = array_merge(
+            [
             'status' => ENROL_INSTANCE_ENABLED,
             'cost' => 100,
             'currency' => 'ARS',
             'roleid' => $studentrole->id,
-        ], $fields);
+            ], $fields
+        );
 
         $instanceid = $plugin->add_instance($course, $fields);
         $instance = $DB->get_record('enrol', ['id' => $instanceid], '*', MUST_EXIST);
@@ -105,13 +114,14 @@ trait helper_trait {
     /**
      * Build the x-signature header Mercado Pago would send for a notification.
      *
-     * @param string $dataid
-     * @param string $requestid
-     * @param string $secret
-     * @param int|null $ts
+     * @param  string   $dataid
+     * @param  string   $requestid
+     * @param  string   $secret
+     * @param  int|null $ts
      * @return string
      */
-    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string {
+    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string
+    {
         $ts = $ts ?? time();
         $manifest = 'id:' . $dataid . ';request-id:' . $requestid . ';ts:' . $ts . ';';
         return 'ts=' . $ts . ',v1=' . hash_hmac('sha256', $manifest, $secret);

@@ -21,19 +21,21 @@ use enrol_mpcheckoutpro\local\util;
 /**
  * Tests for the shared helpers.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers     \enrol_mpcheckoutpro\local\util
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \enrol_mpcheckoutpro\local\util
  */
-final class util_test extends \advanced_testcase {
+final class util_test extends \advanced_testcase
+{
 
     /**
      * A reference produced by the plugin round-trips back to its parts.
      *
      * @return void
      */
-    public function test_external_reference_roundtrip(): void {
+    public function test_external_reference_roundtrip(): void
+    {
         $this->resetAfterTest();
 
         $reference = util::build_external_reference(42, 7, 13);
@@ -50,7 +52,8 @@ final class util_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_external_reference_rejects_tampering(): void {
+    public function test_external_reference_rejects_tampering(): void
+    {
         $this->resetAfterTest();
 
         $reference = util::build_external_reference(42, 7, 13);
@@ -71,7 +74,8 @@ final class util_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_external_reference_rejects_foreign_values(): void {
+    public function test_external_reference_rejects_foreign_values(): void
+    {
         $this->resetAfterTest();
 
         $this->assertNull(util::parse_external_reference(null));
@@ -85,10 +89,12 @@ final class util_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_redact_removes_sensitive_values(): void {
+    public function test_redact_removes_sensitive_values(): void
+    {
         $this->resetAfterTest();
 
-        $redacted = util::redact([
+        $redacted = util::redact(
+            [
             'id' => 1,
             'access_token' => 'APP_USR-secret',
             'payer' => [
@@ -97,7 +103,8 @@ final class util_test extends \advanced_testcase {
             ],
             'card' => ['first_six_digits' => '450995'],
             'transaction_amount' => 100,
-        ]);
+            ]
+        );
 
         $this->assertSame('(redacted)', $redacted['access_token']);
         $this->assertSame('(redacted)', $redacted['payer']['email']);
@@ -112,7 +119,8 @@ final class util_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_encode_for_storage_truncates(): void {
+    public function test_encode_for_storage_truncates(): void
+    {
         $this->resetAfterTest();
 
         $json = util::encode_for_storage(['blob' => str_repeat('x', 5000)], 500);
@@ -125,7 +133,8 @@ final class util_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_normalise_amount(): void {
+    public function test_normalise_amount(): void
+    {
         $this->assertSame(10.35, util::normalise_amount(10.3456));
         $this->assertSame(10.0, util::normalise_amount(9.999));
     }

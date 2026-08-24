@@ -23,28 +23,30 @@ use enrol_mpcheckoutpro\local\transaction;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php');
+require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php';
 
 /**
  * Tests for the Checkout Pro preference body.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers     \enrol_mpcheckoutpro\local\preference_builder
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers    \enrol_mpcheckoutpro\local\preference_builder
  */
-final class preference_builder_test extends \advanced_testcase {
+final class preference_builder_test extends \advanced_testcase
+{
 
     use helper_trait;
 
     /**
      * Build a preference body for a freshly created course and user.
      *
-     * @param array $instancefields
-     * @param array $siteconfig
+     * @param  array $instancefields
+     * @param  array $siteconfig
      * @return array
      */
-    protected function build(array $instancefields = [], array $siteconfig = []): array {
+    protected function build(array $instancefields = [], array $siteconfig = []): array
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -67,7 +69,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_minimal_preference(): void {
+    public function test_minimal_preference(): void
+    {
         $request = $this->build();
 
         $this->assertCount(1, $request['items']);
@@ -98,7 +101,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_metadata_contains_moodle_identifiers(): void {
+    public function test_metadata_contains_moodle_identifiers(): void
+    {
         $request = $this->build();
         $metadata = $request['metadata'];
 
@@ -117,7 +121,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_payment_methods_block(): void {
+    public function test_payment_methods_block(): void
+    {
         $request = $this->build();
         $this->assertArrayNotHasKey('payment_methods', $request);
 
@@ -138,7 +143,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_default_installments_is_capped(): void {
+    public function test_default_installments_is_capped(): void
+    {
         $request = $this->build(['customint2' => 3, 'customint7' => 12]);
         $this->assertSame(3, $request['payment_methods']['default_installments']);
     }
@@ -148,7 +154,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_expiration_dates(): void {
+    public function test_expiration_dates(): void
+    {
         $request = $this->build([], ['preferenceexpiry' => 3600]);
 
         $this->assertTrue($request['expires']);
@@ -163,7 +170,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_statement_descriptor_is_sanitised(): void {
+    public function test_statement_descriptor_is_sanitised(): void
+    {
         $request = $this->build([], ['statementdescriptor' => 'Uni*versity! Courses & More 2026']);
         $this->assertSame('University Courses  Mo', $request['statement_descriptor']);
         $this->assertLessThanOrEqual(22, strlen($request['statement_descriptor']));
@@ -174,7 +182,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_marketplace_fee(): void {
+    public function test_marketplace_fee(): void
+    {
         $request = $this->build(['customint8' => 1, 'customdec1' => 15]);
         $this->assertArrayNotHasKey('marketplace_fee', $request);
 
@@ -191,7 +200,8 @@ final class preference_builder_test extends \advanced_testcase {
      *
      * @return void
      */
-    public function test_wallet_purchase_purpose(): void {
+    public function test_wallet_purchase_purpose(): void
+    {
         $request = $this->build();
         $this->assertArrayNotHasKey('purpose', $request);
 

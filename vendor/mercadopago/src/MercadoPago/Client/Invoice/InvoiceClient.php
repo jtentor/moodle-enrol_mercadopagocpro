@@ -24,7 +24,9 @@ final class InvoiceClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/authorized_payments/search";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -33,8 +35,8 @@ final class InvoiceClient extends MercadoPagoClient
     /**
      * Retrieves an invoice (authorized payment) by its ID.
      *
-     * @param int $id Invoice ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  int                 $id              Invoice ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Invoice The found invoice resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
@@ -50,8 +52,8 @@ final class InvoiceClient extends MercadoPagoClient
     /**
      * Searches invoices with pagination and filters.
      *
-     * @param MPSearchRequest $request Search criteria (limit, offset, filters like status, preapproval_id).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  MPSearchRequest     $request         Search criteria (limit, offset, filters like status, preapproval_id).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return InvoiceSearch Paginated search results containing matching invoices.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

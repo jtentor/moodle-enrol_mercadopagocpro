@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7d364c51-04c7-45e3-af61-f82423bcc39c */
+/**
+ * API version: 7d364c51-04c7-45e3-af61-f82423bcc39c 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -17,43 +19,69 @@ use MercadoPago\Serialization\Mapper;
  */
 class OnlineConfig
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** ISO 8601 datetime from which the order is available for payment. */
+    /**
+     * ISO 8601 datetime from which the order is available for payment. 
+     */
     public ?string $available_from;
 
-    /** Restricts who can pay. "account_only" limits to logged-in MercadoPago users; omit to accept all users. */
+    /**
+     * Restricts who can pay. "account_only" limits to logged-in MercadoPago users; omit to accept all users. 
+     */
     public ?string $allowed_user_type;
 
-    /** URL where MercadoPago sends asynchronous payment notifications (IPN/webhook). */
+    /**
+     * URL where MercadoPago sends asynchronous payment notifications (IPN/webhook). 
+     */
     public ?string $callback_url;
 
-    /** URL to redirect the buyer after a successful payment. */
+    /**
+     * URL to redirect the buyer after a successful payment. 
+     */
     public ?string $success_url;
 
-    /** URL to redirect the buyer when the payment is pending approval. */
+    /**
+     * URL to redirect the buyer when the payment is pending approval. 
+     */
     public ?string $pending_url;
 
-    /** URL to redirect the buyer after a failed payment. */
+    /**
+     * URL to redirect the buyer after a failed payment. 
+     */
     public ?string $failure_url;
 
-    /** Legacy URL field for automatic redirection. Prefer auto_return plus success/failure/pending URLs for online orders. */
+    /**
+     * Legacy URL field for automatic redirection. Prefer auto_return plus success/failure/pending URLs for online orders. 
+     */
     public ?string $auto_return_url;
 
-    /** Automatic redirect behavior. "approved" redirects to success_url on approval; "all" redirects on any outcome. */
+    /**
+     * Automatic redirect behavior. "approved" redirects to success_url on approval; "all" redirects on any outcome. 
+     */
     public ?string $auto_return;
 
-    /** Tracking pixels fired at checkout completion. Supports "google_ad" and "facebook_ad" types. Each element maps to {@see Track}. */
+    /**
+     * Tracking pixels fired at checkout completion. Supports "google_ad" and "facebook_ad" types. Each element maps to {@see Track}. 
+     */
     public ?array $tracks;
 
-    /** Payment retry configuration for this order. Maps to {@see Retries}. */
+    /**
+     * Payment retry configuration for this order. Maps to {@see Retries}. 
+     */
     public array|object|null $retries;
 
-    /** Differential pricing configuration for offering different prices per payment method. Maps to DifferentialPricing. */
+    /**
+     * Differential pricing configuration for offering different prices per payment method. Maps to DifferentialPricing. 
+     */
     public array|object|null $differential_pricing;
 
-    /** 3D Secure and other transaction security settings. Maps to {@see TransactionSecurity}. */
+    /**
+     * 3D Secure and other transaction security settings. Maps to {@see TransactionSecurity}. 
+     */
     public array|object|null $transaction_security;
 
     private $map = [

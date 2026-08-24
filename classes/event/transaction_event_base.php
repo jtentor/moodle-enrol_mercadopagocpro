@@ -19,18 +19,20 @@ namespace enrol_mpcheckoutpro\event;
 /**
  * Shared behaviour for the events raised about a payment transaction.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class transaction_event_base extends \core\event\base {
+abstract class transaction_event_base extends \core\event\base
+{
 
     /**
      * Common initialisation: read only, course level, on the transaction table.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_OTHER;
         $this->data['objecttable'] = 'enrol_mpcheckoutpro_txn';
@@ -39,17 +41,20 @@ abstract class transaction_event_base extends \core\event\base {
     /**
      * Build an event from an enrolment instance and a transaction record.
      *
-     * @param \stdClass $instance enrol instance
-     * @param \stdClass $transaction transaction record
-     * @param array $other extra values for the `other` payload
+     * @param  \stdClass $instance    enrol instance
+     * @param  \stdClass $transaction transaction record
+     * @param  array     $other       extra values for the `other` payload
      * @return static
      */
-    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self {
-        $event = static::create([
+    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self
+    {
+        $event = static::create(
+            [
             'context' => \context_course::instance($instance->courseid),
             'objectid' => (int)$transaction->id,
             'relateduserid' => (int)$transaction->userid,
-            'other' => array_merge([
+            'other' => array_merge(
+                [
                 'enrolid' => (int)$instance->id,
                 'status' => (string)$transaction->status,
                 'statusdetail' => (string)($transaction->statusdetail ?? ''),
@@ -59,8 +64,10 @@ abstract class transaction_event_base extends \core\event\base {
                 'currency' => (string)$transaction->currency,
                 'enrolmentstate' => (string)$transaction->enrolmentstate,
                 'livemode' => (int)$transaction->livemode,
-            ], $other),
-        ]);
+                ], $other
+            ),
+            ]
+        );
         $event->add_record_snapshot('enrol_mpcheckoutpro_txn', $transaction);
         return $event;
     }
@@ -70,10 +77,13 @@ abstract class transaction_event_base extends \core\event\base {
      *
      * @return \moodle_url
      */
-    public function get_url() {
-        return new \moodle_url('/enrol/mpcheckoutpro/transactions.php', [
+    public function get_url()
+    {
+        return new \moodle_url(
+            '/enrol/mpcheckoutpro/transactions.php', [
             'courseid' => $this->contextinstanceid,
             'txn' => $this->objectid,
-        ]);
+            ]
+        );
     }
 }

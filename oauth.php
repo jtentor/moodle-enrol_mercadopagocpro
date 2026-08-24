@@ -20,13 +20,13 @@
  * Acts both as the entry point ("connect") and as the redirect_uri registered in
  * the Mercado Pago application.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.br/developers/en/docs/security/oauth/creation
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.br/developers/en/docs/security/oauth/creation
  */
 
-require(__DIR__ . '/../../config.php');
+require __DIR__ . '/../../config.php';
 
 use enrol_mpcheckoutpro\local\api_exception;
 use enrol_mpcheckoutpro\local\oauth_helper;

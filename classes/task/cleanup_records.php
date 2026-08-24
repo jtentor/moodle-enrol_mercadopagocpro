@@ -26,18 +26,20 @@ use enrol_mpcheckoutpro\local\webhook_handler;
  * Transactions that produced a payment are never deleted here; they are financial
  * records. Only checkouts the buyer never completed and old notification rows go.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class cleanup_records extends \core\task\scheduled_task {
+class cleanup_records extends \core\task\scheduled_task
+{
 
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:cleanup_records', 'enrol_mpcheckoutpro');
     }
 
@@ -46,7 +48,8 @@ class cleanup_records extends \core\task\scheduled_task {
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         global $DB;
 
         $keepfor = (int)get_config('enrol_mpcheckoutpro', 'cleanupafter');

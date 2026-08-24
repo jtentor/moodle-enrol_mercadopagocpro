@@ -10,6 +10,8 @@ namespace MercadoPago\Resources\User;
  */
 class Context
 {
-    /** The user's IP address. */
+    /**
+     * The user's IP address. 
+     */
     public ?string $ip_address;
 }

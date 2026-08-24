@@ -10,6 +10,8 @@ namespace MercadoPago\Resources\User;
  */
 class BillData
 {
-    /** Indicates whether the user accepts credit notes (true/false). */
+    /**
+     * Indicates whether the user accepts credit notes (true/false). 
+     */
     public ?bool $accept_credit_note;
 }

@@ -12,9 +12,13 @@ namespace MercadoPago\Resources\Order;
  */
 class InstallmentsInterestFree
 {
-    /** Promotion type that determines who absorbs the interest cost (e.g., "seller_costs"). */
+    /**
+     * Promotion type that determines who absorbs the interest cost (e.g., "seller_costs"). 
+     */
     public ?string $type = null;
 
-    /** Allowed installment counts for this promotion (e.g., [3, 6, 12]). */
+    /**
+     * Allowed installment counts for this promotion (e.g., [3, 6, 12]). 
+     */
     public ?array $values = null;
 }

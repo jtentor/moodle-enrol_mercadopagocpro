@@ -29,7 +29,9 @@ final class PaymentClient extends MercadoPagoClient
 
     private const URL_SEARCH = "/v1/payments/search";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -38,12 +40,12 @@ final class PaymentClient extends MercadoPagoClient
     /**
      * Creates a new payment.
      *
-     * @param array<string,mixed> $request Payment data (transaction_amount, token, payment_method_id, payer, etc.).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  array<string,mixed> $request         Payment data (transaction_amount, token, payment_method_id, payer, etc.).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Payment The created payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/create-payment/post
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/create-payment/post
      */
     public function create(array $request, ?RequestOptions $request_options = null): Payment
     {
@@ -56,12 +58,12 @@ final class PaymentClient extends MercadoPagoClient
     /**
      * Retrieves an existing payment by its ID.
      *
-     * @param int $id Payment ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  int                 $id              Payment ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Payment The found payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/get-payment/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/get-payment/get
      */
     public function get(int $id, ?RequestOptions $request_options = null): Payment
     {
@@ -73,13 +75,13 @@ final class PaymentClient extends MercadoPagoClient
     /**
      * Updates an existing payment with arbitrary fields.
      *
-     * @param int $id Payment ID.
-     * @param array<string,mixed> $request Fields to update (e.g. status, transaction_amount).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  int                 $id              Payment ID.
+     * @param  array<string,mixed> $request         Fields to update (e.g. status, transaction_amount).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Payment The updated payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
      */
     public function update(int $id, array $request, ?RequestOptions $request_options = null): Payment
     {
@@ -94,12 +96,12 @@ final class PaymentClient extends MercadoPagoClient
      *
      * Only payments in "pending" status can be cancelled.
      *
-     * @param int $id Payment ID.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  int                 $id              Payment ID.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Payment The cancelled payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
      */
     public function cancel(int $id, ?RequestOptions $request_options = null): Payment
     {
@@ -116,13 +118,13 @@ final class PaymentClient extends MercadoPagoClient
      * Only applies to payments created with `capture: false`. Pass null for the amount
      * to capture the full authorized amount, or a specific value for partial capture.
      *
-     * @param int $id Payment ID.
-     * @param float|null $amount Amount to capture. Null captures the full authorized amount.
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  int                 $id              Payment ID.
+     * @param  float|null          $amount          Amount to capture. Null captures the full authorized amount.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return Payment The captured payment resource.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/update-payment/put
      */
     public function capture(int $id, ?float $amount, ?RequestOptions $request_options = null): Payment
     {
@@ -137,12 +139,12 @@ final class PaymentClient extends MercadoPagoClient
     /**
      * Searches payments with pagination and filters.
      *
-     * @param MPSearchRequest $request Search criteria (limit, offset, filters like status, date_created, etc.).
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  MPSearchRequest     $request         Search criteria (limit, offset, filters like status, date_created, etc.).
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentSearch Paginated search results containing matching payments.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.
-     * @see https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/search-payments/get
+     * @see    https://www.mercadopago.com/developers/en/reference/online-payments/checkout-api-payments/search-payments/get
      */
     public function search(MPSearchRequest $request, ?RequestOptions $request_options = null): PaymentSearch
     {
@@ -156,8 +158,8 @@ final class PaymentClient extends MercadoPagoClient
     /**
      * Returns a Generator that lazily fetches all pages of payments matching the search criteria.
      *
-     * @param MPSearchRequest $request Search filters and pagination seed.
-     * @param RequestOptions|null $request_options Per-request overrides.
+     * @param  MPSearchRequest     $request         Search filters and pagination seed.
+     * @param  RequestOptions|null $request_options Per-request overrides.
      * @return \Generator Yields individual PaymentSearchResult items.
      */
     public function searchAll(MPSearchRequest $request, ?RequestOptions $request_options = null): \Generator

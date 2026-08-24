@@ -20,7 +20,9 @@ final class PaymentMethodClient extends MercadoPagoClient
 {
     private const URL = "/v1/payment_methods";
 
-    /** @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. */
+    /**
+     * @param MPHttpClient|null $MPHttpClient Custom HTTP client. Defaults to the SDK global client. 
+     */
     public function __construct(?MPHttpClient $MPHttpClient = null)
     {
         parent::__construct($MPHttpClient ?: MercadoPagoConfig::getHttpClient());
@@ -29,7 +31,7 @@ final class PaymentMethodClient extends MercadoPagoClient
     /**
      * Lists all available payment methods for the current country.
      *
-     * @param RequestOptions|null $request_options Per-request configuration overrides.
+     * @param  RequestOptions|null $request_options Per-request configuration overrides.
      * @return PaymentMethodResult Collection of available payment method resources.
      * @throws \MercadoPago\Exceptions\MPApiException When the API returns a non-2xx status code.
      * @throws \Exception On transport-level errors.

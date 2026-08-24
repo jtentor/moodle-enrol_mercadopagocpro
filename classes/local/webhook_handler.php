@@ -28,32 +28,49 @@ use MercadoPago\Webhook\WebhookSignatureValidator;
  * official Webhooks documentation. The body is never trusted for payment state:
  * it only tells us which resource to go and read from the API.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks
  */
-class webhook_handler {
+class webhook_handler
+{
 
-    /** @var string Table holding the webhook audit log. */
+    /**
+     * @var string Table holding the webhook audit log. 
+     */
     public const LOG_TABLE = 'enrol_mpcheckoutpro_wh';
 
-    /** @var string Signature was verified. */
+    /**
+     * @var string Signature was verified. 
+     */
     public const SIG_VALID = 'valid';
-    /** @var string Signature present but wrong. */
+    /**
+     * @var string Signature present but wrong. 
+     */
     public const SIG_INVALID = 'invalid';
-    /** @var string No x-signature header was sent. */
+    /**
+     * @var string No x-signature header was sent. 
+     */
     public const SIG_MISSING = 'missing';
-    /** @var string Verification deliberately skipped (no secret configured). */
+    /**
+     * @var string Verification deliberately skipped (no secret configured). 
+     */
     public const SIG_SKIPPED = 'skipped';
 
-    /** @var int Maximum accepted body size, well above any real notification. */
+    /**
+     * @var int Maximum accepted body size, well above any real notification. 
+     */
     private const MAX_BODY_BYTES = 65536;
 
-    /** @var int[] Retry backoff in seconds for deferred processing. */
+    /**
+     * @var int[] Retry backoff in seconds for deferred processing. 
+     */
     private const RETRY_BACKOFF = [60, 300, 900, 3600, 10800];
 
-    /** @var int Give up after this many internal retries. */
+    /**
+     * @var int Give up after this many internal retries. 
+     */
     private const MAX_ATTEMPTS = 5;
 
     /**
@@ -62,7 +79,9 @@ class webhook_handler {
      * @param payment_processor|null $processor injected in tests
      */
     public function __construct(
-        /** @var payment_processor|null */
+        /**
+         * @var payment_processor|null 
+         */
         protected ?payment_processor $processor = null,
     ) {
     }
@@ -70,13 +89,14 @@ class webhook_handler {
     /**
      * Handle one incoming notification.
      *
-     * @param array $query the request query string parameters
-     * @param array $headers request headers, lower case keys
-     * @param string $rawbody raw request body
-     * @param string $clientip remote address, used for rate limiting
+     * @param  array  $query    the request query string parameters
+     * @param  array  $headers  request headers, lower case keys
+     * @param  string $rawbody  raw request body
+     * @param  string $clientip remote address, used for rate limiting
      * @return array{status:int,body:string} the HTTP response to send back
      */
-    public function handle(array $query, array $headers, string $rawbody, string $clientip): array {
+    public function handle(array $query, array $headers, string $rawbody, string $clientip): array
+    {
         if (!rate_limiter::for_webhook()->allow($clientip)) {
             util::log_error('Webhook rate limit exceeded', ['ip' => $clientip]);
             return ['status' => 429, 'body' => 'Too Many Requests'];
@@ -108,10 +128,12 @@ class webhook_handler {
                 $this->finish_log($logid, 401, false, 'Signature ' . $signaturestatus);
                 return ['status' => 401, 'body' => 'Unauthorized'];
             }
-            util::log_error('Webhook signature could not be verified but verification is not enforced', [
+            util::log_error(
+                'Webhook signature could not be verified but verification is not enforced', [
                 'reason' => $signaturestatus,
                 'requestid' => $notification['requestid'],
-            ]);
+                ]
+            );
         }
 
         webhook_received::create_from_notification($notification)->trigger();
@@ -152,9 +174,9 @@ class webhook_handler {
     /**
      * Dispatch a notification to the payment processor.
      *
-     * @param array $notification normalised notification
-     * @param \stdClass|null $instance
-     * @param \stdClass|null $transaction already resolved transaction, when the caller has one
+     * @param  array          $notification normalised notification
+     * @param  \stdClass|null $instance
+     * @param  \stdClass|null $transaction  already resolved transaction, when the caller has one
      * @return processing_result
      */
     public function dispatch(
@@ -180,10 +202,12 @@ class webhook_handler {
                 return $processor->process_merchant_order($dataid, $transaction);
             }
         } catch (\Throwable $e) {
-            util::log_error('Webhook dispatch failed: ' . $e->getMessage(), [
+            util::log_error(
+                'Webhook dispatch failed: ' . $e->getMessage(), [
                 'type' => $type,
                 'dataid' => $dataid,
-            ]);
+                ]
+            );
             return processing_result::retry($e->getMessage(), true);
         }
 
@@ -193,11 +217,12 @@ class webhook_handler {
     /**
      * Best effort resolution of the transaction a notification refers to.
      *
-     * @param array $notification
-     * @param \stdClass|null $instance
+     * @param  array          $notification
+     * @param  \stdClass|null $instance
      * @return \stdClass|null
      */
-    protected function find_transaction(array $notification, ?\stdClass $instance): ?\stdClass {
+    protected function find_transaction(array $notification, ?\stdClass $instance): ?\stdClass
+    {
         global $DB;
 
         if ($notification['type'] === 'payment' && $notification['dataid'] !== '') {
@@ -235,11 +260,12 @@ class webhook_handler {
      * the body, and the topic either as `type` (body / query) or as the legacy
      * `topic` query parameter.
      *
-     * @param array $query
-     * @param array $body
+     * @param  array $query
+     * @param  array $body
      * @return array{dataid:string,type:string,action:string,notificationid:string,requestid:string,livemode:bool}
      */
-    public function extract_notification(array $query, array $body): array {
+    public function extract_notification(array $query, array $body): array
+    {
         $dataid = '';
         if (isset($query['data.id'])) {
             $dataid = (string)$query['data.id'];
@@ -273,22 +299,24 @@ class webhook_handler {
     /**
      * Keep only the characters Mercado Pago uses in topic and action names.
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
-    private static function sanitise_token(string $value): string {
+    private static function sanitise_token(string $value): string
+    {
         return (string)preg_replace('/[^A-Za-z0-9_.\-]/', '', trim($value));
     }
 
     /**
      * Validate the x-signature header with the official SDK validator.
      *
-     * @param array $headers
-     * @param array $notification passed by reference so the request id can be recorded
-     * @param credentials $credentials
+     * @param  array       $headers
+     * @param  array       $notification passed by reference so the request id can be recorded
+     * @param  credentials $credentials
      * @return string one of the SIG_* constants
      */
-    protected function verify_signature(array $headers, array &$notification, credentials $credentials): string {
+    protected function verify_signature(array $headers, array &$notification, credentials $credentials): string
+    {
         $signature = $headers['x-signature'] ?? null;
         $requestid = $headers['x-request-id'] ?? null;
         $notification['requestid'] = (string)($requestid ?? '');
@@ -316,10 +344,12 @@ class webhook_handler {
             );
             return self::SIG_VALID;
         } catch (InvalidWebhookSignatureException $e) {
-            util::log_error('Webhook signature rejected', [
+            util::log_error(
+                'Webhook signature rejected', [
                 'reason' => $e->getReason(),
                 'requestid' => $e->getRequestId(),
-            ]);
+                ]
+            );
             return self::SIG_INVALID;
         } catch (\Throwable $e) {
             util::log_error('Webhook signature validation error: ' . $e->getMessage());
@@ -332,7 +362,8 @@ class webhook_handler {
      *
      * @return bool
      */
-    protected function signature_required(): bool {
+    protected function signature_required(): bool
+    {
         $value = get_config('enrol_mpcheckoutpro', 'requiresignature');
         return $value === false ? true : (bool)$value;
     }
@@ -342,7 +373,8 @@ class webhook_handler {
      *
      * @return bool
      */
-    protected function deferred_mode(): bool {
+    protected function deferred_mode(): bool
+    {
         return (bool)get_config('enrol_mpcheckoutpro', 'deferwebhooks');
     }
 
@@ -350,10 +382,11 @@ class webhook_handler {
      * Resolve the enrolment instance from the enrolid query parameter we set on
      * notification_url.
      *
-     * @param array $query
+     * @param  array $query
      * @return \stdClass|null
      */
-    protected function resolve_instance(array $query): ?\stdClass {
+    protected function resolve_instance(array $query): ?\stdClass
+    {
         global $DB;
 
         $enrolid = isset($query['enrolid']) ? (int)$query['enrolid'] : 0;
@@ -367,10 +400,11 @@ class webhook_handler {
     /**
      * Short lived de-duplication so a burst of identical deliveries costs one API call.
      *
-     * @param array $notification
+     * @param  array $notification
      * @return bool
      */
-    protected function is_duplicate(array $notification): bool {
+    protected function is_duplicate(array $notification): bool
+    {
         if ($notification['dataid'] === '') {
             return false;
         }
@@ -390,16 +424,18 @@ class webhook_handler {
     /**
      * Insert the audit row for an incoming notification.
      *
-     * @param array $notification
-     * @param string $rawbody
-     * @param array $headers
+     * @param  array  $notification
+     * @param  string $rawbody
+     * @param  array  $headers
      * @return int the log row id
      */
-    protected function log_reception(array $notification, string $rawbody, array $headers): int {
+    protected function log_reception(array $notification, string $rawbody, array $headers): int
+    {
         global $DB;
 
         $decoded = json_decode($rawbody, true);
-        return (int)$DB->insert_record(self::LOG_TABLE, (object)[
+        return (int)$DB->insert_record(
+            self::LOG_TABLE, (object)[
             'notificationid' => \core_text::substr($notification['notificationid'], 0, 64) ?: null,
             'requestid' => \core_text::substr((string)($headers['x-request-id'] ?? ''), 0, 128) ?: null,
             'type' => \core_text::substr($notification['type'], 0, 64) ?: null,
@@ -411,17 +447,19 @@ class webhook_handler {
             'attempts' => 0,
             'payload' => util::encode_for_storage(is_array($decoded) ? $decoded : ['raw' => $rawbody], 20000),
             'timecreated' => time(),
-        ]);
+            ]
+        );
     }
 
     /**
      * Update fields on a log row.
      *
-     * @param int $logid
-     * @param array $fields
+     * @param  int   $logid
+     * @param  array $fields
      * @return void
      */
-    protected function update_log(int $logid, array $fields): void {
+    protected function update_log(int $logid, array $fields): void
+    {
         global $DB;
         $fields['id'] = $logid;
         $DB->update_record(self::LOG_TABLE, (object)$fields);
@@ -430,43 +468,50 @@ class webhook_handler {
     /**
      * Close a log row with the response we are about to send.
      *
-     * @param int $logid
-     * @param int $httpstatus
-     * @param bool $processed
-     * @param string $message
+     * @param  int    $logid
+     * @param  int    $httpstatus
+     * @param  bool   $processed
+     * @param  string $message
      * @return void
      */
-    protected function finish_log(int $logid, int $httpstatus, bool $processed, string $message): void {
-        $this->update_log($logid, [
+    protected function finish_log(int $logid, int $httpstatus, bool $processed, string $message): void
+    {
+        $this->update_log(
+            $logid, [
             'httpstatus' => $httpstatus,
             'processed' => $processed ? 1 : 0,
             'errormessage' => \core_text::substr($message, 0, 1000),
             'timeprocessed' => $processed ? time() : null,
-        ]);
+            ]
+        );
     }
 
     /**
      * Arrange another internal attempt at a notification.
      *
-     * @param int $logid
-     * @param int $attempts attempts already made
+     * @param  int $logid
+     * @param  int $attempts attempts already made
      * @return void
      */
-    protected function schedule_retry(int $logid, int $attempts): void {
+    protected function schedule_retry(int $logid, int $attempts): void
+    {
         $index = min($attempts, count(self::RETRY_BACKOFF) - 1);
-        $this->update_log($logid, [
+        $this->update_log(
+            $logid, [
             'attempts' => $attempts + 1,
             'nextretry' => time() + self::RETRY_BACKOFF[$index],
-        ]);
+            ]
+        );
     }
 
     /**
      * Log rows that are waiting for another attempt.
      *
-     * @param int $limit
+     * @param  int $limit
      * @return \stdClass[]
      */
-    public static function get_retryable(int $limit = 50): array {
+    public static function get_retryable(int $limit = 50): array
+    {
         global $DB;
         return $DB->get_records_select(
             self::LOG_TABLE,
@@ -482,10 +527,11 @@ class webhook_handler {
     /**
      * Re-attempt one logged notification. Used by the retry task.
      *
-     * @param \stdClass $logrow
+     * @param  \stdClass $logrow
      * @return processing_result
      */
-    public function retry(\stdClass $logrow): processing_result {
+    public function retry(\stdClass $logrow): processing_result
+    {
         $notification = [
             'dataid' => (string)($logrow->dataid ?? ''),
             'type' => (string)($logrow->type ?? ''),
@@ -502,13 +548,15 @@ class webhook_handler {
             $this->schedule_retry((int)$logrow->id, (int)$logrow->attempts);
             $this->update_log((int)$logrow->id, ['errormessage' => \core_text::substr($result->message, 0, 1000)]);
         } else {
-            $this->update_log((int)$logrow->id, [
+            $this->update_log(
+                (int)$logrow->id, [
                 'processed' => 1,
                 'attempts' => (int)$logrow->attempts + 1,
                 'nextretry' => null,
                 'errormessage' => \core_text::substr($result->message, 0, 1000),
                 'timeprocessed' => time(),
-            ]);
+                ]
+            );
         }
 
         return $result;

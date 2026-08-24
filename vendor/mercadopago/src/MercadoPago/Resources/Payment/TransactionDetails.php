@@ -13,25 +13,39 @@ use MercadoPago\Serialization\Mapper;
  */
 class TransactionDetails
 {
-    /** Maps nested objects to their corresponding DTO classes. */
+    /**
+ * Maps nested objects to their corresponding DTO classes. 
+*/
     use Mapper;
 
-    /** Name or code of the financial institution that processed the payment. */
+    /**
+     * Name or code of the financial institution that processed the payment. 
+     */
     public ?string $financial_institution;
 
-    /** Net amount received by the seller after all fees are deducted. */
+    /**
+     * Net amount received by the seller after all fees are deducted. 
+     */
     public ?float $net_received_amount;
 
-    /** Total amount paid by the buyer, including fees and taxes. */
+    /**
+     * Total amount paid by the buyer, including fees and taxes. 
+     */
     public ?float $total_paid_amount;
 
-    /** Amount of each installment when paying in installments. */
+    /**
+     * Amount of each installment when paying in installments. 
+     */
     public ?float $installment_amount;
 
-    /** Amount overpaid by the buyer (applies only to ticket/offline payment methods). */
+    /**
+     * Amount overpaid by the buyer (applies only to ticket/offline payment methods). 
+     */
     public ?float $overpaid_amount;
 
-    /** URL to the payment resource on the processor's system (e.g. boleto PDF). */
+    /**
+     * URL to the payment resource on the processor's system (e.g. boleto PDF). 
+     */
     public ?string $external_resource_url;
 
     /**
@@ -42,25 +56,39 @@ class TransactionDetails
      */
     public ?string $payment_method_reference_id;
 
-    /** Reference identifier assigned by the acquirer for reconciliation. */
+    /**
+     * Reference identifier assigned by the acquirer for reconciliation. 
+     */
     public ?string $acquirer_reference;
 
-    /** Deferral period before the payment becomes payable to the seller. */
+    /**
+     * Deferral period before the payment becomes payable to the seller. 
+     */
     public ?string $payable_deferral_period;
 
-    /** Identifier of the bank transfer operation. */
+    /**
+     * Identifier of the bank transfer operation. 
+     */
     public ?string $bank_transfer_id;
 
-    /** Transaction identifier within the payment processor. */
+    /**
+     * Transaction identifier within the payment processor. 
+     */
     public ?string $transaction_id;
 
-    /** @var Barcode|array|null Barcode data for offline payment methods (e.g. boleto). */
+    /**
+     * @var Barcode|array|null Barcode data for offline payment methods (e.g. boleto). 
+     */
     public array|object|null $barcode;
 
-    /** Digitable line for boleto payments (typed barcode representation). */
+    /**
+     * Digitable line for boleto payments (typed barcode representation). 
+     */
     public ?string $digitable_line;
 
-    /** Verification code for the payment transaction. */
+    /**
+     * Verification code for the payment transaction. 
+     */
     public ?string $verification_code;
 
     private $map = [
@@ -68,8 +96,8 @@ class TransactionDetails
     ];
 
     /**
-    * Method responsible for getting map of entities.
-    */
+     * Method responsible for getting map of entities.
+     */
     public function getMap(): array
     {
         return $this->map;

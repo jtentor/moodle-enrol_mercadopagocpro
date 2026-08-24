@@ -12,27 +12,43 @@ use MercadoPago\Net\MPResource;
  */
 class Disbursement extends MPResource
 {
-    /** The disbursement ID. */
+    /**
+     * The disbursement ID. 
+     */
     public ?int $id;
 
-    /** The collector (receiver) ID. */
+    /**
+     * The collector (receiver) ID. 
+     */
     public ?int $collector_id;
 
-    /** The amount to disburse to this collector. */
+    /**
+     * The amount to disburse to this collector. 
+     */
     public ?float $amount;
 
-    /** The external reference for this disbursement. */
+    /**
+     * The external reference for this disbursement. 
+     */
     public ?string $external_reference;
 
-    /** The application fee retained by the marketplace. */
+    /**
+     * The application fee retained by the marketplace. 
+     */
     public ?float $application_fee;
 
-    /** The money release date for this disbursement. */
+    /**
+     * The money release date for this disbursement. 
+     */
     public ?string $money_release_date;
 
-    /** The status of the disbursement. */
+    /**
+     * The status of the disbursement. 
+     */
     public ?string $status;
 
-    /** The status detail. */
+    /**
+     * The status detail. 
+     */
     public ?string $status_detail;
 }

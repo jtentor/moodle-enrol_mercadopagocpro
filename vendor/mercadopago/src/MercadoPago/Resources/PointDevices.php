@@ -19,13 +19,19 @@ use MercadoPago\Serialization\Mapper;
  */
 class PointDevices extends MPResource
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Search paging. */
+    /**
+     * Search paging. 
+     */
     public array|object|null $paging;
 
-    /** Devices. */
+    /**
+     * Devices. 
+     */
     public array|object|null $devices;
 
     private $map = [

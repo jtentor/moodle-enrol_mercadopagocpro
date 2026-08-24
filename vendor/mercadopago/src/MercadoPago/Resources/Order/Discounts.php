@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 */
+/**
+ * API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,10 +18,14 @@ use MercadoPago\Serialization\Mapper;
  */
 class Discounts
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Discount definitions per payment method type. Each element maps to {@see PaymentMethodDiscount}. */
+    /**
+     * Discount definitions per payment method type. Each element maps to {@see PaymentMethodDiscount}. 
+     */
     public ?array $payment_methods;
 
     private $map = [

@@ -18,10 +18,14 @@ class CustomerSearch extends MPResource
 {
     use Mapper;
 
-    /** Pagination metadata (offset, limit, total). */
+    /**
+     * Pagination metadata (offset, limit, total). 
+     */
     public array|object|null $paging;
 
-    /** Array of customer records matching the search criteria. */
+    /**
+     * Array of customer records matching the search criteria. 
+     */
     public array|object|null $results;
 
     /**

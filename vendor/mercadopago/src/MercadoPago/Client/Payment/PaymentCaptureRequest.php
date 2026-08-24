@@ -9,9 +9,13 @@ namespace MercadoPago\Client\Payment;
  */
 class PaymentCaptureRequest
 {
-    /** Flag indicating this is a capture operation. Always true. */
+    /**
+     * Flag indicating this is a capture operation. Always true. 
+     */
     public bool $capture = true;
 
-    /** Amount to capture. When null, the full authorized amount is captured. */
+    /**
+     * Amount to capture. When null, the full authorized amount is captured. 
+     */
     public float $transaction_amount;
 }

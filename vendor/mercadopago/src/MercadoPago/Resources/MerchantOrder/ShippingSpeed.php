@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\MerchantOrder;
  */
 class ShippingSpeed
 {
-    /** Handling time. */
+    /**
+     * Handling time. 
+     */
     public ?int $handling;
 
-    /** Shipping time. */
+    /**
+     * Shipping time. 
+     */
     public ?int $shipping;
 }

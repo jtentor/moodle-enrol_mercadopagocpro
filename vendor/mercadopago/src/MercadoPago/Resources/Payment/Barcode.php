@@ -10,6 +10,8 @@ namespace MercadoPago\Resources\Payment;
  */
 class Barcode
 {
-    /** Raw barcode content string that can be rendered as a scannable barcode. */
+    /**
+     * Raw barcode content string that can be rendered as a scannable barcode. 
+     */
     public ?string $content;
 }

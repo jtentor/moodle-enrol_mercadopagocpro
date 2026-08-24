@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\Payment;
  */
 class ApplicationData
 {
-    /** Name of the originating application. */
+    /**
+     * Name of the originating application. 
+     */
     public ?string $name;
 
-    /** Version of the originating application. */
+    /**
+     * Version of the originating application. 
+     */
     public ?string $version;
 }

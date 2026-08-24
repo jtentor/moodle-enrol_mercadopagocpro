@@ -24,17 +24,22 @@ namespace enrol_mpcheckoutpro\local;
  * autoloader. If the site prefers to manage it with Composer, a
  * vendor/autoload.php inside the plugin directory takes precedence.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://github.com/mercadopago/sdk-php
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://github.com/mercadopago/sdk-php
  */
-final class sdk {
+final class sdk
+{
 
-    /** @var bool Whether the autoloader has already been registered. */
+    /**
+     * @var bool Whether the autoloader has already been registered. 
+     */
     private static bool $registered = false;
 
-    /** @var bool Whether global SDK configuration has been applied. */
+    /**
+     * @var bool Whether global SDK configuration has been applied. 
+     */
     private static bool $configured = false;
 
     /**
@@ -42,7 +47,8 @@ final class sdk {
      *
      * @return void
      */
-    public static function register(): void {
+    public static function register(): void
+    {
         global $CFG;
 
         if (self::$registered) {
@@ -55,7 +61,7 @@ final class sdk {
         // 1. Composer managed installation inside the plugin.
         $composerautoload = $plugindir . '/vendor/autoload.php';
         if (file_exists($composerautoload)) {
-            require_once($composerautoload);
+            include_once $composerautoload;
             return;
         }
 
@@ -65,19 +71,21 @@ final class sdk {
             return;
         }
 
-        spl_autoload_register(static function (string $class) use ($bundled): void {
-            $prefix = 'MercadoPago\\';
-            if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
-                return;
+        spl_autoload_register(
+            static function (string $class) use ($bundled): void {
+                $prefix = 'MercadoPago\\';
+                if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
+                    return;
+                }
+                $relative = substr($class, strlen($prefix));
+                $path = $bundled . '/' . str_replace('\\', '/', $relative) . '.php';
+                // Guard against traversal coming from a crafted class name.
+                $real = realpath($path);
+                if ($real !== false && strpos($real, realpath($bundled)) === 0) {
+                    include_once $real;
+                }
             }
-            $relative = substr($class, strlen($prefix));
-            $path = $bundled . '/' . str_replace('\\', '/', $relative) . '.php';
-            // Guard against traversal coming from a crafted class name.
-            $real = realpath($path);
-            if ($real !== false && strpos($real, realpath($bundled)) === 0) {
-                require_once($real);
-            }
-        });
+        );
     }
 
     /**
@@ -85,7 +93,8 @@ final class sdk {
      *
      * @return bool
      */
-    public static function is_available(): bool {
+    public static function is_available(): bool
+    {
         self::register();
         return class_exists('\MercadoPago\MercadoPagoConfig')
             && class_exists('\MercadoPago\Client\Preference\PreferenceClient')
@@ -97,7 +106,8 @@ final class sdk {
      *
      * @return string|null
      */
-    public static function get_version(): ?string {
+    public static function get_version(): ?string
+    {
         if (!self::is_available()) {
             return null;
         }
@@ -114,7 +124,8 @@ final class sdk {
      * @return void
      * @throws \moodle_exception when the SDK is missing.
      */
-    public static function configure(): void {
+    public static function configure(): void
+    {
         if (!self::is_available()) {
             throw new \moodle_exception('error:sdkmissing', 'enrol_mpcheckoutpro');
         }

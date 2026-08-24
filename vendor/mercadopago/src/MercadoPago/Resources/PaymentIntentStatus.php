@@ -14,9 +14,13 @@ use MercadoPago\Net\MPResource;
  */
 class PaymentIntentStatus extends MPResource
 {
-    /** Status of payment intent. */
+    /**
+     * Status of payment intent. 
+     */
     public ?string $status;
 
-    /** Date created. */
+    /**
+     * Date created. 
+     */
     public ?string $created_on;
 }

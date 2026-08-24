@@ -19,18 +19,20 @@ namespace enrol_mpcheckoutpro\event;
 /**
  * A Mercado Pago payment was approved and the enrolment was activated.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class payment_approved extends transaction_event_base {
+class payment_approved extends transaction_event_base
+{
 
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         parent::init();
         $this->data['crud'] = 'u';
     }
@@ -40,7 +42,8 @@ class payment_approved extends transaction_event_base {
      *
      * @return string
      */
-    public static function get_name() {
+    public static function get_name()
+    {
         return get_string('event:payment_approved', 'enrol_mpcheckoutpro');
     }
 
@@ -49,7 +52,8 @@ class payment_approved extends transaction_event_base {
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "The Mercado Pago payment '{$this->other['paymentid']}' for the user with id "
             . "'{$this->relateduserid}' was approved and the enrolment in the course with id "
             . "'{$this->contextinstanceid}' is now active.";

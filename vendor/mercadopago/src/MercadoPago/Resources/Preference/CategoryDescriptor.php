@@ -16,16 +16,24 @@ use MercadoPago\Serialization\Mapper;
  */
 class CategoryDescriptor
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Event date. */
+    /**
+     * Event date. 
+     */
     public ?string $event_date;
 
-    /** @var Passenger|array|null Passenger information. */
+    /**
+     * @var Passenger|array|null Passenger information. 
+     */
     public array|object|null $passenger;
 
-    /** @var Route|array|null Route information. */
+    /**
+     * @var Route|array|null Route information. 
+     */
     public array|object|null $route;
 
     private $map = [

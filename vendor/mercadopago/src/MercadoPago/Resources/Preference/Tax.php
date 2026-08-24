@@ -10,9 +10,13 @@ namespace MercadoPago\Resources\Preference;
  */
 class Tax
 {
-    /** Tax type. */
+    /**
+     * Tax type. 
+     */
     public ?string $type;
 
-    /** Tax value. */
+    /**
+     * Tax value. 
+     */
     public ?float $value;
 }

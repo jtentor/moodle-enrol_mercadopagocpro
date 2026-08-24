@@ -31,7 +31,7 @@ interface HttpRequest
     /**
      * Retrieves metadata about the last executed request.
      *
-     * @param int $name A CURLINFO_* constant (e.g., CURLINFO_HTTP_CODE).
+     * @param  int $name A CURLINFO_* constant (e.g., CURLINFO_HTTP_CODE).
      * @return mixed The requested information value.
      */
     public function getInfo(mixed $name): mixed;

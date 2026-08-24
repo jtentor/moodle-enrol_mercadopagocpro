@@ -29,23 +29,25 @@ use enrol_mpcheckoutpro\local\transaction;
 /**
  * Privacy Subsystem implementation for enrol_mpcheckoutpro.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://moodledev.io/docs/5.2/apis/subsystems/privacy
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://moodledev.io/docs/5.2/apis/subsystems/privacy
  */
 class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\request\core_userlist_provider
+{
 
     /**
      * Describe the personal data this plugin stores and sends to Mercado Pago.
      *
-     * @param collection $items
+     * @param  collection $items
      * @return collection
      */
-    public static function get_metadata(collection $items): collection {
+    public static function get_metadata(collection $items): collection
+    {
         $items->add_database_table(
             transaction::TABLE,
             [
@@ -84,10 +86,11 @@ class provider implements
     /**
      * Course contexts where a user has payment transactions.
      *
-     * @param int $userid
+     * @param  int $userid
      * @return contextlist
      */
-    public static function get_contexts_for_userid(int $userid): contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist
+    {
         $contextlist = new contextlist();
 
         $sql = "SELECT ctx.id
@@ -95,10 +98,12 @@ class provider implements
                   JOIN {context} ctx ON ctx.instanceid = t.courseid AND ctx.contextlevel = :contextlevel
                  WHERE t.userid = :userid";
 
-        $contextlist->add_from_sql($sql, [
+        $contextlist->add_from_sql(
+            $sql, [
             'contextlevel' => CONTEXT_COURSE,
             'userid' => $userid,
-        ]);
+            ]
+        );
 
         return $contextlist;
     }
@@ -106,10 +111,11 @@ class provider implements
     /**
      * Users who have payment transactions in a given context.
      *
-     * @param userlist $userlist
+     * @param  userlist $userlist
      * @return void
      */
-    public static function get_users_in_context(userlist $userlist) {
+    public static function get_users_in_context(userlist $userlist)
+    {
         $context = $userlist->get_context();
         if (!$context instanceof \context_course) {
             return;
@@ -125,10 +131,11 @@ class provider implements
     /**
      * Export the transactions of the approved contexts.
      *
-     * @param approved_contextlist $contextlist
+     * @param  approved_contextlist $contextlist
      * @return void
      */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist)
+    {
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -141,10 +148,12 @@ class provider implements
                 continue;
             }
 
-            $records = $DB->get_records(transaction::TABLE, [
+            $records = $DB->get_records(
+                transaction::TABLE, [
                 'courseid' => $context->instanceid,
                 'userid' => $user->id,
-            ], 'timecreated ASC');
+                ], 'timecreated ASC'
+            );
 
             if (!$records) {
                 continue;
@@ -181,10 +190,11 @@ class provider implements
     /**
      * Delete every transaction in a context.
      *
-     * @param \context $context
+     * @param  \context $context
      * @return void
      */
-    public static function delete_data_for_all_users_in_context(\context $context) {
+    public static function delete_data_for_all_users_in_context(\context $context)
+    {
         global $DB;
 
         if (!$context instanceof \context_course) {
@@ -196,10 +206,11 @@ class provider implements
     /**
      * Delete the transactions of one user.
      *
-     * @param approved_contextlist $contextlist
+     * @param  approved_contextlist $contextlist
      * @return void
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist)
+    {
         global $DB;
 
         $userid = $contextlist->get_user()->id;
@@ -207,20 +218,23 @@ class provider implements
             if (!$context instanceof \context_course) {
                 continue;
             }
-            $DB->delete_records(transaction::TABLE, [
+            $DB->delete_records(
+                transaction::TABLE, [
                 'courseid' => $context->instanceid,
                 'userid' => $userid,
-            ]);
+                ]
+            );
         }
     }
 
     /**
      * Delete the transactions of a list of users in one context.
      *
-     * @param approved_userlist $userlist
+     * @param  approved_userlist $userlist
      * @return void
      */
-    public static function delete_data_for_users(approved_userlist $userlist) {
+    public static function delete_data_for_users(approved_userlist $userlist)
+    {
         global $DB;
 
         $context = $userlist->get_context();

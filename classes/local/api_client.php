@@ -34,12 +34,13 @@ use MercadoPago\Exceptions\MPApiException;
  * Every call carries its own access token through RequestOptions so a per course
  * seller never inherits the site credentials.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://www.mercadopago.com.ar/developers/en/reference/online-payments/checkout-pro/overview
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see       https://www.mercadopago.com.ar/developers/en/reference/online-payments/checkout-pro/overview
  */
-class api_client {
+class api_client
+{
 
     /**
      * Constructor.
@@ -47,7 +48,9 @@ class api_client {
      * @param credentials $credentials credentials used for every call made through this instance
      */
     public function __construct(
-        /** @var credentials */
+        /**
+         * @var credentials 
+         */
         protected credentials $credentials,
     ) {
         sdk::configure();
@@ -56,10 +59,11 @@ class api_client {
     /**
      * Build the request options for one call.
      *
-     * @param string|null $idempotencykey value for the X-Idempotency-Key header
+     * @param  string|null $idempotencykey value for the X-Idempotency-Key header
      * @return RequestOptions
      */
-    protected function request_options(?string $idempotencykey = null): RequestOptions {
+    protected function request_options(?string $idempotencykey = null): RequestOptions
+    {
         $options = new RequestOptions();
         $options->setAccessToken($this->credentials->get_access_token());
         if ($idempotencykey !== null && $idempotencykey !== '') {
@@ -71,30 +75,36 @@ class api_client {
     /**
      * Create a checkout preference.
      *
-     * @param array $request preference body
-     * @param string|null $idempotencykey
+     * @param  array       $request        preference body
+     * @param  string|null $idempotencykey
      * @return \MercadoPago\Resources\Preference
      * @throws api_exception
      */
-    public function create_preference(array $request, ?string $idempotencykey = null) {
-        return $this->call(function () use ($request, $idempotencykey) {
-            $client = new PreferenceClient();
-            return $client->create($request, $this->request_options($idempotencykey));
-        }, 'POST /checkout/preferences');
+    public function create_preference(array $request, ?string $idempotencykey = null)
+    {
+        return $this->call(
+            function () use ($request, $idempotencykey) {
+                $client = new PreferenceClient();
+                return $client->create($request, $this->request_options($idempotencykey));
+            }, 'POST /checkout/preferences'
+        );
     }
 
     /**
      * Fetch a preference.
      *
-     * @param string $preferenceid
+     * @param  string $preferenceid
      * @return \MercadoPago\Resources\Preference
      * @throws api_exception
      */
-    public function get_preference(string $preferenceid) {
-        return $this->call(function () use ($preferenceid) {
-            $client = new PreferenceClient();
-            return $client->get($preferenceid, $this->request_options());
-        }, 'GET /checkout/preferences/' . $preferenceid);
+    public function get_preference(string $preferenceid)
+    {
+        return $this->call(
+            function () use ($preferenceid) {
+                $client = new PreferenceClient();
+                return $client->get($preferenceid, $this->request_options());
+            }, 'GET /checkout/preferences/' . $preferenceid
+        );
     }
 
     /**
@@ -103,50 +113,59 @@ class api_client {
      * This is the only source of truth for payment status in this plugin: nothing
      * that arrives from the browser or from a notification body is trusted.
      *
-     * @param int|string $paymentid
+     * @param  int|string $paymentid
      * @return \MercadoPago\Resources\Payment
      * @throws api_exception
      */
-    public function get_payment($paymentid) {
+    public function get_payment($paymentid)
+    {
         $id = (int)$paymentid;
-        return $this->call(function () use ($id) {
-            $client = new PaymentClient();
-            return $client->get($id, $this->request_options());
-        }, 'GET /v1/payments/' . $id);
+        return $this->call(
+            function () use ($id) {
+                $client = new PaymentClient();
+                return $client->get($id, $this->request_options());
+            }, 'GET /v1/payments/' . $id
+        );
     }
 
     /**
      * Fetch a merchant order, used to resolve merchant_order notifications to payments.
      *
-     * @param int|string $merchantorderid
+     * @param  int|string $merchantorderid
      * @return \MercadoPago\Resources\MerchantOrder
      * @throws api_exception
      */
-    public function get_merchant_order($merchantorderid) {
+    public function get_merchant_order($merchantorderid)
+    {
         $id = (int)$merchantorderid;
-        return $this->call(function () use ($id) {
-            $client = new MerchantOrderClient();
-            return $client->get($id, $this->request_options());
-        }, 'GET /merchant_orders/' . $id);
+        return $this->call(
+            function () use ($id) {
+                $client = new MerchantOrderClient();
+                return $client->get($id, $this->request_options());
+            }, 'GET /merchant_orders/' . $id
+        );
     }
 
     /**
      * Run one SDK call, translating every SDK exception into an api_exception.
      *
-     * @param callable $callable
-     * @param string $operation human readable operation name for the log
+     * @param  callable $callable
+     * @param  string   $operation human readable operation name for the log
      * @return mixed
      * @throws api_exception
      */
-    protected function call(callable $callable, string $operation) {
+    protected function call(callable $callable, string $operation)
+    {
         $start = microtime(true);
         try {
             $result = $callable();
-            util::log_debug('Mercado Pago call succeeded', [
+            util::log_debug(
+                'Mercado Pago call succeeded', [
                 'operation' => $operation,
                 'ms' => (int)round((microtime(true) - $start) * 1000),
                 'source' => $this->credentials->get_source(),
-            ]);
+                ]
+            );
             return $result;
         } catch (MPApiException $e) {
             $statuscode = $e->getStatusCode();
@@ -156,18 +175,22 @@ class api_client {
             } catch (\Throwable $ignored) {
                 $body = '';
             }
-            util::log_error('Mercado Pago API error', [
+            util::log_error(
+                'Mercado Pago API error', [
                 'operation' => $operation,
                 'status' => $statuscode,
                 'message' => $e->getMessage(),
                 'body' => is_string($body) ? substr($body, 0, 1000) : '',
-            ]);
+                ]
+            );
             throw new api_exception($e->getMessage(), $statuscode, $operation, $e);
         } catch (\Throwable $e) {
-            util::log_error('Mercado Pago transport error', [
+            util::log_error(
+                'Mercado Pago transport error', [
                 'operation' => $operation,
                 'message' => $e->getMessage(),
-            ]);
+                ]
+            );
             throw new api_exception($e->getMessage(), 0, $operation, $e);
         }
     }
@@ -177,7 +200,8 @@ class api_client {
      *
      * @return credentials
      */
-    public function get_credentials(): credentials {
+    public function get_credentials(): credentials
+    {
         return $this->credentials;
     }
 }

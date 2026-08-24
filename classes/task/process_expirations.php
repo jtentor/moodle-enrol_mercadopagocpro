@@ -19,18 +19,20 @@ namespace enrol_mpcheckoutpro\task;
 /**
  * Expires enrolments whose paid period ran out and sends expiry notifications.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class process_expirations extends \core\task\scheduled_task {
+class process_expirations extends \core\task\scheduled_task
+{
 
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:process_expirations', 'enrol_mpcheckoutpro');
     }
 
@@ -39,7 +41,8 @@ class process_expirations extends \core\task\scheduled_task {
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         $plugin = enrol_get_plugin('mpcheckoutpro');
         if (!$plugin) {
             return;

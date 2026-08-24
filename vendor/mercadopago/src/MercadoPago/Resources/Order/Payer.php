@@ -1,6 +1,8 @@
 <?php
 
-/** API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 */
+/**
+ * API version: 7c223ec9-4635-4eae-8501-604c35ea1b00 
+ */
 
 namespace MercadoPago\Resources\Order;
 
@@ -16,31 +18,49 @@ use MercadoPago\Serialization\Mapper;
  */
 class Payer
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** MercadoPago customer ID if the payer is a registered customer. */
+    /**
+     * MercadoPago customer ID if the payer is a registered customer. 
+     */
     public ?string $customer_id;
 
-    /** Legal entity type of the payer (e.g., "individual", "association"). */
+    /**
+     * Legal entity type of the payer (e.g., "individual", "association"). 
+     */
     public ?string $entity_type;
 
-    /** Payer's email address used for notifications and receipts. */
+    /**
+     * Payer's email address used for notifications and receipts. 
+     */
     public ?string $email;
 
-    /** Payer's first name. */
+    /**
+     * Payer's first name. 
+     */
     public ?string $first_name;
 
-    /** Payer's last name. */
+    /**
+     * Payer's last name. 
+     */
     public ?string $last_name;
 
-    /** Payer's identification document (type and number). Maps to Identification. */
+    /**
+     * Payer's identification document (type and number). Maps to Identification. 
+     */
     public array|object|null $identification;
 
-    /** Payer's phone number details. Maps to Phone. */
+    /**
+     * Payer's phone number details. Maps to Phone. 
+     */
     public array|object|null $phone;
 
-    /** Payer's address details. Maps to Address. */
+    /**
+     * Payer's address details. Maps to Address. 
+     */
     public array|object|null $address;
 
     private $map = [

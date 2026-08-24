@@ -9,6 +9,8 @@ namespace MercadoPago\Client\Point;
  */
 class PointDeviceOperatingModeRequest
 {
-    /** Target operating mode (e.g., "PDV", "STANDALONE"). */
+    /**
+     * Target operating mode (e.g., "PDV", "STANDALONE"). 
+     */
     public string $operating_mode;
 }

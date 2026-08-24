@@ -19,18 +19,20 @@ namespace enrol_mpcheckoutpro\event;
 /**
  * A Mercado Pago webhook notification was accepted.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class webhook_received extends \core\event\base {
+class webhook_received extends \core\event\base
+{
 
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_OTHER;
     }
@@ -40,7 +42,8 @@ class webhook_received extends \core\event\base {
      *
      * @return string
      */
-    public static function get_name() {
+    public static function get_name()
+    {
         return get_string('event:webhook_received', 'enrol_mpcheckoutpro');
     }
 
@@ -49,7 +52,8 @@ class webhook_received extends \core\event\base {
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "A Mercado Pago '{$this->other['type']}' notification for resource "
             . "'{$this->other['dataid']}' was accepted.";
     }
@@ -57,11 +61,13 @@ class webhook_received extends \core\event\base {
     /**
      * Build the event from a normalised notification.
      *
-     * @param array $notification
+     * @param  array $notification
      * @return self
      */
-    public static function create_from_notification(array $notification): self {
-        return self::create([
+    public static function create_from_notification(array $notification): self
+    {
+        return self::create(
+            [
             'context' => \context_system::instance(),
             'other' => [
                 'type' => (string)$notification['type'],
@@ -70,6 +76,7 @@ class webhook_received extends \core\event\base {
                 'requestid' => (string)$notification['requestid'],
                 'livemode' => !empty($notification['livemode']),
             ],
-        ]);
+            ]
+        );
     }
 }

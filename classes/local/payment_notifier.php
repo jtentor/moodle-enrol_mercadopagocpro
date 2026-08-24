@@ -21,22 +21,33 @@ use core\message\message;
 /**
  * Sends the payment related notifications to buyers and to course staff.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class payment_notifier {
+class payment_notifier
+{
 
-    /** @var string Payment approved and enrolment active. */
+    /**
+     * @var string Payment approved and enrolment active. 
+     */
     public const EVENT_APPROVED = 'approved';
-    /** @var string Payment pending / in process. */
+    /**
+     * @var string Payment pending / in process. 
+     */
     public const EVENT_PENDING = 'pending';
-    /** @var string Payment rejected or cancelled before approval. */
+    /**
+     * @var string Payment rejected or cancelled before approval. 
+     */
     public const EVENT_FAILED = 'failed';
-    /** @var string Payment refunded or charged back. */
+    /**
+     * @var string Payment refunded or charged back. 
+     */
     public const EVENT_REVERSED = 'reversed';
 
-    /** @var array<string,string> Event to message provider mapping. */
+    /**
+     * @var array<string,string> Event to message provider mapping. 
+     */
     private const PROVIDERS = [
         self::EVENT_APPROVED => 'payment_approved',
         self::EVENT_PENDING => 'payment_pending',
@@ -44,18 +55,21 @@ class payment_notifier {
         self::EVENT_REVERSED => 'payment_reversed',
     ];
 
-    /** @var string[] Events that also notify course staff. */
+    /**
+     * @var string[] Events that also notify course staff. 
+     */
     private const STAFF_EVENTS = [self::EVENT_APPROVED, self::EVENT_REVERSED];
 
     /**
      * Send the notifications for one event.
      *
-     * @param string $event one of the EVENT_* constants
-     * @param \stdClass $instance enrol instance
-     * @param \stdClass $transaction transaction record
+     * @param  string    $event       one of the EVENT_* constants
+     * @param  \stdClass $instance    enrol instance
+     * @param  \stdClass $transaction transaction record
      * @return void
      */
-    public function send(string $event, \stdClass $instance, \stdClass $transaction): void {
+    public function send(string $event, \stdClass $instance, \stdClass $transaction): void
+    {
         global $DB;
 
         if (!isset(self::PROVIDERS[$event])) {
@@ -90,13 +104,14 @@ class payment_notifier {
     /**
      * Message the buyer.
      *
-     * @param string $event
-     * @param \stdClass $user
-     * @param \stdClass $course
-     * @param \stdClass $a placeholders
+     * @param  string    $event
+     * @param  \stdClass $user
+     * @param  \stdClass $course
+     * @param  \stdClass $a      placeholders
      * @return void
      */
-    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void {
+    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void
+    {
         $provider = self::PROVIDERS[$event];
 
         $message = new message();
@@ -120,11 +135,11 @@ class payment_notifier {
     /**
      * Message the course staff who can see payment transactions.
      *
-     * @param string $event
-     * @param \context_course $context
-     * @param \stdClass $course
-     * @param \stdClass $buyer
-     * @param \stdClass $a
+     * @param  string          $event
+     * @param  \context_course $context
+     * @param  \stdClass       $course
+     * @param  \stdClass       $buyer
+     * @param  \stdClass       $a
      * @return void
      */
     protected function send_to_staff(
@@ -170,10 +185,11 @@ class payment_notifier {
     /**
      * Format the transaction amount for display in a message.
      *
-     * @param \stdClass $transaction
+     * @param  \stdClass $transaction
      * @return string
      */
-    protected function format_amount(\stdClass $transaction): string {
+    protected function format_amount(\stdClass $transaction): string
+    {
         $amount = (float)$transaction->amount;
         $currency = (string)$transaction->currency;
         $locale = get_string('localecldr', 'langconfig');

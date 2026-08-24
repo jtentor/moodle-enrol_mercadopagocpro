@@ -26,13 +26,16 @@ use enrol_mpcheckoutpro\local\util;
  * This is the safety net that makes a lost webhook harmless: no matter what
  * happens to the notifications, every payment converges to the right enrolment.
  *
- * @package    enrol_mpcheckoutpro
- * @copyright  2026 Julio Tentor <jtentor@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   enrol_mpcheckoutpro
+ * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class reconcile_payments extends \core\task\scheduled_task {
+class reconcile_payments extends \core\task\scheduled_task
+{
 
-    /** @var int Maximum transactions handled in one run. */
+    /**
+     * @var int Maximum transactions handled in one run. 
+     */
     private const BATCH_SIZE = 100;
 
     /**
@@ -40,7 +43,8 @@ class reconcile_payments extends \core\task\scheduled_task {
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:reconcile_payments', 'enrol_mpcheckoutpro');
     }
 
@@ -49,7 +53,8 @@ class reconcile_payments extends \core\task\scheduled_task {
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         if (!enrol_is_enabled('mpcheckoutpro')) {
             mtrace('enrol_mpcheckoutpro is disabled, skipping reconciliation.');
             return;
@@ -76,9 +81,11 @@ class reconcile_payments extends \core\task\scheduled_task {
                 }
                 mtrace('  txn ' . $record->id . ': ' . $result->outcome . ' - ' . $result->message);
             } catch (\Throwable $e) {
-                util::log_error('Reconciliation failed for a transaction: ' . $e->getMessage(), [
+                util::log_error(
+                    'Reconciliation failed for a transaction: ' . $e->getMessage(), [
                     'txnid' => $record->id,
-                ]);
+                    ]
+                );
                 mtrace('  txn ' . $record->id . ': error - ' . $e->getMessage());
             }
         }

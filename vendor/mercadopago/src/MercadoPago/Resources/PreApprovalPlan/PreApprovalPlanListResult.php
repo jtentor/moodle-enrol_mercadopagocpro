@@ -15,43 +15,69 @@ use MercadoPago\Serialization\Mapper;
  */
 class PreApprovalPlanListResult
 {
-    /** Class mapper. */
+    /**
+ * Class mapper. 
+*/
     use Mapper;
 
-    /** Subscription ID. */
+    /**
+     * Subscription ID. 
+     */
     public ?string $id;
 
-    /** Return URL. */
+    /**
+     * Return URL. 
+     */
     public ?string $back_url;
 
-    /** Collector ID. */
+    /**
+     * Collector ID. 
+     */
     public ?int $collector_id;
 
-    /** Application ID. */
+    /**
+     * Application ID. 
+     */
     public ?int $application_id;
 
-    /** Reason for the subscription. */
+    /**
+     * Reason for the subscription. 
+     */
     public ?string $reason;
 
-    /** Subscription status. */
+    /**
+     * Subscription status. 
+     */
     public ?string $status;
 
-    /** Date of creation. */
+    /**
+     * Date of creation. 
+     */
     public ?string $date_created;
 
-    /** Date of last modification. */
+    /**
+     * Date of last modification. 
+     */
     public ?string $last_modified;
 
-    /** Initial point. */
+    /**
+     * Initial point. 
+     */
     public ?string $init_point;
 
-    /** Auto-recurring subscription details. */
+    /**
+     * Auto-recurring subscription details. 
+     */
     public ?object $auto_recurring;
 
-    /** Allowed payment methods. */
+    /**
+     * Allowed payment methods. 
+     */
     public array|object|null $payment_methods_allowed;
 
-    /** Subscribed. */
+    /**
+     * Subscribed. 
+     */
     public ?int $subscribed;
 
 
