@@ -169,18 +169,24 @@ class api_client
             return $result;
         } catch (MPApiException $e) {
             $statuscode = $e->getStatusCode();
-            $body = '';
+            // MPResponse::getContent() is declared ": array" in the SDK, so it
+            // returns the decoded body and never a string. Casting it discarded
+            // the whole response, logged the literal "Array" and raised a PHP
+            // warning on every API error. Pass the structure through instead:
+            // util::log_error() runs it through redact() and encode_for_storage(),
+            // which scrub the sensitive values and cap the length.
+            $body = null;
             try {
-                $body = (string)$e->getApiResponse()->getContent();
+                $body = $e->getApiResponse()->getContent();
             } catch (\Throwable $ignored) {
-                $body = '';
+                $body = null;
             }
             util::log_error(
                 'Mercado Pago API error', [
                 'operation' => $operation,
                 'status' => $statuscode,
                 'message' => $e->getMessage(),
-                'body' => is_string($body) ? substr($body, 0, 1000) : '',
+                'body' => is_string($body) ? substr($body, 0, 1000) : $body,
                 ]
             );
             throw new api_exception($e->getMessage(), $statuscode, $operation, $e);
