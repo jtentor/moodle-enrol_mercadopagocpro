@@ -59,6 +59,26 @@ trait helper_trait
         // Mercado Pago requires https for notification_url and back_urls.
         $CFG->wwwroot = str_replace('http://', 'https://', $CFG->wwwroot);
 
+        // Make the suite hermetic with respect to server level credentials.
+        //
+        // credentials::resolve() deliberately ranks the server configuration above
+        // the site settings, so a real access token present on the machine running
+        // the tests would override the fake one set below. PHPUnit's bootstrap
+        // already discards $CFG->enrol_mpcheckoutpro, but it cannot discard the
+        // process environment, which a production server normally has populated.
+        // Clearing it here keeps the tests from ever seeing a live credential.
+        unset($CFG->enrol_mpcheckoutpro);
+        foreach (
+            [
+            'MPCHECKOUTPRO_ACCESS_TOKEN',
+            'MPCHECKOUTPRO_PUBLIC_KEY',
+            'MPCHECKOUTPRO_WEBHOOK_SECRET',
+            ] as $envname
+        ) {
+            putenv($envname);
+            unset($_ENV[$envname], $_SERVER[$envname]);
+        }
+
         $enabled = enrol_get_plugins(true);
         $enabled['mpcheckoutpro'] = true;
         set_config('enrol_plugins_enabled', implode(',', array_keys($enabled)));
