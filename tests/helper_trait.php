@@ -23,6 +23,19 @@ use MercadoPago\MercadoPagoConfig;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+
+// The fixture below declares "implements MPHttpClient", so PHP has to resolve
+// that interface while the file is being compiled. Nothing has registered the
+// Mercado Pago autoloader at this point in a test run, so it must happen first.
+// sdk::register() is idempotent and setup_plugin() calls it again harmlessly.
+sdk::register();
+if (!interface_exists(\MercadoPago\Net\MPHttpClient::class)) {
+    throw new \coding_exception(
+        'The bundled Mercado Pago SDK could not be loaded from ' .
+        'enrol/mpcheckoutpro/vendor/mercadopago/src. The test fixtures implement ' .
+        'its interfaces, so the suite cannot run without it.'
+    );
+}
 require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/fixtures/mock_http_client.php';
 
 /**
