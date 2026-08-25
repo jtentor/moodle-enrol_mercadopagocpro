@@ -131,7 +131,8 @@ unset($result);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 echo $OUTPUT->render_from_template(
-    'enrol_mpcheckoutpro/status_page', [
+    'enrol_mpcheckoutpro/status_page',
+    [
     'tone' => $tone,
     'message' => $message,
     'statuslabel' => status::label($paymentstatus),

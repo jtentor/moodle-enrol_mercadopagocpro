@@ -31,19 +31,19 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * @var string Plugin component name. 
+ * @var string Plugin component name.
 */
 define('ENROL_MPCHECKOUTPRO_COMPONENT', 'enrol_mpcheckoutpro');
 
 /**
- * Action performed when a payment is refunded / charged back: do nothing. 
+ * Action performed when a payment is refunded / charged back: do nothing.
 */
 define('ENROL_MPCHECKOUTPRO_REVERSAL_KEEP', 0);
 /**
- * Action performed when a payment is refunded / charged back: suspend and remove roles. 
+ * Action performed when a payment is refunded / charged back: suspend and remove roles.
 */
 define('ENROL_MPCHECKOUTPRO_REVERSAL_SUSPEND', 1);
 /**
- * Action performed when a payment is refunded / charged back: unenrol. 
+ * Action performed when a payment is refunded / charged back: unenrol.
 */
 define('ENROL_MPCHECKOUTPRO_REVERSAL_UNENROL', 2);

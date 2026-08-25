@@ -73,11 +73,11 @@ EOT;
 }
 
 /**
- * @var int Number of blocking problems found. 
+ * @var int Number of blocking problems found.
 */
 $failures = 0;
 /**
- * @var int Number of warnings found. 
+ * @var int Number of warnings found.
 */
 $warnings = 0;
 
@@ -90,8 +90,7 @@ $warnings = 0;
  * @param  string    $fix    what to do about it
  * @return void
  */
-function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
-{
+function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void {
     global $failures, $warnings;
 
     if ($ok === true) {

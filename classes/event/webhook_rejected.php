@@ -26,14 +26,12 @@ namespace enrol_mpcheckoutpro\event;
  */
 class webhook_rejected extends \core\event\base
 {
-
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_OTHER;
     }
@@ -43,8 +41,7 @@ class webhook_rejected extends \core\event\base
      *
      * @return string
      */
-    public static function get_name()
-    {
+    public static function get_name() {
         return get_string('event:webhook_rejected', 'enrol_mpcheckoutpro');
     }
 
@@ -53,8 +50,7 @@ class webhook_rejected extends \core\event\base
      *
      * @return string
      */
-    public function get_description()
-    {
+    public function get_description() {
         return "A Mercado Pago notification for resource '{$this->other['dataid']}' was rejected: "
             . "signature {$this->other['reason']}.";
     }
@@ -66,8 +62,7 @@ class webhook_rejected extends \core\event\base
      * @param  string $reason       signature status
      * @return self
      */
-    public static function create_from_notification(array $notification, string $reason): self
-    {
+    public static function create_from_notification(array $notification, string $reason): self {
         return self::create(
             [
             'context' => \context_system::instance(),

@@ -25,14 +25,12 @@ namespace enrol_mpcheckoutpro\event;
  */
 class preference_created extends transaction_event_base
 {
-
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         parent::init();
         $this->data['crud'] = 'c';
     }
@@ -42,8 +40,7 @@ class preference_created extends transaction_event_base
      *
      * @return string
      */
-    public static function get_name()
-    {
+    public static function get_name() {
         return get_string('event:preference_created', 'enrol_mpcheckoutpro');
     }
 
@@ -52,8 +49,7 @@ class preference_created extends transaction_event_base
      *
      * @return string
      */
-    public function get_description()
-    {
+    public function get_description() {
         return "The user with id '{$this->relateduserid}' started a Mercado Pago Checkout Pro payment "
             . "(preference '{$this->other['preferenceid']}') for the enrolment instance with id "
             . "'{$this->other['enrolid']}' in the course with id '{$this->contextinstanceid}'.";

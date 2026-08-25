@@ -31,14 +31,13 @@ namespace enrol_mpcheckoutpro\local;
  */
 final class sdk
 {
-
     /**
-     * @var bool Whether the autoloader has already been registered. 
+     * @var bool Whether the autoloader has already been registered.
      */
     private static bool $registered = false;
 
     /**
-     * @var bool Whether global SDK configuration has been applied. 
+     * @var bool Whether global SDK configuration has been applied.
      */
     private static bool $configured = false;
 
@@ -47,8 +46,7 @@ final class sdk
      *
      * @return void
      */
-    public static function register(): void
-    {
+    public static function register(): void {
         global $CFG;
 
         if (self::$registered) {
@@ -93,8 +91,7 @@ final class sdk
      *
      * @return bool
      */
-    public static function is_available(): bool
-    {
+    public static function is_available(): bool {
         self::register();
         return class_exists('\MercadoPago\MercadoPagoConfig')
             && class_exists('\MercadoPago\Client\Preference\PreferenceClient')
@@ -106,8 +103,7 @@ final class sdk
      *
      * @return string|null
      */
-    public static function get_version(): ?string
-    {
+    public static function get_version(): ?string {
         if (!self::is_available()) {
             return null;
         }
@@ -124,8 +120,7 @@ final class sdk
      * @return void
      * @throws \moodle_exception when the SDK is missing.
      */
-    public static function configure(): void
-    {
+    public static function configure(): void {
         if (!self::is_available()) {
             throw new \moodle_exception('error:sdkmissing', 'enrol_mpcheckoutpro');
         }

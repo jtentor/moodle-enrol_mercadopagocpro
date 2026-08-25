@@ -36,9 +36,8 @@ use MercadoPago\Client\OAuth\OAuthRefreshRequest;
  */
 class oauth_helper
 {
-
     /**
-     * @var string User preference key holding the CSRF state of an in-flight flow. 
+     * @var string User preference key holding the CSRF state of an in-flight flow.
      */
     private const STATE_PREFERENCE = 'enrol_mpcheckoutpro_oauthstate';
 
@@ -47,8 +46,7 @@ class oauth_helper
      *
      * @return bool
      */
-    public static function is_enabled(): bool
-    {
+    public static function is_enabled(): bool {
         return (bool)get_config('enrol_mpcheckoutpro', 'marketplaceenabled')
             && self::get_client_id() !== ''
             && self::get_client_secret() !== '';
@@ -59,8 +57,7 @@ class oauth_helper
      *
      * @return string
      */
-    public static function get_client_id(): string
-    {
+    public static function get_client_id(): string {
         return trim((string)get_config('enrol_mpcheckoutpro', 'marketplaceclientid'));
     }
 
@@ -69,8 +66,7 @@ class oauth_helper
      *
      * @return string
      */
-    public static function get_client_secret(): string
-    {
+    public static function get_client_secret(): string {
         return trim((string)get_config('enrol_mpcheckoutpro', 'marketplaceclientsecret'));
     }
 
@@ -79,8 +75,7 @@ class oauth_helper
      *
      * @return \moodle_url
      */
-    public static function get_redirect_uri(): \moodle_url
-    {
+    public static function get_redirect_uri(): \moodle_url {
         return util::plugin_url('oauth.php');
     }
 
@@ -90,8 +85,7 @@ class oauth_helper
      * @param  int $enrolid
      * @return string
      */
-    public static function build_authorization_url(int $enrolid): string
-    {
+    public static function build_authorization_url(int $enrolid): string {
         sdk::configure();
 
         $state = $enrolid . ':' . bin2hex(random_bytes(16));
@@ -111,8 +105,7 @@ class oauth_helper
      * @param  string $state
      * @return int the enrol instance id, 0 when the state does not match
      */
-    public static function consume_state(string $state): int
-    {
+    public static function consume_state(string $state): int {
         $stored = (string)get_user_preferences(self::STATE_PREFERENCE, '');
         unset_user_preference(self::STATE_PREFERENCE);
 
@@ -131,8 +124,7 @@ class oauth_helper
      * @return \stdClass{sellerid:string,livemode:bool}
      * @throws api_exception
      */
-    public static function exchange_code(int $enrolid, string $code): \stdClass
-    {
+    public static function exchange_code(int $enrolid, string $code): \stdClass {
         sdk::configure();
 
         $request = new OAuthCreateRequest();
@@ -162,8 +154,7 @@ class oauth_helper
      * @param  int $enrolid
      * @return bool true when a new token was stored
      */
-    public static function refresh(int $enrolid): bool
-    {
+    public static function refresh(int $enrolid): bool {
         global $DB;
 
         $record = $DB->get_record(credentials::TABLE, ['enrolid' => $enrolid]);
@@ -188,7 +179,8 @@ class oauth_helper
             $oauth = $client->refresh($request);
         } catch (\Throwable $e) {
             util::log_error(
-                'Could not refresh the Mercado Pago seller token: ' . $e->getMessage(), [
+                'Could not refresh the Mercado Pago seller token: ' . $e->getMessage(),
+                [
                 'enrolid' => $enrolid,
                 ]
             );
@@ -206,8 +198,7 @@ class oauth_helper
      * @param  object $oauth
      * @return void
      */
-    protected static function store(int $enrolid, object $oauth): void
-    {
+    protected static function store(int $enrolid, object $oauth): void {
         $expiresin = (int)($oauth->expires_in ?? 0);
         credentials::store_for_instance(
             $enrolid,
@@ -227,8 +218,7 @@ class oauth_helper
      * @param  int $threshold seconds before expiry at which a refresh is due
      * @return bool
      */
-    public static function needs_refresh(int $enrolid, int $threshold = WEEKSECS): bool
-    {
+    public static function needs_refresh(int $enrolid, int $threshold = WEEKSECS): bool {
         global $DB;
         $expires = $DB->get_field(credentials::TABLE, 'tokenexpires', ['enrolid' => $enrolid]);
         if (empty($expires)) {

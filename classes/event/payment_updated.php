@@ -25,14 +25,12 @@ namespace enrol_mpcheckoutpro\event;
  */
 class payment_updated extends transaction_event_base
 {
-
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         parent::init();
         $this->data['crud'] = 'u';
     }
@@ -42,8 +40,7 @@ class payment_updated extends transaction_event_base
      *
      * @return string
      */
-    public static function get_name()
-    {
+    public static function get_name() {
         return get_string('event:payment_updated', 'enrol_mpcheckoutpro');
     }
 
@@ -52,8 +49,7 @@ class payment_updated extends transaction_event_base
      *
      * @return string
      */
-    public function get_description()
-    {
+    public function get_description() {
         return "The Mercado Pago payment for the user with id '{$this->relateduserid}' in the course with id "
             . "'{$this->contextinstanceid}' changed from '{$this->other['previousstatus']}' to "
             . "'{$this->other['status']}'.";

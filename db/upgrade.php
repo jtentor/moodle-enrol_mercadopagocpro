@@ -33,8 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param  int $oldversion the version we are upgrading from
  * @return bool
  */
-function xmldb_enrol_mpcheckoutpro_upgrade($oldversion)
-{
+function xmldb_enrol_mpcheckoutpro_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();

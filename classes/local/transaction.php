@@ -25,9 +25,8 @@ namespace enrol_mpcheckoutpro\local;
  */
 class transaction
 {
-
     /**
-     * @var string Table name. 
+     * @var string Table name.
      */
     public const TABLE = 'enrol_mpcheckoutpro_txn';
 
@@ -42,8 +41,7 @@ class transaction
      * @param  instance_settings $settings
      * @return \stdClass the created record
      */
-    public static function create(\stdClass $instance, \stdClass $user, instance_settings $settings): \stdClass
-    {
+    public static function create(\stdClass $instance, \stdClass $user, instance_settings $settings): \stdClass {
         global $DB;
 
         $now = time();
@@ -87,8 +85,7 @@ class transaction
      * @param  int $id
      * @return \stdClass|null
      */
-    public static function get(int $id): ?\stdClass
-    {
+    public static function get(int $id): ?\stdClass {
         global $DB;
         $record = $DB->get_record(self::TABLE, ['id' => $id]);
         return $record ?: null;
@@ -100,8 +97,7 @@ class transaction
      * @param  string $reference
      * @return \stdClass|null
      */
-    public static function get_by_reference(string $reference): ?\stdClass
-    {
+    public static function get_by_reference(string $reference): ?\stdClass {
         global $DB;
         $record = $DB->get_record(self::TABLE, ['externalreference' => $reference]);
         return $record ?: null;
@@ -113,8 +109,7 @@ class transaction
      * @param  string $paymentid
      * @return \stdClass|null
      */
-    public static function get_by_payment_id(string $paymentid): ?\stdClass
-    {
+    public static function get_by_payment_id(string $paymentid): ?\stdClass {
         global $DB;
         $records = $DB->get_records(self::TABLE, ['paymentid' => $paymentid], 'id DESC', '*', 0, 1);
         return $records ? reset($records) : null;
@@ -132,16 +127,20 @@ class transaction
      * @param  instance_settings $settings
      * @return \stdClass|null
      */
-    public static function get_reusable(int $enrolid, int $userid, instance_settings $settings): ?\stdClass
-    {
+    public static function get_reusable(int $enrolid, int $userid, instance_settings $settings): ?\stdClass {
         global $DB;
 
         $records = $DB->get_records(
-            self::TABLE, [
+            self::TABLE,
+            [
             'enrolid' => $enrolid,
             'userid' => $userid,
             'status' => status::LOCAL_CREATED,
-            ], 'id DESC', '*', 0, 5
+            ],
+            'id DESC',
+            '*',
+            0,
+            5
         );
 
         $now = time();
@@ -170,8 +169,7 @@ class transaction
      * @param  int $userid
      * @return \stdClass[]
      */
-    public static function get_for_user(int $enrolid, int $userid): array
-    {
+    public static function get_for_user(int $enrolid, int $userid): array {
         global $DB;
         return $DB->get_records(self::TABLE, ['enrolid' => $enrolid, 'userid' => $userid], 'id DESC');
     }
@@ -183,8 +181,7 @@ class transaction
      * @param  array $fields field => value
      * @return \stdClass the reloaded record
      */
-    public static function update(int $id, array $fields): \stdClass
-    {
+    public static function update(int $id, array $fields): \stdClass {
         global $DB;
 
         $fields['id'] = $id;
@@ -203,10 +200,10 @@ class transaction
      * @param  array  $metadata
      * @return \stdClass
      */
-    public static function set_preference(int $id, string $preferenceid, string $initpoint, array $metadata): \stdClass
-    {
+    public static function set_preference(int $id, string $preferenceid, string $initpoint, array $metadata): \stdClass {
         return self::update(
-            $id, [
+            $id,
+            [
             'preferenceid' => $preferenceid,
             'initpoint' => $initpoint,
             'metadata' => util::encode_for_storage($metadata, 8000),
@@ -223,8 +220,7 @@ class transaction
      * @param  int $maxage      ignore transactions older than this many seconds
      * @return \stdClass[]
      */
-    public static function get_pending_for_reconciliation(int $limit, int $maxattempts, int $maxage): array
-    {
+    public static function get_pending_for_reconciliation(int $limit, int $maxattempts, int $maxage): array {
         global $DB;
 
         [$insql, $params] = $DB->get_in_or_equal(
@@ -247,11 +243,11 @@ class transaction
      * @param  string $message
      * @return void
      */
-    public static function record_error(int $id, string $message): void
-    {
+    public static function record_error(int $id, string $message): void {
         global $DB;
         $DB->update_record(
-            self::TABLE, (object)[
+            self::TABLE,
+            (object)[
             'id' => $id,
             'lasterror' => \core_text::substr($message, 0, 1000),
             'timemodified' => time(),
@@ -265,8 +261,7 @@ class transaction
      * @param  int $id
      * @return void
      */
-    public static function touch_reconcile(int $id): void
-    {
+    public static function touch_reconcile(int $id): void {
         global $DB;
         $DB->execute(
             'UPDATE {' . self::TABLE . '} SET reconcileattempts = reconcileattempts + 1, timemodified = ? WHERE id = ?',
@@ -280,8 +275,7 @@ class transaction
      * @param  int $enrolid
      * @return int
      */
-    public static function count_active_enrolments(int $enrolid): int
-    {
+    public static function count_active_enrolments(int $enrolid): int {
         global $DB;
         return $DB->count_records_select(
             'user_enrolments',

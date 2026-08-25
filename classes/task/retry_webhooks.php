@@ -30,9 +30,8 @@ use enrol_mpcheckoutpro\local\webhook_handler;
  */
 class retry_webhooks extends \core\task\scheduled_task
 {
-
     /**
-     * @var int Maximum notifications handled in one run. 
+     * @var int Maximum notifications handled in one run.
      */
     private const BATCH_SIZE = 50;
 
@@ -41,8 +40,7 @@ class retry_webhooks extends \core\task\scheduled_task
      *
      * @return string
      */
-    public function get_name()
-    {
+    public function get_name() {
         return get_string('task:retry_webhooks', 'enrol_mpcheckoutpro');
     }
 
@@ -51,8 +49,7 @@ class retry_webhooks extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute()
-    {
+    public function execute() {
         if (!enrol_is_enabled('mpcheckoutpro')) {
             mtrace('enrol_mpcheckoutpro is disabled, skipping webhook retries.');
             return;

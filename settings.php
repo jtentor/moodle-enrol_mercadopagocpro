@@ -31,7 +31,6 @@ use enrol_mpcheckoutpro\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-
     // ------------------------------------------------------------- Diagnostics.
     $notices = [];
     if (!sdk::is_available()) {
@@ -53,7 +52,8 @@ if ($ADMIN->fulltree) {
     }
     $notices[] = new \core\output\notification(
         get_string(
-            'webhookurl_desc', 'enrol_mpcheckoutpro',
+            'webhookurl_desc',
+            'enrol_mpcheckoutpro',
             util::plugin_url('webhook.php')->out(false)
         ),
         \core\output\notification::NOTIFY_INFO
@@ -357,7 +357,9 @@ if ($ADMIN->fulltree) {
             'enrol_mpcheckoutpro_marketplace',
             get_string('settings_marketplace', 'enrol_mpcheckoutpro'),
             get_string(
-                'settings_marketplace_desc', 'enrol_mpcheckoutpro', [
+                'settings_marketplace_desc',
+                'enrol_mpcheckoutpro',
+                [
                 'redirecturi' => oauth_helper::get_redirect_uri()->out(false),
                 ]
             )
