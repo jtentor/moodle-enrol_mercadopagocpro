@@ -159,7 +159,13 @@ final class util
             return '{"error":"json_encode failed"}';
         }
         if (strlen($json) > $maxlength) {
-            return substr($json, 0, $maxlength - 16) . '..."(truncated)"}';
+            // Derive the room to leave from the marker itself. A hardcoded count
+            // here was off by one and produced a string of $maxlength + 1 bytes.
+            $marker = '..."(truncated)"}';
+            if ($maxlength <= strlen($marker)) {
+                return substr($marker, 0, $maxlength);
+            }
+            return substr($json, 0, $maxlength - strlen($marker)) . $marker;
         }
         return $json;
     }
