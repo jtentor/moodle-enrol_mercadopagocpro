@@ -4,6 +4,34 @@ All notable changes to `enrol_mpcheckoutpro` are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+First execution of the PHPUnit suite (65 tests, 191 assertions, all passing on
+Moodle 5.2.2 / PHP 8.4.14 / MariaDB 12.0.2). It found three defects, fixed here:
+
+### Fixed
+
+- `util::encode_for_storage()` reserved 16 characters for a 17 character
+  truncation marker, so a capped payload was always one byte over the requested
+  maximum. The room is now derived from the marker itself.
+- `api_client::call()` cast `MPResponse::getContent()` to string. The SDK declares
+  that method `: array`, so every Mercado Pago API error logged the literal
+  `"Array"` and raised a PHP warning, discarding the diagnostic Mercado Pago sends
+  back. The decoded body is now passed through `redact()` and stored intact.
+- The test harness loaded `tests/fixtures/mock_http_client.php` before the
+  Mercado Pago autoloader was registered. Since the fixture declares
+  `implements MPHttpClient`, PHP could not compile it and six of the seven test
+  files aborted before running.
+
+### Changed
+
+- The test suite no longer inherits server level credentials. `credentials::resolve()`
+  ranks the server configuration above the site settings, and PHPUnit's bootstrap
+  discards `$CFG` but not the process environment, so a production
+  `MPCHECKOUTPRO_ACCESS_TOKEN` would have overridden the fake test token.
+- Log context is typed and formatted consistently: `txnid` is always an integer,
+  and both sides of an amount mismatch are formatted to two decimals.
+
 ## [1.0.0] - 2026-08-23
 
 First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.

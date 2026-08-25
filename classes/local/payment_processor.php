@@ -198,7 +198,7 @@ class payment_processor
         if ($reference !== '' && $reference !== (string)$transaction->externalreference) {
             util::log_error(
                 'Payment external_reference does not match the transaction', [
-                'txnid' => $transaction->id,
+                'txnid' => (int)$transaction->id,
                 'paymentid' => $payment->id ?? null,
                 ]
             );
@@ -246,9 +246,14 @@ class payment_processor
                 $fields['lasterror'] = 'Approved payment does not match the expected amount or currency.';
                 util::log_error(
                     'Approved payment amount mismatch - enrolment withheld', [
-                    'txnid' => $transaction->id,
-                    'expected' => $transaction->amount . ' ' . $transaction->currency,
-                    'received' => $paidamount . ' ' . $paidcurrency,
+                    'txnid' => (int)$transaction->id,
+                    // Both sides are formatted the same way on purpose: the column
+                    // is a decimal and the payment amount is a float, so without
+                    // this the line read "expected 100.00 ARS, received 1 ARS".
+                    'expected' => number_format((float)$transaction->amount, 2, '.', '')
+                        . ' ' . $transaction->currency,
+                    'received' => number_format($paidamount, 2, '.', '')
+                        . ' ' . $paidcurrency,
                     ]
                 );
                 $transaction = transaction::update((int)$transaction->id, $fields);
@@ -295,7 +300,7 @@ class payment_processor
                 if (!enrolment_manager::has_capacity($instance, $settings) && $state !== status::ENROLMENT_PENDING) {
                     util::log_error(
                         'Course is full, approved payment could not be enrolled', [
-                        'txnid' => $transaction->id,
+                        'txnid' => (int)$transaction->id,
                         ]
                     );
                     transaction::record_error(
@@ -428,7 +433,7 @@ class payment_processor
             // A welcome message must never cost somebody their paid enrolment.
             util::log_error(
                 'Welcome message could not be sent: ' . $e->getMessage(), [
-                'txnid' => $transaction->id,
+                'txnid' => (int)$transaction->id,
                 ]
             );
         }
@@ -455,7 +460,7 @@ class payment_processor
             util::log_error(
                 'Notification could not be sent: ' . $e->getMessage(), [
                 'event' => $event,
-                'txnid' => $transaction->id,
+                'txnid' => (int)$transaction->id,
                 ]
             );
         }

@@ -152,7 +152,7 @@ class enrolment_manager
         if (self::has_other_granting_transaction($transaction)) {
             util::log_debug(
                 'Reversal ignored: another approved transaction still grants access', [
-                'txnid' => $transaction->id,
+                'txnid' => (int)$transaction->id,
                 'userid' => $userid,
                 ]
             );

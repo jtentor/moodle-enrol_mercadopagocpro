@@ -83,7 +83,7 @@ class reconcile_payments extends \core\task\scheduled_task
             } catch (\Throwable $e) {
                 util::log_error(
                     'Reconciliation failed for a transaction: ' . $e->getMessage(), [
-                    'txnid' => $record->id,
+                    'txnid' => (int)$record->id,
                     ]
                 );
                 mtrace('  txn ' . $record->id . ': error - ' . $e->getMessage());
