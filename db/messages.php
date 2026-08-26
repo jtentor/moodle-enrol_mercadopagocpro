@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Message providers for enrol_mpcheckoutpro.
+ * Message providers for enrol_mercadopagocpro.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -60,7 +60,7 @@ $messageproviders = [
 
     // Sent to course teachers/managers on relevant payment events.
     'teacher_notification' => [
-        'capability' => 'enrol/mpcheckoutpro:viewtransactions',
+        'capability' => 'enrol/mercadopagocpro:viewtransactions',
         'defaults' => [
             'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_ENABLED,
             'email' => MESSAGE_PERMITTED,

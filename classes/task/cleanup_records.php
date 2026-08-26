@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\task;
+namespace enrol_mercadopagocpro\task;
 
-use enrol_mpcheckoutpro\local\status;
-use enrol_mpcheckoutpro\local\transaction;
-use enrol_mpcheckoutpro\local\webhook_handler;
+use enrol_mercadopagocpro\local\status;
+use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\webhook_handler;
 
 /**
  * Housekeeping: drops abandoned checkouts and ages out the webhook audit log.
@@ -26,19 +26,21 @@ use enrol_mpcheckoutpro\local\webhook_handler;
  * Transactions that produced a payment are never deleted here; they are financial
  * records. Only checkouts the buyer never completed and old notification rows go.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cleanup_records extends \core\task\scheduled_task
 {
+
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
-        return get_string('task:cleanup_records', 'enrol_mpcheckoutpro');
+    public function get_name()
+    {
+        return get_string('task:cleanup_records', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -46,10 +48,11 @@ class cleanup_records extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         global $DB;
 
-        $keepfor = (int)get_config('enrol_mpcheckoutpro', 'cleanupafter');
+        $keepfor = (int)get_config('enrol_mercadopagocpro', 'cleanupafter');
         if ($keepfor <= 0) {
             mtrace('Retention is disabled, nothing to clean up.');
             return;

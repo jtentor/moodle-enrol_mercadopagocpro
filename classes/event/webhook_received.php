@@ -14,23 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\event;
+namespace enrol_mercadopagocpro\event;
 
 /**
  * A Mercado Pago webhook notification was accepted.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class webhook_received extends \core\event\base
 {
+
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_OTHER;
     }
@@ -40,8 +42,9 @@ class webhook_received extends \core\event\base
      *
      * @return string
      */
-    public static function get_name() {
-        return get_string('event:webhook_received', 'enrol_mpcheckoutpro');
+    public static function get_name()
+    {
+        return get_string('event:webhook_received', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -49,7 +52,8 @@ class webhook_received extends \core\event\base
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "A Mercado Pago '{$this->other['type']}' notification for resource "
             . "'{$this->other['dataid']}' was accepted.";
     }
@@ -60,7 +64,8 @@ class webhook_received extends \core\event\base
      * @param  array $notification
      * @return self
      */
-    public static function create_from_notification(array $notification): self {
+    public static function create_from_notification(array $notification): self
+    {
         return self::create(
             [
             'context' => \context_system::instance(),

@@ -21,7 +21,7 @@
  * possible before the x-signature header has been verified: rate limiting, size
  * checks and writing the audit row.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/notifications/webhooks
@@ -33,8 +33,8 @@ define('NO_DEBUG_DISPLAY', true);
 
 require __DIR__ . '/../../config.php';
 
-use enrol_mpcheckoutpro\local\util;
-use enrol_mpcheckoutpro\local\webhook_handler;
+use enrol_mercadopagocpro\local\util;
+use enrol_mercadopagocpro\local\webhook_handler;
 
 /**
  * Send a plain response and stop.
@@ -43,7 +43,8 @@ use enrol_mpcheckoutpro\local\webhook_handler;
  * @param  string $body   response body
  * @return void
  */
-function enrol_mpcheckoutpro_respond(int $status, string $body): void {
+function enrol_mercadopagocpro_respond(int $status, string $body): void
+{
     if (!headers_sent()) {
         http_response_code($status);
         header('Content-Type: text/plain; charset=utf-8');
@@ -55,12 +56,12 @@ function enrol_mpcheckoutpro_respond(int $status, string $body): void {
 
 if (!isset($_SERVER['REQUEST_METHOD']) || strtoupper($_SERVER['REQUEST_METHOD']) !== 'POST') {
     // Mercado Pago always POSTs. Anything else is a probe.
-    enrol_mpcheckoutpro_respond(405, 'Method Not Allowed');
+    enrol_mercadopagocpro_respond(405, 'Method Not Allowed');
     die();
 }
 
-if (!enrol_is_enabled('mpcheckoutpro')) {
-    enrol_mpcheckoutpro_respond(503, 'Enrolment method disabled');
+if (!enrol_is_enabled('mercadopagocpro')) {
+    enrol_mercadopagocpro_respond(503, 'Enrolment method disabled');
     die();
 }
 
@@ -86,9 +87,9 @@ if (function_exists('getallheaders')) {
 try {
     $handler = new webhook_handler();
     $response = $handler->handle($_GET, $headers, $rawbody, (string)getremoteaddr());
-    enrol_mpcheckoutpro_respond($response['status'], $response['body']);
+    enrol_mercadopagocpro_respond($response['status'], $response['body']);
 } catch (Throwable $e) {
     util::log_error('Unhandled error in the webhook endpoint: ' . $e->getMessage());
     // A 500 makes Mercado Pago retry the notification later, which is what we want.
-    enrol_mpcheckoutpro_respond(500, 'Internal Server Error');
+    enrol_mercadopagocpro_respond(500, 'Internal Server Error');
 }

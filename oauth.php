@@ -20,7 +20,7 @@
  * Acts both as the entry point ("connect") and as the redirect_uri registered in
  * the Mercado Pago application.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see       https://www.mercadopago.com.br/developers/en/docs/security/oauth/creation
@@ -28,9 +28,9 @@
 
 require __DIR__ . '/../../config.php';
 
-use enrol_mpcheckoutpro\local\api_exception;
-use enrol_mpcheckoutpro\local\oauth_helper;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\api_exception;
+use enrol_mercadopagocpro\local\oauth_helper;
+use enrol_mercadopagocpro\local\util;
 
 $action = optional_param('action', '', PARAM_ALPHA);
 $code = optional_param('code', '', PARAM_RAW_TRIMMED);
@@ -42,11 +42,11 @@ require_login();
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url(util::plugin_url('oauth.php'));
 $PAGE->set_pagelayout('admin');
-$PAGE->set_title(get_string('splitpayments', 'enrol_mpcheckoutpro'));
-$PAGE->set_heading(get_string('splitpayments', 'enrol_mpcheckoutpro'));
+$PAGE->set_title(get_string('splitpayments', 'enrol_mercadopagocpro'));
+$PAGE->set_heading(get_string('splitpayments', 'enrol_mercadopagocpro'));
 
 if (!oauth_helper::is_enabled()) {
-    throw new moodle_exception('error:marketplacedisabled', 'enrol_mpcheckoutpro');
+    throw new moodle_exception('error:marketplacedisabled', 'enrol_mercadopagocpro');
 }
 
 // ---------------------------------------------------------------- Start flow.
@@ -54,9 +54,9 @@ if ($action === 'connect') {
     require_sesskey();
     $instanceid = required_param('instanceid', PARAM_INT);
 
-    $instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mpcheckoutpro'], '*', MUST_EXIST);
+    $instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mercadopagocpro'], '*', MUST_EXIST);
     $context = context_course::instance($instance->courseid, MUST_EXIST);
-    require_capability('enrol/mpcheckoutpro:config', $context);
+    require_capability('enrol/mercadopagocpro:config', $context);
 
     redirect(new moodle_url(oauth_helper::build_authorization_url($instanceid)));
 }
@@ -66,28 +66,28 @@ $returnurl = new moodle_url('/enrol/instances.php');
 
 if ($error !== '') {
     util::log_error('Mercado Pago OAuth returned an error', ['error' => $error]);
-    throw new moodle_exception('error:oauthdenied', 'enrol_mpcheckoutpro', $returnurl, s($error));
+    throw new moodle_exception('error:oauthdenied', 'enrol_mercadopagocpro', $returnurl, s($error));
 }
 
 if ($state === '' || $code === '') {
-    throw new moodle_exception('error:oauthincomplete', 'enrol_mpcheckoutpro', $returnurl);
+    throw new moodle_exception('error:oauthincomplete', 'enrol_mercadopagocpro', $returnurl);
 }
 
 $instanceid = oauth_helper::consume_state($state);
 if ($instanceid <= 0) {
-    throw new moodle_exception('error:oauthstate', 'enrol_mpcheckoutpro', $returnurl);
+    throw new moodle_exception('error:oauthstate', 'enrol_mercadopagocpro', $returnurl);
 }
 
-$instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mpcheckoutpro'], '*', MUST_EXIST);
+$instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mercadopagocpro'], '*', MUST_EXIST);
 $context = context_course::instance($instance->courseid, MUST_EXIST);
-require_capability('enrol/mpcheckoutpro:config', $context);
+require_capability('enrol/mercadopagocpro:config', $context);
 
 $returnurl = new moodle_url('/enrol/instances.php', ['id' => $instance->courseid]);
 
 try {
     $seller = oauth_helper::exchange_code($instanceid, $code);
 } catch (api_exception $e) {
-    throw new moodle_exception('error:oauthexchange', 'enrol_mpcheckoutpro', $returnurl, null, $e->getMessage());
+    throw new moodle_exception('error:oauthexchange', 'enrol_mercadopagocpro', $returnurl, null, $e->getMessage());
 }
 
 // Record the collector id on the instance so it shows in the settings form.
@@ -97,7 +97,7 @@ if ($seller->sellerid !== '') {
 
 redirect(
     $returnurl,
-    get_string('sellerconnected', 'enrol_mpcheckoutpro', $seller->sellerid),
+    get_string('sellerconnected', 'enrol_mercadopagocpro', $seller->sellerid),
     null,
     \core\output\notification::NOTIFY_SUCCESS
 );

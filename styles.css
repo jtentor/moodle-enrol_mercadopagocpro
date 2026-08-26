@@ -1,31 +1,31 @@
 /* Mercado Pago Checkout Pro enrolment plugin styles. */
 
-.enrol-mpcheckoutpro .enrol-mpcheckoutpro-cost {
+.enrol-mercadopagocpro .enrol-mercadopagocpro-cost {
     font-weight: 600;
 }
 
-.enrol-mpcheckoutpro .enrol-mpcheckoutpro-description {
+.enrol-mercadopagocpro .enrol-mercadopagocpro-description {
     margin-bottom: 0.5rem;
 }
 
-.enrol-mpcheckoutpro .enrol-mpcheckoutpro-installments {
+.enrol-mercadopagocpro .enrol-mercadopagocpro-installments {
     margin-bottom: 0.5rem;
 }
 
-.enrol-mpcheckoutpro-result dl.row dt {
+.enrol-mercadopagocpro-result dl.row dt {
     font-weight: 600;
 }
 
-.enrol-mpcheckoutpro-result code {
+.enrol-mercadopagocpro-result code {
     word-break: break-all;
 }
 
-.enrol-mpcheckoutpro-summary .card {
+.enrol-mercadopagocpro-summary .card {
     min-width: 9rem;
 }
 
 @media (max-width: 576px) {
-    .enrol-mpcheckoutpro-summary .card {
+    .enrol-mercadopagocpro-summary .card {
         min-width: 100%;
     }
 }

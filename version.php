@@ -17,16 +17,16 @@
 /**
  * Mercado Pago Checkout Pro enrolment plugin version specification.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026082300;                  // Plugin version (YYYYMMDDXX).
+$plugin->version   = 2026082500;                  // Plugin version (YYYYMMDDXX).
 $plugin->requires  = 2026042002.00;               // Moodle 5.2.2 or later of the 5.2 branch.
 $plugin->supported = [502, 502];                  // Supported Moodle branches.
-$plugin->component = 'enrol_mpcheckoutpro';      // Full name of the plugin.
+$plugin->component = 'enrol_mercadopagocpro';      // Full name of the plugin.
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = 'v1.0.0';

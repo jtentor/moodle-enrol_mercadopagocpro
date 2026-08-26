@@ -33,19 +33,19 @@ For development, tunnel the site and set `$CFG->wwwroot` to the tunnel URL.
 ### 3. Register the webhook URL
 
 - [ ] In *Your integrations ▸ Webhooks*, register
-      `https://your-site/enrol/mpcheckoutpro/webhook.php` and subscribe to the
+      `https://your-site/enrol/mercadopagocpro/webhook.php` and subscribe to the
       **Payments** topic (and Merchant orders if you want them).
 - [ ] Verify from outside your network that the URL is reachable and is not
       behind basic auth, an IP allowlist, or a WAF rule that drops JSON POSTs:
 
-      curl -i -X POST https://your-site/enrol/mpcheckoutpro/webhook.php -d '{}'
+      curl -i -X POST https://your-site/enrol/mercadopagocpro/webhook.php -d '{}'
 
       A `401` is the correct answer — it proves the request arrives.
 
 ### 4. Moodle cron
 
 - [ ] Confirm cron runs at least every minute and that
-      `\enrol_mpcheckoutpro\task\reconcile_payments` appears in the task list
+      `\enrol_mercadopagocpro\task\reconcile_payments` appears in the task list
       and succeeds.
 
 This is the safety net that settles payments when a notification is lost. A site
@@ -92,7 +92,7 @@ These have defaults, but the defaults are guesses about your institution:
 - [ ] **Course welcome message** — off by default. Decide whether to send one,
       who it should come from, and whether to write your own text or use the core
       default. Remember it goes out only when the payment is approved.
-- [ ] **Who gets `enrol/mpcheckoutpro:viewtransactions`** — the report shows who
+- [ ] **Who gets `enrol/mercadopagocpro:viewtransactions`** — the report shows who
       paid what. Editing teachers have it by default; decide if that is right.
 
 ### 8. Refund policy and the first production payment
@@ -107,7 +107,7 @@ These have defaults, but the defaults are guesses about your institution:
 
 - [ ] Confirm your account meets the [split payments prerequisites](https://www.mercadopago.com.br/developers/en/docs/split-payments/prerequisites)
       (seller account with the required KYC level).
-- [ ] Register `https://your-site/enrol/mpcheckoutpro/oauth.php` as the
+- [ ] Register `https://your-site/enrol/mercadopagocpro/oauth.php` as the
       redirect URI of your marketplace application — it must match exactly.
 - [ ] Put the application client id and client secret into the plugin settings.
 - [ ] Connect one seller through the enrolment method settings and confirm the

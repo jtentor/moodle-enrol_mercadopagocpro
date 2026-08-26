@@ -14,23 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\event;
+namespace enrol_mercadopagocpro\event;
 
 /**
  * A Checkout Pro preference was created for a user.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class preference_created extends transaction_event_base
 {
+
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         parent::init();
         $this->data['crud'] = 'c';
     }
@@ -40,8 +42,9 @@ class preference_created extends transaction_event_base
      *
      * @return string
      */
-    public static function get_name() {
-        return get_string('event:preference_created', 'enrol_mpcheckoutpro');
+    public static function get_name()
+    {
+        return get_string('event:preference_created', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -49,7 +52,8 @@ class preference_created extends transaction_event_base
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "The user with id '{$this->relateduserid}' started a Mercado Pago Checkout Pro payment "
             . "(preference '{$this->other['preferenceid']}') for the enrolment instance with id "
             . "'{$this->other['enrolid']}' in the course with id '{$this->contextinstanceid}'.";

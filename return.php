@@ -22,7 +22,7 @@
  * processing_mode and merchant_account_id to this URL. None of those values are
  * trusted: the page always re-queries the API before deciding anything.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
@@ -30,10 +30,10 @@
 
 require __DIR__ . '/../../config.php';
 
-use enrol_mpcheckoutpro\local\payment_processor;
-use enrol_mpcheckoutpro\local\status;
-use enrol_mpcheckoutpro\local\transaction;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\payment_processor;
+use enrol_mercadopagocpro\local\status;
+use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\util;
 
 $txnid = required_param('txn', PARAM_INT);
 $result = optional_param('result', '', PARAM_ALPHA);
@@ -48,13 +48,13 @@ require_login();
 
 $transaction = transaction::get($txnid);
 if ($transaction === null) {
-    throw new moodle_exception('error:unknowntransaction', 'enrol_mpcheckoutpro');
+    throw new moodle_exception('error:unknowntransaction', 'enrol_mercadopagocpro');
 }
 
 // A user may only look at their own transaction.
 if ((int)$transaction->userid !== (int)$USER->id) {
     $coursecontext = context_course::instance($transaction->courseid, IGNORE_MISSING);
-    if (!$coursecontext || !has_capability('enrol/mpcheckoutpro:viewtransactions', $coursecontext)) {
+    if (!$coursecontext || !has_capability('enrol/mercadopagocpro:viewtransactions', $coursecontext)) {
         throw new moodle_exception('nopermissions', 'error', '', 'view this transaction');
     }
 }
@@ -64,7 +64,7 @@ if ($externalreference !== '') {
     $parsed = util::parse_external_reference($externalreference);
     if ($parsed === null || $parsed['txnid'] !== (int)$transaction->id) {
         util::log_error('Return URL carried a mismatched external_reference', ['txnid' => $txnid]);
-        throw new moodle_exception('error:referencemismatch', 'enrol_mpcheckoutpro');
+        throw new moodle_exception('error:referencemismatch', 'enrol_mercadopagocpro');
     }
 }
 
@@ -77,7 +77,7 @@ $PAGE->set_context($context);
 $PAGE->set_url(util::plugin_url('return.php', ['txn' => $txnid]));
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('paymentresult', 'enrol_mpcheckoutpro'));
+$PAGE->set_title(get_string('paymentresult', 'enrol_mercadopagocpro'));
 $PAGE->set_heading($course->fullname);
 
 // Re-query the API. This is the step that actually decides the enrolment.
@@ -100,29 +100,29 @@ $paymentstatus = (string)$transaction->status;
 
 if (in_array($paymentstatus, status::granting(), true) && $state === status::ENROLMENT_ACTIVE) {
     $tone = 'success';
-    $heading = get_string('result_approved_title', 'enrol_mpcheckoutpro');
-    $message = get_string('result_approved_body', 'enrol_mpcheckoutpro');
+    $heading = get_string('result_approved_title', 'enrol_mercadopagocpro');
+    $message = get_string('result_approved_body', 'enrol_mercadopagocpro');
     $continueurl = $courseurl;
 } else if (in_array($paymentstatus, [status::PENDING, status::IN_PROCESS, status::AUTHORIZED], true)) {
     $tone = 'info';
-    $heading = get_string('result_pending_title', 'enrol_mpcheckoutpro');
-    $message = get_string('result_pending_body', 'enrol_mpcheckoutpro');
+    $heading = get_string('result_pending_title', 'enrol_mercadopagocpro');
+    $message = get_string('result_pending_body', 'enrol_mercadopagocpro');
     $continueurl = $enrolurl;
 } else if (in_array($paymentstatus, [status::REJECTED, status::CANCELLED], true)) {
     $tone = 'error';
-    $heading = get_string('result_rejected_title', 'enrol_mpcheckoutpro');
-    $message = get_string('result_rejected_body', 'enrol_mpcheckoutpro');
+    $heading = get_string('result_rejected_title', 'enrol_mercadopagocpro');
+    $message = get_string('result_rejected_body', 'enrol_mercadopagocpro');
     $continueurl = $enrolurl;
 } else if ($paymentstatus === status::LOCAL_CREATED) {
     // The buyer came back before Mercado Pago produced a payment.
     $tone = 'info';
-    $heading = get_string('result_unknown_title', 'enrol_mpcheckoutpro');
-    $message = get_string('result_unknown_body', 'enrol_mpcheckoutpro');
+    $heading = get_string('result_unknown_title', 'enrol_mercadopagocpro');
+    $message = get_string('result_unknown_body', 'enrol_mercadopagocpro');
     $continueurl = $enrolurl;
 } else {
     $tone = 'warning';
-    $heading = get_string('result_review_title', 'enrol_mpcheckoutpro');
-    $message = get_string('result_review_body', 'enrol_mpcheckoutpro');
+    $heading = get_string('result_review_title', 'enrol_mercadopagocpro');
+    $message = get_string('result_review_body', 'enrol_mercadopagocpro');
     $continueurl = $enrolurl;
 }
 
@@ -131,8 +131,7 @@ unset($result);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 echo $OUTPUT->render_from_template(
-    'enrol_mpcheckoutpro/status_page',
-    [
+    'enrol_mercadopagocpro/status_page', [
     'tone' => $tone,
     'message' => $message,
     'statuslabel' => status::label($paymentstatus),

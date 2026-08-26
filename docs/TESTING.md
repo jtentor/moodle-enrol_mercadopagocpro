@@ -8,13 +8,13 @@ From your Moodle root, after initialising the test environment:
 
 ```bash
 php admin/tool/phpunit/cli/init.php
-vendor/bin/phpunit --testsuite enrol_mpcheckoutpro_testsuite
+vendor/bin/phpunit --testsuite enrol_mercadopagocpro_testsuite
 ```
 
 or a single file:
 
 ```bash
-vendor/bin/phpunit enrol/mpcheckoutpro/tests/payment_processor_test.php
+vendor/bin/phpunit enrol/mercadopagocpro/tests/payment_processor_test.php
 ```
 
 No test reaches the network. `tests/fixtures/mock_http_client.php` implements the
@@ -37,7 +37,7 @@ enabled plugin.
 
 ```bash
 php admin/tool/behat/cli/init.php
-vendor/bin/behat --config /path/to/behatdata/behatrun/behat/behat.yml --tags @enrol_mpcheckoutpro
+vendor/bin/behat --config /path/to/behatdata/behatrun/behat/behat.yml --tags @enrol_mercadopagocpro
 ```
 
 The feature covers adding the method to a course, the validation messages and
@@ -50,7 +50,7 @@ Run `phpcs` and `phpcbf` from **inside the plugin directory** so they pick up th
 bundled `.phpcs.xml`, which is the only configuration that is safe here:
 
 ```bash
-cd enrol/mpcheckoutpro
+cd enrol/mercadopagocpro
 ../../vendor/bin/phpcs           # uses .phpcs.xml
 ../../vendor/bin/phpcbf          # same rules, applies the fixes
 cd ../..
@@ -75,8 +75,8 @@ If you prefer to pass the standard explicitly, the equivalent is:
 ```bash
 vendor/bin/phpcs --standard=moodle-extra \
   --exclude=PEAR.Files.IncludingFile \
-  --ignore=enrol/mpcheckoutpro/vendor \
-  enrol/mpcheckoutpro
+  --ignore=enrol/mercadopagocpro/vendor \
+  enrol/mercadopagocpro
 ```
 
 ## Manual testing with Mercado Pago test credentials
@@ -93,7 +93,7 @@ account is configured correctly — only a real end-to-end run does that.
 3. Create two [test users](https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/additional-content/your-integrations/test/accounts):
    one seller (whose credentials you just used) and one buyer.
 4. Configure the webhook URL in *Your integrations*:
-   `https://your-site/enrol/mpcheckoutpro/webhook.php`
+   `https://your-site/enrol/mercadopagocpro/webhook.php`
 
 Your site must be reachable from the internet over HTTPS for notifications to
 arrive. For local work, tunnel it (`ngrok`, `cloudflared`) and set `$CFG->wwwroot`

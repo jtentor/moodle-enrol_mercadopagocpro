@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\task;
+namespace enrol_mercadopagocpro\task;
 
-use enrol_mpcheckoutpro\local\payment_processor;
-use enrol_mpcheckoutpro\local\transaction;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\payment_processor;
+use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\util;
 
 /**
  * Re-queries Mercado Pago for every transaction that has not reached a final state.
@@ -26,14 +26,15 @@ use enrol_mpcheckoutpro\local\util;
  * This is the safety net that makes a lost webhook harmless: no matter what
  * happens to the notifications, every payment converges to the right enrolment.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reconcile_payments extends \core\task\scheduled_task
 {
+
     /**
-     * @var int Maximum transactions handled in one run.
+     * @var int Maximum transactions handled in one run. 
      */
     private const BATCH_SIZE = 100;
 
@@ -42,8 +43,9 @@ class reconcile_payments extends \core\task\scheduled_task
      *
      * @return string
      */
-    public function get_name() {
-        return get_string('task:reconcile_payments', 'enrol_mpcheckoutpro');
+    public function get_name()
+    {
+        return get_string('task:reconcile_payments', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -51,14 +53,15 @@ class reconcile_payments extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
-        if (!enrol_is_enabled('mpcheckoutpro')) {
-            mtrace('enrol_mpcheckoutpro is disabled, skipping reconciliation.');
+    public function execute()
+    {
+        if (!enrol_is_enabled('mercadopagocpro')) {
+            mtrace('enrol_mercadopagocpro is disabled, skipping reconciliation.');
             return;
         }
 
-        $maxattempts = (int)get_config('enrol_mpcheckoutpro', 'reconcilemaxattempts') ?: 60;
-        $maxage = (int)get_config('enrol_mpcheckoutpro', 'reconcilemaxage') ?: 90 * DAYSECS;
+        $maxattempts = (int)get_config('enrol_mercadopagocpro', 'reconcilemaxattempts') ?: 60;
+        $maxage = (int)get_config('enrol_mercadopagocpro', 'reconcilemaxage') ?: 90 * DAYSECS;
 
         $pending = transaction::get_pending_for_reconciliation(self::BATCH_SIZE, $maxattempts, $maxage);
         if (!$pending) {
@@ -79,8 +82,7 @@ class reconcile_payments extends \core\task\scheduled_task
                 mtrace('  txn ' . $record->id . ': ' . $result->outcome . ' - ' . $result->message);
             } catch (\Throwable $e) {
                 util::log_error(
-                    'Reconciliation failed for a transaction: ' . $e->getMessage(),
-                    [
+                    'Reconciliation failed for a transaction: ' . $e->getMessage(), [
                     'txnid' => (int)$record->id,
                     ]
                 );

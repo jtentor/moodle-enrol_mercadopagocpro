@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\local;
+namespace enrol_mercadopagocpro\local;
 
 /**
  * Resolved configuration for one enrolment instance.
@@ -40,147 +40,148 @@ namespace enrol_mpcheckoutpro\local;
  *               category_id, extra metadata fields and the payment notification
  *               toggle - the int columns are all spoken for
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class instance_settings
 {
+
     /**
-     * @var int Reversal action: leave the enrolment untouched.
+     * @var int Reversal action: leave the enrolment untouched. 
      */
     public const REVERSAL_KEEP = 0;
     /**
-     * @var int Reversal action: suspend the enrolment and remove the roles.
+     * @var int Reversal action: suspend the enrolment and remove the roles. 
      */
     public const REVERSAL_SUSPEND = 1;
     /**
-     * @var int Reversal action: unenrol the user.
+     * @var int Reversal action: unenrol the user. 
      */
     public const REVERSAL_UNENROL = 2;
 
     /**
-     * @var float Enrolment cost.
+     * @var float Enrolment cost. 
      */
     public float $cost = 0.0;
     /**
-     * @var string ISO-4217 currency.
+     * @var string ISO-4217 currency. 
      */
     public string $currency = 'ARS';
     /**
-     * @var int Role assigned on approval.
+     * @var int Role assigned on approval. 
      */
     public int $roleid = 0;
     /**
-     * @var int Enrolment duration in seconds, 0 = unlimited.
+     * @var int Enrolment duration in seconds, 0 = unlimited. 
      */
     public int $enrolperiod = 0;
     /**
-     * @var int Enrolment start date, 0 = immediately.
+     * @var int Enrolment start date, 0 = immediately. 
      */
     public int $enrolstartdate = 0;
     /**
-     * @var int Enrolment end date, 0 = never.
+     * @var int Enrolment end date, 0 = never. 
      */
     public int $enrolenddate = 0;
     /**
-     * @var int Group to add the user to, 0 = none.
+     * @var int Group to add the user to, 0 = none. 
      */
     public int $groupid = 0;
     /**
-     * @var int Maximum installments offered, 0 = do not send the field.
+     * @var int Maximum installments offered, 0 = do not send the field. 
      */
     public int $installments = 0;
     /**
-     * @var int default_installments, 0 = do not send the field.
+     * @var int default_installments, 0 = do not send the field. 
      */
     public int $defaultinstallments = 0;
     /**
-     * @var string default_payment_method_id, empty = do not send the field.
+     * @var string default_payment_method_id, empty = do not send the field. 
      */
     public string $defaultpaymentmethodid = '';
     /**
-     * @var string[] excluded_payment_types ids.
+     * @var string[] excluded_payment_types ids. 
      */
     public array $excludedpaymenttypes = [];
     /**
-     * @var string[] excluded_payment_methods ids.
+     * @var string[] excluded_payment_methods ids. 
      */
     public array $excludedpaymentmethods = [];
     /**
-     * @var bool binary_mode.
+     * @var bool binary_mode. 
      */
     public bool $binarymode = false;
     /**
-     * @var bool Send purpose=wallet_purchase, restricting checkout to Mercado Pago accounts.
+     * @var bool Send purpose=wallet_purchase, restricting checkout to Mercado Pago accounts. 
      */
     public bool $walletpurchase = false;
     /**
-     * @var bool Whether to send auto_return=approved.
+     * @var bool Whether to send auto_return=approved. 
      */
     public bool $autoreturn = true;
     /**
-     * @var string statement_descriptor.
+     * @var string statement_descriptor. 
      */
     public string $statementdescriptor = '';
     /**
-     * @var int Preference validity in seconds, 0 = no expiration fields.
+     * @var int Preference validity in seconds, 0 = no expiration fields. 
      */
     public int $preferenceexpiry = 0;
     /**
-     * @var string Item description.
+     * @var string Item description. 
      */
     public string $itemdescription = '';
     /**
-     * @var string Item category_id.
+     * @var string Item category_id. 
      */
     public string $categoryid = 'learnings';
     /**
-     * @var array Extra metadata key => value.
+     * @var array Extra metadata key => value. 
      */
     public array $custommetadata = [];
     /**
-     * @var bool Create a suspended enrolment while a payment is pending.
+     * @var bool Create a suspended enrolment while a payment is pending. 
      */
     public bool $pendingholding = false;
     /**
-     * @var bool Send notifications about payment events.
+     * @var bool Send notifications about payment events. 
      */
     public bool $notifications = true;
     /**
-     * @var int The raw tri-state behind $notifications: -1 site default, 0 no, 1 yes.
+     * @var int The raw tri-state behind $notifications: -1 site default, 0 no, 1 yes. 
      */
     public int $notificationsraw = -1;
     /**
-     * @var int Course welcome message send option, one of ENROL_SEND_EMAIL_FROM_*.
+     * @var int Course welcome message send option, one of ENROL_SEND_EMAIL_FROM_*. 
      */
     public int $welcomemessage = ENROL_DO_NOT_SEND_EMAIL;
     /**
-     * @var string Custom course welcome message, empty for the core default text.
+     * @var string Custom course welcome message, empty for the core default text. 
      */
     public string $welcomemessagetext = '';
     /**
-     * @var int Action on refund / chargeback, one of the self::REVERSAL_* constants.
+     * @var int Action on refund / chargeback, one of the self::REVERSAL_* constants. 
      */
     public int $reversalaction = self::REVERSAL_SUSPEND;
     /**
-     * @var int Maximum enrolled users, 0 = unlimited.
+     * @var int Maximum enrolled users, 0 = unlimited. 
      */
     public int $maxenrolled = 0;
     /**
-     * @var bool Split payments (marketplace) mode.
+     * @var bool Split payments (marketplace) mode. 
      */
     public bool $marketplaceenabled = false;
     /**
-     * @var float marketplace_fee.
+     * @var float marketplace_fee. 
      */
     public float $marketplacefee = 0.0;
     /**
-     * @var string Seller (collector) id.
+     * @var string Seller (collector) id. 
      */
     public string $sellerid = '';
     /**
-     * @var string marketplace identifier sent in the preference.
+     * @var string marketplace identifier sent in the preference. 
      */
     public string $marketplacename = '';
 
@@ -190,10 +191,11 @@ class instance_settings
      * @param  \stdClass $instance enrol instance record
      * @return self
      */
-    public static function from_instance(\stdClass $instance): self {
+    public static function from_instance(\stdClass $instance): self
+    {
         $s = new self();
-        $config = static fn(string $name, $default = null) => get_config('enrol_mpcheckoutpro', $name) !== false
-            ? get_config('enrol_mpcheckoutpro', $name)
+        $config = static fn(string $name, $default = null) => get_config('enrol_mercadopagocpro', $name) !== false
+            ? get_config('enrol_mercadopagocpro', $name)
             : $default;
 
         $s->cost = (float)($instance->cost ?? 0);
@@ -293,7 +295,8 @@ class instance_settings
      * @param  string $value
      * @return string[]
      */
-    private static function split_ids(string $value): array {
+    private static function split_ids(string $value): array
+    {
         if (trim($value) === '') {
             return [];
         }
@@ -306,7 +309,8 @@ class instance_settings
      * @param  array $ids
      * @return string[]
      */
-    private static function clean_ids(array $ids): array {
+    private static function clean_ids(array $ids): array
+    {
         $clean = [];
         foreach ($ids as $id) {
             if (!is_scalar($id)) {
@@ -327,7 +331,8 @@ class instance_settings
      * @param  string $value
      * @return array
      */
-    private static function parse_metadata_lines(string $value): array {
+    private static function parse_metadata_lines(string $value): array
+    {
         $result = [];
         foreach (preg_split('/\R/', $value) ?: [] as $line) {
             $line = trim($line);
@@ -349,7 +354,8 @@ class instance_settings
      * @param  string $json
      * @return array
      */
-    private static function decode_json(string $json): array {
+    private static function decode_json(string $json): array
+    {
         if (trim($json) === '') {
             return [];
         }
@@ -363,7 +369,8 @@ class instance_settings
      * @param  array $values
      * @return string
      */
-    public static function encode_extra(array $values): string {
+    public static function encode_extra(array $values): string
+    {
         $filtered = array_filter($values, static fn($v) => $v !== null && $v !== '' && $v !== []);
         if ($filtered === []) {
             return '';

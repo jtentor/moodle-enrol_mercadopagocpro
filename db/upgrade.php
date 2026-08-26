@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade steps for enrol_mpcheckoutpro.
+ * Upgrade steps for enrol_mercadopagocpro.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,7 +33,8 @@ defined('MOODLE_INTERNAL') || die();
  * @param  int $oldversion the version we are upgrading from
  * @return bool
  */
-function xmldb_enrol_mpcheckoutpro_upgrade($oldversion) {
+function xmldb_enrol_mercadopagocpro_upgrade($oldversion)
+{
     global $DB;
 
     $dbman = $DB->get_manager();

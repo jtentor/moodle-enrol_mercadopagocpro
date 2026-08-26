@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="enrol_mpcheckoutpro">
+<ruleset name="enrol_mercadopagocpro">
     <description>Moodle coding style for the Mercado Pago Checkout Pro enrolment plugin.</description>
 
     <!-- Check this directory by default. -->

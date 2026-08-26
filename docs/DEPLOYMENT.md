@@ -19,7 +19,7 @@
 ```bash
 cd /path/to/moodle
 # Moodle 5.x source trees keep code under public/
-git clone <repo> public/enrol/mpcheckoutpro
+git clone <repo> public/enrol/mercadopagocpro
 php admin/cli/upgrade.php --non-interactive
 php admin/cli/purge_caches.php
 ```
@@ -27,7 +27,7 @@ php admin/cli/purge_caches.php
 Then enable it:
 
 ```bash
-php admin/cli/cfg.php --name=enrol_plugins_enabled --set="manual,guest,self,cohort,mpcheckoutpro"
+php admin/cli/cfg.php --name=enrol_plugins_enabled --set="manual,guest,self,cohort,mercadopagocpro"
 ```
 
 or through **Site administration ▸ Plugins ▸ Enrolments ▸ Manage enrol plugins**.
@@ -38,7 +38,7 @@ The official Mercado Pago PHP SDK ships inside `vendor/mercadopago`. Nothing
 else is needed. To manage it with Composer instead:
 
 ```bash
-cd public/enrol/mpcheckoutpro
+cd public/enrol/mercadopagocpro
 composer install --no-dev --optimize-autoloader
 ```
 
@@ -53,14 +53,14 @@ Preferred, for production: keep them out of the database.
 
 ```php
 // config.php, before require_once(__DIR__.'/lib/setup.php');
-$CFG->enrol_mpcheckoutpro = [
-    'accesstoken'   => getenv('MPCHECKOUTPRO_ACCESS_TOKEN'),
-    'publickey'     => getenv('MPCHECKOUTPRO_PUBLIC_KEY'),
-    'webhooksecret' => getenv('MPCHECKOUTPRO_WEBHOOK_SECRET'),
+$CFG->enrol_mercadopagocpro = [
+    'accesstoken'   => getenv('MERCADOPAGOCPRO_ACCESS_TOKEN'),
+    'publickey'     => getenv('MERCADOPAGOCPRO_PUBLIC_KEY'),
+    'webhooksecret' => getenv('MERCADOPAGOCPRO_WEBHOOK_SECRET'),
 ];
 ```
 
-The environment variables are read directly if `$CFG->enrol_mpcheckoutpro` is
+The environment variables are read directly if `$CFG->enrol_mercadopagocpro` is
 absent. Otherwise use the plugin settings page.
 
 The **webhook secret is not the access token**: it is the separate secret
@@ -72,7 +72,7 @@ differs between the test and production applications.
 Register in *Your integrations ▸ Webhooks*:
 
 ```
-https://your-site.example/enrol/mpcheckoutpro/webhook.php
+https://your-site.example/enrol/mercadopagocpro/webhook.php
 ```
 
 Subscribe to the **Payments** topic. Merchant orders are also handled if you
@@ -112,7 +112,7 @@ The webhook endpoint must be reachable by Mercado Pago:
 
 - Do not put it behind HTTP basic auth, an IP allowlist, or a WAF rule that
   blocks unknown POST bodies.
-- Do not force a login redirect on `/enrol/mpcheckoutpro/webhook.php`.
+- Do not force a login redirect on `/enrol/mercadopagocpro/webhook.php`.
 - Allow a request body of at least 64 KB.
 - Keep `mod_security` from stripping the `x-signature` and `x-request-id`
   headers.
@@ -131,7 +131,7 @@ Everything else in the plugin is a normal authenticated Moodle page.
 - [ ] **Verbose logging off**. It is redacted, but it is noisy and it records
       payment ids.
 - [ ] Rate limits left at their defaults unless you have a reason.
-- [ ] `enrol/mpcheckoutpro:viewtransactions` and `:reconcile` granted only to
+- [ ] `enrol/mercadopagocpro:viewtransactions` and `:reconcile` granted only to
       the people who need them — the report shows who paid what.
 - [ ] Per-course credentials disabled unless you actually run multiple sellers.
 - [ ] The encryption key backed up if per-course credentials are on.
@@ -147,7 +147,7 @@ Watch these:
   is failing.
 - `webhook_rejected` events in the site log. A few are normal (probes); a steady
   stream means a wrong webhook secret.
-- `grep enrol_mpcheckoutpro /var/log/php-fpm/error.log` for `[ERROR]` lines.
+- `grep enrol_mercadopagocpro /var/log/php-fpm/error.log` for `[ERROR]` lines.
 
 A useful early warning is a transaction with `status = approved` and
 `enrolmentstate = none`: that is an approved payment that did not become an
@@ -157,7 +157,7 @@ enrolment. It should never happen; if it does, the `lasterror` column says why
 ## Upgrading
 
 ```bash
-cd public/enrol/mpcheckoutpro && git pull
+cd public/enrol/mercadopagocpro && git pull
 php admin/cli/upgrade.php --non-interactive
 php admin/cli/purge_caches.php
 ```

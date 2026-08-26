@@ -2,7 +2,7 @@
 
 Work from the symptom. Almost every problem shows up in one of three places: the
 transaction report (**course ▸ Participants ▸ Enrolment methods ▸ the report
-icon**), the site log filtered to `enrol_mpcheckoutpro`, or the server error log.
+icon**), the site log filtered to `enrol_mercadopagocpro`, or the server error log.
 
 **Start here.** The plugin ships a diagnostic that checks the whole chain —
 installation, class loading, enabled state, capabilities, HTTPS, the SDK, the
@@ -10,8 +10,8 @@ database tables, the credentials and the scheduled tasks — and tells you what 
 do about each failure:
 
 ```bash
-php enrol/mpcheckoutpro/cli/diagnose.php
-php enrol/mpcheckoutpro/cli/diagnose.php --courseid=12 --username=jperez
+php enrol/mercadopagocpro/cli/diagnose.php
+php enrol/mercadopagocpro/cli/diagnose.php --courseid=12 --username=jperez
 ```
 
 ## The method saves but never appears in the course
@@ -23,24 +23,24 @@ creates more invisible rows.
 Cause: `enrol_plugin::get_name()` in core derives the plugin name with
 `explode('_', get_class($this))[1]`; its own comment says *"second word in class
 is always enrol name, sorry, no fancy plugin names with _"*. For
-`enrol_mpcheckoutpro_plugin` that returns `mp`, so every instance is written to
+`enrol_mercadopagocpro_plugin` that returns `mp`, so every instance is written to
 the `enrol` table with `enrol='mp'` - a plugin that does not exist. The insert
 succeeds, which is why there is no error, but `enrol/instances.php` can no longer
 map the row back to a plugin and skips it.
 
-`classes/plugin.php` overrides `get_name()` to return `mpcheckoutpro`, which is
+`classes/plugin.php` overrides `get_name()` to return `mercadopagocpro`, which is
 the complete fix: this is the only place in core that parses the name that way.
 If you see this symptom, check the override is present:
 
 ```bash
-php enrol/mpcheckoutpro/cli/diagnose.php
+php enrol/mercadopagocpro/cli/diagnose.php
 ```
 
 Section 2 reports `get_name()` and counts orphan rows. Remove the rows left
 behind by earlier attempts with:
 
 ```bash
-php enrol/mpcheckoutpro/cli/diagnose.php --fixorphans
+php enrol/mercadopagocpro/cli/diagnose.php --fixorphans
 ```
 
 Any enrolment plugin whose directory name contains an underscore needs this
@@ -55,10 +55,10 @@ them silently removes the method:
 1. **The plugin must be enabled** site-wide (*Manage enrol plugins*). Installed
    is not the same as enabled, and a disabled method never appears in a course.
 2. **The class must be loadable.** `enrol_get_plugins()` skips a plugin whose
-   `enrol_mpcheckoutpro_plugin` class cannot be autoloaded — with no error
+   `enrol_mercadopagocpro_plugin` class cannot be autoloaded — with no error
    anywhere. A stale class map after copying the files in is the usual cause:
    `php admin/cli/purge_caches.php`.
-3. **`enrol/mpcheckoutpro:config` must be allowed** in the course. It is granted
+3. **`enrol/mercadopagocpro:config` must be allowed** in the course. It is granted
    to **Manager only** by default, exactly like `enrol/fee`. An editing teacher
    can add *Self enrolment* but not this one. Either use a Manager account, or
    allow the capability for the editing teacher role in *Site administration ▸
@@ -74,7 +74,7 @@ block *enabling* the instance, and the form says so when you save.
 
 **"No Mercado Pago credentials are configured"**
 The access token is empty at every level. Check the plugin settings, then
-`$CFG->enrol_mpcheckoutpro`, then the environment variables. Remember the
+`$CFG->enrol_mercadopagocpro`, then the environment variables. Remember the
 **Environment** switch: in *Test* mode the plugin reads the *test* access token,
 not the production one.
 
@@ -189,9 +189,9 @@ whose cron is not running will take payments and enrol nobody.
 **No `webhook_received` events in the site log**
 
 1. Confirm the URL registered in *Your integrations* is exactly
-   `https://your-site/enrol/mpcheckoutpro/webhook.php`.
+   `https://your-site/enrol/mercadopagocpro/webhook.php`.
 2. Test reachability from outside:
-   `curl -i -X POST https://your-site/enrol/mpcheckoutpro/webhook.php -d '{}'`
+   `curl -i -X POST https://your-site/enrol/mercadopagocpro/webhook.php -d '{}'`
    A `401` is the correct answer (unsigned) — it proves the request arrives. A
    redirect to a login page, a `403`, or a timeout means something in front of
    Moodle is blocking it.
@@ -206,7 +206,7 @@ different for the test and production applications. Copy it again, carefully.
 **`webhook_rejected` with reason `missing`**
 Something removed the `x-signature` header, or the request is not really from
 Mercado Pago (probes are common on public URLs). Check the `payload` column of
-`enrol_mpcheckoutpro_wh` to see what actually arrived.
+`enrol_mercadopagocpro_wh` to see what actually arrived.
 
 **Notifications arrive but time out**
 Mercado Pago allows five seconds. If your outbound connection to
@@ -246,7 +246,7 @@ again from the enrolment method settings.
 
 **"The authorisation code could not be exchanged"**
 The `redirect_uri` registered in the Mercado Pago application must match
-`https://your-site/enrol/mpcheckoutpro/oauth.php` exactly, including the scheme
+`https://your-site/enrol/mercadopagocpro/oauth.php` exactly, including the scheme
 and any trailing path. The settings page prints the value to register.
 
 **Payments succeed but the commission is wrong**
@@ -274,6 +274,6 @@ failures carry the status code and response body. Credentials, card data, emails
 and identification numbers are redacted. Turn it off again afterwards.
 
 For a single stuck transaction, the `lastapipayload` column of
-`enrol_mpcheckoutpro_txn` holds a redacted copy of the last payment resource
+`enrol_mercadopagocpro_txn` holds a redacted copy of the last payment resource
 the plugin received, which is usually enough to see what Mercado Pago thinks the
 state is.

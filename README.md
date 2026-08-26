@@ -1,11 +1,11 @@
 # Mercado Pago Checkout Pro enrolment method for Moodle
 
-`enrol_mpcheckoutpro` lets students pay for a course through **Mercado Pago
+`enrol_mercadopagocpro` lets students pay for a course through **Mercado Pago
 Checkout Pro** and be enrolled automatically once the payment is credited.
 
-- **Component:** `enrol_mpcheckoutpro`
-- **Directory:** `enrol/mpcheckoutpro`
-- **Main class:** `enrol_mpcheckoutpro_plugin`
+- **Component:** `enrol_mercadopagocpro`
+- **Directory:** `enrol/mercadopagocpro`
+- **Main class:** `enrol_mercadopagocpro_plugin`
 - **Version:** v1.0.0
 - **Requires:** Moodle 5.2.2 (`2026042002.00`) or a later release of the 5.2 branch, PHP 8.2+
 - **Default currency:** ARS (BRL, CLP, COP, MXN, PEN and UYU are also selectable)
@@ -61,22 +61,52 @@ payment.
 - **Redaction.** Tokens, card data, emails and identification numbers are
   stripped from anything written to the database or the log.
 
-## Replacing the earlier `enrol_mp_checkoutpro`
+## Relationship to other Mercado Pago plugins
 
-This component supersedes `enrol_mp_checkoutpro`, whose plugin name contained an
-underscore that core cannot carry. Uninstall the old one first — *Site
+Several Mercado Pago enrolment plugins already exist for Moodle, and this one
+owes them a debt — they mapped the territory first:
+
+- [`enrol_mpcheckoutpro`](https://moodle.org/plugins/enrol_mpcheckoutpro)
+  ([redesitos](https://github.com/redesitos/moodle-enrol_mpcheckoutpro)), a
+  Checkout Pro integration published for Colombia.
+- [`enrol_mercadopagoar`](https://github.com), a variant of the above adapted to
+  Argentina using Bricks.
+- [`enrol_mercadopago`](https://github.com/harregoces/moodle-enrol_mercadopago)
+  and [a fork of it](https://github.com/equicomv2/moodle-enrol_mercadopago),
+  covering several countries.
+
+`enrol_mercadopagocpro` is a separate component rather than a fork. What it adds
+is a current codebase written against Moodle 5.2 and the official
+`mercadopago/dx-php` SDK, documented architecture, and an automated test suite
+(65 PHPUnit tests) that runs against a real site. The component name is
+deliberately distinct so that it can be installed alongside any of the above
+without colliding.
+
+> **TODO for the maintainer:** confirm the `enrol_mercadopagoar` repository URL
+> and expand this section with the specific acknowledgements you want to make.
+
+## Earlier names of this component
+
+This plugin was developed under two earlier names, neither of which was ever
+released: `enrol_mp_checkoutpro` (abandoned because the underscore in the plugin
+name made core's `enrol_plugin::get_name()` resolve it to `mp`) and
+`enrol_mpcheckoutpro` (abandoned because that name is already taken in the Moodle
+plugins directory).
+
+If you are moving from one of those builds, uninstall it first — *Site
 administration ▸ Plugins ▸ Plugins overview ▸ Uninstall* — and export its
 transaction report beforehand if you need the payment history, because
-uninstalling drops its tables. Then remove `enrol/mp_checkoutpro` from disk and
+uninstalling drops its tables. Then remove the old directory from disk and
 install this plugin. There is no upgrade path and no shared data.
 
-If the old plugin left rows behind in the `enrol` table under the name `mp`,
-`php enrol/mpcheckoutpro/cli/diagnose.php --fixorphans` removes them.
+If an earlier build left rows behind in the `enrol` table under the names `mp` or
+`mpcheckoutpro`, `php enrol/mercadopagocpro/cli/diagnose.php --fixorphans`
+removes them.
 
 ## Installation
 
-1. Copy this directory to `enrol/mpcheckoutpro` inside your Moodle
-   installation (`public/enrol/mpcheckoutpro` on Moodle 5.x source trees).
+1. Copy this directory to `enrol/mercadopagocpro` inside your Moodle
+   installation (`public/enrol/mercadopagocpro` on Moodle 5.x source trees).
 2. Visit **Site administration ▸ Notifications** and complete the upgrade.
 3. Enable the method in **Site administration ▸ Plugins ▸ Enrolments ▸ Manage
    enrol plugins**.
@@ -109,10 +139,10 @@ recommended pattern when the database is shared with less trusted environments:
 
 ```php
 // config.php
-$CFG->enrol_mpcheckoutpro = [
-    'accesstoken'   => getenv('MPCHECKOUTPRO_ACCESS_TOKEN'),
-    'publickey'     => getenv('MPCHECKOUTPRO_PUBLIC_KEY'),
-    'webhooksecret' => getenv('MPCHECKOUTPRO_WEBHOOK_SECRET'),
+$CFG->enrol_mercadopagocpro = [
+    'accesstoken'   => getenv('MERCADOPAGOCPRO_ACCESS_TOKEN'),
+    'publickey'     => getenv('MERCADOPAGOCPRO_PUBLIC_KEY'),
+    'webhooksecret' => getenv('MERCADOPAGOCPRO_WEBHOOK_SECRET'),
 ];
 ```
 
@@ -142,7 +172,7 @@ option is not offered, because a paid enrolment has no key holder.
 | `return.php` | logged-in user | The three `back_urls`; re-queries the API and shows the result |
 | `webhook.php` | Mercado Pago, no session | Receives, verifies and dispatches notifications |
 | `oauth.php` | manager, sesskey | Connects a marketplace seller through OAuth |
-| `transactions.php` | `enrol/mpcheckoutpro:viewtransactions` | Per-course payment report |
+| `transactions.php` | `enrol/mercadopagocpro:viewtransactions` | Per-course payment report |
 | `cli/diagnose.php` | CLI | Checks the whole install and says why the method may not appear |
 
 ## Documentation

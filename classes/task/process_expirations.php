@@ -14,24 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\task;
+namespace enrol_mercadopagocpro\task;
 
 /**
  * Expires enrolments whose paid period ran out and sends expiry notifications.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class process_expirations extends \core\task\scheduled_task
 {
+
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
-        return get_string('task:process_expirations', 'enrol_mpcheckoutpro');
+    public function get_name()
+    {
+        return get_string('task:process_expirations', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -39,8 +41,9 @@ class process_expirations extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+    public function execute()
+    {
+        $plugin = enrol_get_plugin('mercadopagocpro');
         if (!$plugin) {
             return;
         }

@@ -1,5 +1,5 @@
 {
-    "name": "jtentor/moodle-enrol_mpcheckoutpro",
+    "name": "jtentor/moodle-enrol_mercadopagocpro",
     "description": "Moodle enrolment plugin that enrols students after payment through Mercado Pago Checkout Pro.",
     "type": "project",
     "license": "GPL-3.0-or-later",

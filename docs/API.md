@@ -21,12 +21,12 @@ never inherits the site credentials.
 
 ## The preference body
 
-Built by `enrol_mpcheckoutpro\local\preference_builder`. Fields marked
+Built by `enrol_mercadopagocpro\local\preference_builder`. Fields marked
 *conditional* are omitted entirely when they are not configured.
 
 | Field | Value | Notes |
 | --- | --- | --- |
-| `items[0].id` | `enrol_mpcheckoutpro-{enrolid}` | |
+| `items[0].id` | `enrol_mercadopagocpro-{enrolid}` | |
 | `items[0].title` | Course full name | Truncated to 256 characters |
 | `items[0].description` | Instance description, or "Enrolment in {course}" | Truncated to 600 characters |
 | `items[0].category_id` | `learnings` by default | Per-instance override |
@@ -59,7 +59,7 @@ Always sent:
 ```json
 {
   "moodle_site": "moodle.example.edu",
-  "moodle_component": "enrol_mpcheckoutpro",
+  "moodle_component": "enrol_mercadopagocpro",
   "moodle_txn_id": 1234,
   "moodle_enrol_id": 56,
   "moodle_course_id": 78,
@@ -123,7 +123,7 @@ Source: [Configure return URLs](https://www.mercadopago.com.ar/developers/en/doc
 ### Request
 
 ```
-POST /enrol/mpcheckoutpro/webhook.php?enrolid=56&type=payment&data.id=1122334455
+POST /enrol/mercadopagocpro/webhook.php?enrolid=56&type=payment&data.id=1122334455
 x-signature: ts=1755780000,v1=<hex>
 x-request-id: <uuid>
 
@@ -239,7 +239,7 @@ core helpers can be used unchanged.
 | `local\payment_processor` | Payment status → enrolment decision |
 | `local\enrolment_manager` | Enrol, hold, revoke, groups, locking |
 | `local\webhook_handler` | Receive, verify, dispatch, log, retry |
-| `local\transaction` | Persistence for `enrol_mpcheckoutpro_txn` |
+| `local\transaction` | Persistence for `enrol_mercadopagocpro_txn` |
 | `local\credentials` | Credential resolution, encryption at rest |
 | `local\instance_settings` | Site settings merged with per-instance overrides |
 | `local\status` | The status vocabulary and the state groups |
@@ -251,22 +251,22 @@ core helpers can be used unchanged.
 
 | Event | Raised when |
 | --- | --- |
-| `\enrol_mpcheckoutpro\event\preference_created` | A checkout is started |
-| `\enrol_mpcheckoutpro\event\payment_approved` | A payment is approved and the enrolment is activated |
-| `\enrol_mpcheckoutpro\event\payment_reversed` | A refund, chargeback or cancellation changes the enrolment |
-| `\enrol_mpcheckoutpro\event\payment_updated` | Any other status change |
-| `\enrol_mpcheckoutpro\event\webhook_received` | A notification is accepted |
-| `\enrol_mpcheckoutpro\event\webhook_rejected` | A notification fails signature validation |
+| `\enrol_mercadopagocpro\event\preference_created` | A checkout is started |
+| `\enrol_mercadopagocpro\event\payment_approved` | A payment is approved and the enrolment is activated |
+| `\enrol_mercadopagocpro\event\payment_reversed` | A refund, chargeback or cancellation changes the enrolment |
+| `\enrol_mercadopagocpro\event\payment_updated` | Any other status change |
+| `\enrol_mercadopagocpro\event\webhook_received` | A notification is accepted |
+| `\enrol_mercadopagocpro\event\webhook_rejected` | A notification fails signature validation |
 
 ## Database
 
-`enrol_mpcheckoutpro_txn` — one row per checkout, carrying the preference, the
+`enrol_mercadopagocpro_txn` — one row per checkout, carrying the preference, the
 payment, the money, the resulting enrolment state and a redacted copy of the
 last API payload. `courseid` and `userid` are denormalised so the row survives
 the deletion of the enrolment instance.
 
-`enrol_mpcheckoutpro_wh` — the notification audit log, including rejected ones,
+`enrol_mercadopagocpro_wh` — the notification audit log, including rejected ones,
 with retry bookkeeping.
 
-`enrol_mpcheckoutpro_cred` — per-instance credentials, encrypted, deliberately
+`enrol_mercadopagocpro_cred` — per-instance credentials, encrypted, deliberately
 outside the `enrol` table so they are never included in a course backup.

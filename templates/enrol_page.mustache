@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template enrol_mpcheckoutpro/enrol_page
+    @template enrol_mercadopagocpro/enrol_page
 
     Body of the enrolment widget shown on the course enrolment page.
 
@@ -39,34 +39,34 @@
         "pendingstatus": ""
     }
 }}
-<div class="enrol-mpcheckoutpro">
+<div class="enrol-mercadopagocpro">
     {{#testmode}}
         <div class="alert alert-warning" role="alert">
-            {{#str}} testmodenotice, enrol_mpcheckoutpro {{/str}}
+            {{#str}} testmodenotice, enrol_mercadopagocpro {{/str}}
         </div>
     {{/testmode}}
 
     {{#haspending}}
         <div class="alert alert-info" role="status">
-            {{#str}} pendingpaymentnotice, enrol_mpcheckoutpro, {{pendingstatus}} {{/str}}
+            {{#str}} pendingpaymentnotice, enrol_mercadopagocpro, {{pendingstatus}} {{/str}}
         </div>
     {{/haspending}}
 
-    <p class="enrol-mpcheckoutpro-cost h4 mb-2">
-        {{#str}} labelvalue, core, {"label": {{#quote}}{{#str}} cost, enrol_mpcheckoutpro {{/str}}{{/quote}}, "value": {{#quote}}{{cost}}{{/quote}} }{{/str}}
+    <p class="enrol-mercadopagocpro-cost h4 mb-2">
+        {{#str}} labelvalue, core, {"label": {{#quote}}{{#str}} cost, enrol_mercadopagocpro {{/str}}{{/quote}}, "value": {{#quote}}{{cost}}{{/quote}} }{{/str}}
     </p>
 
     {{#description}}
-        <p class="enrol-mpcheckoutpro-description text-muted">{{description}}</p>
+        <p class="enrol-mercadopagocpro-description text-muted">{{description}}</p>
     {{/description}}
 
     {{#installments}}
-        <p class="enrol-mpcheckoutpro-installments">
-            {{#str}} installmentsavailable, enrol_mpcheckoutpro, {{installments}} {{/str}}
+        <p class="enrol-mercadopagocpro-installments">
+            {{#str}} installmentsavailable, enrol_mercadopagocpro, {{installments}} {{/str}}
         </p>
     {{/installments}}
 
-    <p class="enrol-mpcheckoutpro-notice small text-muted mb-0">
-        {{#str}} redirectnotice, enrol_mpcheckoutpro {{/str}}
+    <p class="enrol-mercadopagocpro-notice small text-muted mb-0">
+        {{#str}} redirectnotice, enrol_mercadopagocpro {{/str}}
     </p>
 </div>

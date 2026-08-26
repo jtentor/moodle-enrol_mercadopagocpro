@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="enrol/mpcheckoutpro/db" VERSION="20260823" COMMENT="XMLDB file for Moodle enrol/mpcheckoutpro"
+<XMLDB PATH="enrol/mercadopagocpro/db" VERSION="20260823" COMMENT="XMLDB file for Moodle enrol/mercadopagocpro"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="enrol_mpcheckoutpro_txn" COMMENT="One row per Mercado Pago Checkout Pro preference created by this plugin, tracking the resulting payment and the enrolment it produced.">
+    <TABLE NAME="enrol_mercadopagocpro_txn" COMMENT="One row per Mercado Pago Checkout Pro preference created by this plugin, tracking the resulting payment and the enrolment it produced.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="enrolid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Enrolment instance this transaction belongs to."/>
@@ -49,7 +49,7 @@
         <INDEX NAME="enrolid-userid" UNIQUE="false" FIELDS="enrolid, userid"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="enrol_mpcheckoutpro_wh" COMMENT="Audit log of every webhook notification received on the plugin endpoint, including rejected ones.">
+    <TABLE NAME="enrol_mercadopagocpro_wh" COMMENT="Audit log of every webhook notification received on the plugin endpoint, including rejected ones.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="txnid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Transaction this notification resolved to, when it could be matched."/>
@@ -70,7 +70,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="txnid" TYPE="foreign" FIELDS="txnid" REFTABLE="enrol_mpcheckoutpro_txn" REFFIELDS="id"/>
+        <KEY NAME="txnid" TYPE="foreign" FIELDS="txnid" REFTABLE="enrol_mercadopagocpro_txn" REFFIELDS="id"/>
       </KEYS>
       <INDEXES>
         <INDEX NAME="processed-nextretry" UNIQUE="false" FIELDS="processed, nextretry"/>
@@ -78,7 +78,7 @@
         <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="enrol_mpcheckoutpro_cred" COMMENT="Per enrolment instance Mercado Pago credentials, stored encrypted and deliberately kept out of the enrol table so they are never included in course backups.">
+    <TABLE NAME="enrol_mercadopagocpro_cred" COMMENT="Per enrolment instance Mercado Pago credentials, stored encrypted and deliberately kept out of the enrol table so they are never included in course backups.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="enrolid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>

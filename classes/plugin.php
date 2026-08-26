@@ -17,36 +17,38 @@
 /**
  * Mercado Pago Checkout Pro enrolment plugin.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core\output\single_button;
 use core_enrol\output\enrol_page;
-use enrol_mpcheckoutpro\local\credentials;
-use enrol_mpcheckoutpro\local\instance_settings;
-use enrol_mpcheckoutpro\local\sdk;
-use enrol_mpcheckoutpro\local\status;
-use enrol_mpcheckoutpro\local\transaction;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\credentials;
+use enrol_mercadopagocpro\local\instance_settings;
+use enrol_mercadopagocpro\local\sdk;
+use enrol_mercadopagocpro\local\status;
+use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\util;
 
 /**
  * Mercado Pago Checkout Pro enrolment plugin implementation.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class enrol_mpcheckoutpro_plugin extends enrol_plugin
+class enrol_mercadopagocpro_plugin extends enrol_plugin
 {
+
     /**
      * How the method is displayed on the "Enrolment methods" page.
      *
      * @param  stdClass $instance
      * @return string
      */
-    public function get_instance_name_for_management_page(stdClass $instance): string {
+    public function get_instance_name_for_management_page(stdClass $instance): string
+    {
         $result = $this->get_instance_name($instance);
         if (strlen((string)$instance->customchar1)) {
             $context = context_course::instance($instance->courseid);
@@ -61,7 +63,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array currencycode => localised name
      */
-    public function get_possible_currencies(): array {
+    public function get_possible_currencies(): array
+    {
         $currencies = [];
         foreach (util::supported_currencies() as $code) {
             $currencies[$code] = new lang_string($code, 'core_currencies');
@@ -76,7 +79,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  array $instances all instances of this type in one course
      * @return array of pix_icon
      */
-    public function get_info_icons(array $instances) {
+    public function get_info_icons(array $instances)
+    {
         $now = time();
         foreach ($instances as $instance) {
             if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > $now) {
@@ -85,7 +89,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
             if ($instance->enrolenddate != 0 && $instance->enrolenddate < $now) {
                 continue;
             }
-            return [new pix_icon('icon', get_string('pluginname', 'enrol_mpcheckoutpro'), 'enrol_mpcheckoutpro')];
+            return [new pix_icon('icon', get_string('pluginname', 'enrol_mercadopagocpro'), 'enrol_mercadopagocpro')];
         }
         return [];
     }
@@ -95,7 +99,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return bool
      */
-    public function roles_protected() {
+    public function roles_protected()
+    {
         return false;
     }
 
@@ -105,7 +110,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function allow_unenrol(stdClass $instance) {
+    public function allow_unenrol(stdClass $instance)
+    {
         return true;
     }
 
@@ -115,7 +121,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function allow_manage(stdClass $instance) {
+    public function allow_manage(stdClass $instance)
+    {
         return true;
     }
 
@@ -125,7 +132,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function show_enrolme_link(stdClass $instance) {
+    public function show_enrolme_link(stdClass $instance)
+    {
         return (int)$instance->status === ENROL_INSTANCE_ENABLED;
     }
 
@@ -135,12 +143,12 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  int $courseid
      * @return bool
      */
-    public function can_add_instance($courseid) {
+    public function can_add_instance($courseid)
+    {
         $context = context_course::instance($courseid, MUST_EXIST);
 
-        if (
-            !has_capability('moodle/course:enrolconfig', $context)
-            || !has_capability('enrol/mpcheckoutpro:config', $context)
+        if (!has_capability('moodle/course:enrolconfig', $context)
+            || !has_capability('enrol/mercadopagocpro:config', $context)
         ) {
             return false;
         }
@@ -153,7 +161,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return bool
      */
-    public function use_standard_editing_ui() {
+    public function use_standard_editing_ui()
+    {
         return true;
     }
 
@@ -163,9 +172,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function can_delete_instance($instance) {
+    public function can_delete_instance($instance)
+    {
         $context = context_course::instance($instance->courseid);
-        return has_capability('enrol/mpcheckoutpro:config', $context);
+        return has_capability('enrol/mercadopagocpro:config', $context);
     }
 
     /**
@@ -174,9 +184,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return bool
      */
-    public function can_hide_show_instance($instance) {
+    public function can_hide_show_instance($instance)
+    {
         $context = context_course::instance($instance->courseid);
-        return has_capability('enrol/mpcheckoutpro:config', $context);
+        return has_capability('enrol/mercadopagocpro:config', $context);
     }
 
     /**
@@ -186,7 +197,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  array|null $fields
      * @return int|null
      */
-    public function add_instance($course, ?array $fields = null) {
+    public function add_instance($course, ?array $fields = null)
+    {
         if ($fields) {
             $fields = $this->normalise_fields($fields);
         }
@@ -210,7 +222,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $data
      * @return bool
      */
-    public function update_instance($instance, $data) {
+    public function update_instance($instance, $data)
+    {
         if ($data) {
             $fields = $this->normalise_fields((array)$data);
             foreach ($fields as $key => $value) {
@@ -223,8 +236,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
                 $publickey = trim((string)($data->mppublickey ?? ''));
                 $secret = trim((string)($data->mpwebhooksecret ?? ''));
 
-                if (
-                    $accesstoken === '' && $publickey === '' && $secret === ''
+                if ($accesstoken === '' && $publickey === '' && $secret === ''
                     && empty($data->mpkeepcredentials)
                 ) {
                     credentials::delete_for_instance((int)$instance->id);
@@ -247,7 +259,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  array $fields
      * @return array
      */
-    protected function normalise_fields(array $fields): array {
+    protected function normalise_fields(array $fields): array
+    {
         if (isset($fields['cost'])) {
             $fields['cost'] = unformat_float($fields['cost']);
         }
@@ -316,7 +329,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return void
      */
-    public function delete_instance($instance) {
+    public function delete_instance($instance)
+    {
         global $DB;
 
         // Transactions are kept for accounting but detached from the instance,
@@ -334,7 +348,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @return string html
      */
     #[\Override]
-    public function enrol_page_hook(stdClass $instance) {
+    public function enrol_page_hook(stdClass $instance)
+    {
         global $USER, $OUTPUT, $DB;
 
         $now = time();
@@ -356,7 +371,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
 
         $name = !empty($instance->name)
             ? format_string($instance->name, true, ['context' => $context])
-            : get_string('pluginname', 'enrol_mpcheckoutpro');
+            : get_string('pluginname', 'enrol_mercadopagocpro');
 
         // Anything that makes the purchase impossible is shown as a plain notice.
         $blocker = $this->get_blocking_notice($instance, $settings, $context);
@@ -373,8 +388,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         $pending = $this->get_pending_transaction($instance, (int)$USER->id);
 
         $body = $OUTPUT->render_from_template(
-            'enrol_mpcheckoutpro/enrol_page',
-            [
+            'enrol_mercadopagocpro/enrol_page', [
             'cost' => $this->format_cost($settings),
             'currency' => $settings->currency,
             'description' => $settings->itemdescription !== ''
@@ -397,7 +411,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         } else {
             $button = new single_button(
                 util::plugin_url('checkout.php', ['instanceid' => $instance->id, 'sesskey' => sesskey()]),
-                get_string('paybutton', 'enrol_mpcheckoutpro'),
+                get_string('paybutton', 'enrol_mercadopagocpro'),
                 'post',
                 single_button::BUTTON_PRIMARY
             );
@@ -421,19 +435,20 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  context           $context
      * @return \core\output\notification|null
      */
-    protected function get_blocking_notice(stdClass $instance, instance_settings $settings, context $context) {
+    protected function get_blocking_notice(stdClass $instance, instance_settings $settings, context $context)
+    {
         $message = null;
 
         if ($settings->cost <= 0) {
-            $message = get_string('error:nocost', 'enrol_mpcheckoutpro');
+            $message = get_string('error:nocost', 'enrol_mercadopagocpro');
         } else if (!util::site_is_https()) {
-            $message = get_string('error:httpsrequired', 'enrol_mpcheckoutpro');
+            $message = get_string('error:httpsrequired', 'enrol_mercadopagocpro');
         } else if (!sdk::is_available()) {
-            $message = get_string('error:sdkmissing', 'enrol_mpcheckoutpro');
+            $message = get_string('error:sdkmissing', 'enrol_mercadopagocpro');
         } else if (!credentials::resolve($instance)->is_usable()) {
-            $message = get_string('error:nocredentials', 'enrol_mpcheckoutpro');
-        } else if (!\enrol_mpcheckoutpro\local\enrolment_manager::has_capacity($instance, $settings)) {
-            $message = get_string('error:coursefull', 'enrol_mpcheckoutpro');
+            $message = get_string('error:nocredentials', 'enrol_mercadopagocpro');
+        } else if (!\enrol_mercadopagocpro\local\enrolment_manager::has_capacity($instance, $settings)) {
+            $message = get_string('error:coursefull', 'enrol_mercadopagocpro');
         }
 
         if ($message === null) {
@@ -442,7 +457,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
 
         // Students should not be told about server side misconfiguration in detail.
         if (!has_capability('moodle/course:update', $context) && $settings->cost > 0) {
-            $message = get_string('error:notavailable', 'enrol_mpcheckoutpro');
+            $message = get_string('error:notavailable', 'enrol_mercadopagocpro');
         }
 
         $notification = new \core\output\notification($message, \core\output\notification::NOTIFY_ERROR, false);
@@ -457,7 +472,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  int      $userid
      * @return stdClass|null
      */
-    protected function get_pending_transaction(stdClass $instance, int $userid): ?stdClass {
+    protected function get_pending_transaction(stdClass $instance, int $userid): ?stdClass
+    {
         foreach (transaction::get_for_user((int)$instance->id, $userid) as $record) {
             if (in_array($record->status, [status::PENDING, status::IN_PROCESS, status::AUTHORIZED], true)) {
                 return $record;
@@ -472,7 +488,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  instance_settings $settings
      * @return string
      */
-    protected function format_cost(instance_settings $settings): string {
+    protected function format_cost(instance_settings $settings): string
+    {
         $locale = get_string('localecldr', 'langconfig');
         if (class_exists('\NumberFormatter')) {
             $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
@@ -490,15 +507,15 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass $instance
      * @return array
      */
-    public function get_action_icons(stdClass $instance) {
+    public function get_action_icons(stdClass $instance)
+    {
         global $OUTPUT;
 
         $icons = parent::get_action_icons($instance);
         $context = context_course::instance($instance->courseid);
-        if (has_capability('enrol/mpcheckoutpro:viewtransactions', $context)) {
+        if (has_capability('enrol/mercadopagocpro:viewtransactions', $context)) {
             $url = util::plugin_url(
-                'transactions.php',
-                [
+                'transactions.php', [
                 'courseid' => $instance->courseid,
                 'instanceid' => $instance->id,
                 ]
@@ -506,9 +523,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
             $icons[] = $OUTPUT->action_icon(
                 $url,
                 new pix_icon(
-                    'i/report',
-                    get_string('transactions', 'enrol_mpcheckoutpro'),
-                    'core',
+                    'i/report', get_string('transactions', 'enrol_mercadopagocpro'), 'core',
                     ['class' => 'iconsmall']
                 )
             );
@@ -524,7 +539,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  context         $context
      * @return void
      */
-    public function edit_instance_form($instance, MoodleQuickForm $mform, $context) {
+    public function edit_instance_form($instance, MoodleQuickForm $mform, $context)
+    {
 
         // Merge the two expiry notification columns into one selector.
         if (!empty($instance->notifyall) && !empty($instance->expirynotify)) {
@@ -540,43 +556,35 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
         $mform->addElement(
-            'text',
-            'customchar1',
-            get_string('instancedescription', 'enrol_mpcheckoutpro'),
+            'text', 'customchar1', get_string('instancedescription', 'enrol_mercadopagocpro'),
             ['size' => 40]
         );
         $mform->setType('customchar1', PARAM_TEXT);
-        $mform->addHelpButton('customchar1', 'instancedescription', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customchar1', 'instancedescription', 'enrol_mercadopagocpro');
         $mform->addRule('customchar1', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
 
         $mform->addElement(
-            'select',
-            'status',
-            get_string('status', 'enrol_mpcheckoutpro'),
+            'select', 'status', get_string('status', 'enrol_mercadopagocpro'),
             $this->get_status_options()
         );
-        $mform->addHelpButton('status', 'status', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('status', 'status', 'enrol_mercadopagocpro');
         $mform->setDefault('status', $this->get_config('status'));
 
         // ------------------------------------------------------------------ Price.
-        $mform->addElement('text', 'cost', get_string('cost', 'enrol_mpcheckoutpro'), ['size' => 8]);
+        $mform->addElement('text', 'cost', get_string('cost', 'enrol_mercadopagocpro'), ['size' => 8]);
         $mform->setType('cost', PARAM_RAW);
         $mform->setDefault('cost', format_float((float)$this->get_config('cost'), 2, true));
-        $mform->addHelpButton('cost', 'cost', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('cost', 'cost', 'enrol_mercadopagocpro');
 
         $mform->addElement(
-            'select',
-            'currency',
-            get_string('currency', 'enrol_mpcheckoutpro'),
+            'select', 'currency', get_string('currency', 'enrol_mercadopagocpro'),
             $this->get_possible_currencies()
         );
         $mform->setDefault('currency', $this->get_config('currency'));
 
         // ------------------------------------------------------------- Enrolment.
         $mform->addElement(
-            'select',
-            'roleid',
-            get_string('assignrole', 'enrol_mpcheckoutpro'),
+            'select', 'roleid', get_string('assignrole', 'enrol_mercadopagocpro'),
             $this->get_roleid_options($instance, $context)
         );
         $mform->setDefault('roleid', $this->get_config('roleid'));
@@ -585,103 +593,88 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         foreach (groups_get_all_groups($context->instanceid) as $group) {
             $groups[$group->id] = format_string($group->name, true, ['context' => $context]);
         }
-        $mform->addElement('select', 'customint1', get_string('assigngroup', 'enrol_mpcheckoutpro'), $groups);
-        $mform->addHelpButton('customint1', 'assigngroup', 'enrol_mpcheckoutpro');
+        $mform->addElement('select', 'customint1', get_string('assigngroup', 'enrol_mercadopagocpro'), $groups);
+        $mform->addHelpButton('customint1', 'assigngroup', 'enrol_mercadopagocpro');
 
         $mform->addElement(
-            'duration',
-            'enrolperiod',
-            get_string('enrolperiod', 'enrol_mpcheckoutpro'),
+            'duration', 'enrolperiod', get_string('enrolperiod', 'enrol_mercadopagocpro'),
             ['optional' => true, 'defaultunit' => DAYSECS]
         );
         $mform->setDefault('enrolperiod', $this->get_config('enrolperiod'));
-        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_mercadopagocpro');
 
         $mform->addElement(
-            'select',
-            'expirynotify',
-            get_string('expirynotify', 'core_enrol'),
+            'select', 'expirynotify', get_string('expirynotify', 'core_enrol'),
             $this->get_expirynotify_options()
         );
         $mform->addHelpButton('expirynotify', 'expirynotify', 'core_enrol');
 
         $mform->addElement(
-            'duration',
-            'expirythreshold',
-            get_string('expirythreshold', 'core_enrol'),
+            'duration', 'expirythreshold', get_string('expirythreshold', 'core_enrol'),
             ['optional' => false, 'defaultunit' => DAYSECS]
         );
         $mform->addHelpButton('expirythreshold', 'expirythreshold', 'core_enrol');
         $mform->disabledIf('expirythreshold', 'expirynotify', 'eq', 0);
 
         $mform->addElement(
-            'date_time_selector',
-            'enrolstartdate',
-            get_string('enrolstartdate', 'enrol_mpcheckoutpro'),
-            ['optional' => true]
+            'date_time_selector', 'enrolstartdate',
+            get_string('enrolstartdate', 'enrol_mercadopagocpro'), ['optional' => true]
         );
         $mform->setDefault('enrolstartdate', 0);
 
         $mform->addElement(
-            'date_time_selector',
-            'enrolenddate',
-            get_string('enrolenddate', 'enrol_mpcheckoutpro'),
-            ['optional' => true]
+            'date_time_selector', 'enrolenddate',
+            get_string('enrolenddate', 'enrol_mercadopagocpro'), ['optional' => true]
         );
         $mform->setDefault('enrolenddate', 0);
 
-        $mform->addElement('text', 'customint5', get_string('maxenrolled', 'enrol_mpcheckoutpro'), ['size' => 6]);
+        $mform->addElement('text', 'customint5', get_string('maxenrolled', 'enrol_mercadopagocpro'), ['size' => 6]);
         $mform->setType('customint5', PARAM_INT);
-        $mform->addHelpButton('customint5', 'maxenrolled', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customint5', 'maxenrolled', 'enrol_mercadopagocpro');
         $mform->setDefault('customint5', 0);
 
         // ------------------------------------------------- Payment behaviour.
-        $mform->addElement('header', 'mpbehaviour', get_string('paymentbehaviour', 'enrol_mpcheckoutpro'));
+        $mform->addElement('header', 'mpbehaviour', get_string('paymentbehaviour', 'enrol_mercadopagocpro'));
 
         $trilean = [
-            -1 => get_string('usesitedefault', 'enrol_mpcheckoutpro'),
+            -1 => get_string('usesitedefault', 'enrol_mercadopagocpro'),
             0 => get_string('no'),
             1 => get_string('yes'),
         ];
-        $mform->addElement('select', 'customint3', get_string('pendingholding', 'enrol_mpcheckoutpro'), $trilean);
-        $mform->addHelpButton('customint3', 'pendingholding', 'enrol_mpcheckoutpro');
+        $mform->addElement('select', 'customint3', get_string('pendingholding', 'enrol_mercadopagocpro'), $trilean);
+        $mform->addHelpButton('customint3', 'pendingholding', 'enrol_mercadopagocpro');
         $mform->setDefault('customint3', -1);
 
         $mform->addElement(
-            'select',
-            'mpnotifications',
-            get_string('notifications', 'enrol_mpcheckoutpro'),
+            'select', 'mpnotifications', get_string('notifications', 'enrol_mercadopagocpro'),
             $trilean
         );
-        $mform->addHelpButton('mpnotifications', 'notifications', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpnotifications', 'notifications', 'enrol_mercadopagocpro');
         $mform->setDefault('mpnotifications', $settings->notificationsraw);
 
         $reversal = [
-            -1 => get_string('usesitedefault', 'enrol_mpcheckoutpro'),
-            instance_settings::REVERSAL_KEEP => get_string('reversalkeep', 'enrol_mpcheckoutpro'),
-            instance_settings::REVERSAL_SUSPEND => get_string('reversalsuspend', 'enrol_mpcheckoutpro'),
-            instance_settings::REVERSAL_UNENROL => get_string('reversalunenrol', 'enrol_mpcheckoutpro'),
+            -1 => get_string('usesitedefault', 'enrol_mercadopagocpro'),
+            instance_settings::REVERSAL_KEEP => get_string('reversalkeep', 'enrol_mercadopagocpro'),
+            instance_settings::REVERSAL_SUSPEND => get_string('reversalsuspend', 'enrol_mercadopagocpro'),
+            instance_settings::REVERSAL_UNENROL => get_string('reversalunenrol', 'enrol_mercadopagocpro'),
         ];
-        $mform->addElement('select', 'customint6', get_string('reversalaction', 'enrol_mpcheckoutpro'), $reversal);
-        $mform->addHelpButton('customint6', 'reversalaction', 'enrol_mpcheckoutpro');
+        $mform->addElement('select', 'customint6', get_string('reversalaction', 'enrol_mercadopagocpro'), $reversal);
+        $mform->addHelpButton('customint6', 'reversalaction', 'enrol_mercadopagocpro');
         $mform->setDefault('customint6', -1);
 
         // ------------------------------------------------- Course welcome message.
         // Same behaviour and the same enrol table columns as enrol_self, so the
         // message and its placeholders work exactly as course staff already expect.
         $mform->addElement(
-            'select',
-            'customint4',
-            get_string('sendcoursewelcomemessage', 'enrol_mpcheckoutpro'),
+            'select', 'customint4',
+            get_string('sendcoursewelcomemessage', 'enrol_mercadopagocpro'),
             $this->get_welcome_email_options()
         );
-        $mform->addHelpButton('customint4', 'sendcoursewelcomemessage', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customint4', 'sendcoursewelcomemessage', 'enrol_mercadopagocpro');
         $mform->setDefault('customint4', $this->get_config('sendcoursewelcomemessage', ENROL_DO_NOT_SEND_EMAIL));
 
         $mform->addElement(
-            'textarea',
-            'customtext1',
-            get_string('customwelcomemessage', 'core_enrol'),
+            'textarea', 'customtext1', get_string('customwelcomemessage', 'core_enrol'),
             ['cols' => '60', 'rows' => '8']
         );
         $mform->setType('customtext1', PARAM_RAW);
@@ -711,65 +704,54 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         );
 
         // ----------------------------------------- Checkout Pro advanced options.
-        $mform->addElement('header', 'mpadvanced', get_string('advancedpreference', 'enrol_mpcheckoutpro'));
+        $mform->addElement('header', 'mpadvanced', get_string('advancedpreference', 'enrol_mercadopagocpro'));
 
-        $mform->addElement('text', 'customint2', get_string('installments', 'enrol_mpcheckoutpro'), ['size' => 4]);
+        $mform->addElement('text', 'customint2', get_string('installments', 'enrol_mercadopagocpro'), ['size' => 4]);
         $mform->setType('customint2', PARAM_INT);
-        $mform->addHelpButton('customint2', 'installments', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customint2', 'installments', 'enrol_mercadopagocpro');
         $mform->setDefault('customint2', 0);
 
         $mform->addElement(
-            'text',
-            'customint7',
-            get_string('defaultinstallments', 'enrol_mpcheckoutpro'),
+            'text', 'customint7', get_string('defaultinstallments', 'enrol_mercadopagocpro'),
             ['size' => 4]
         );
         $mform->setType('customint7', PARAM_INT);
-        $mform->addHelpButton('customint7', 'defaultinstallments', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customint7', 'defaultinstallments', 'enrol_mercadopagocpro');
         $mform->setDefault('customint7', 0);
 
         $mform->addElement(
-            'select',
-            'mpexcludedtypes',
-            get_string('excludedpaymenttypes', 'enrol_mpcheckoutpro'),
-            $this->get_payment_type_options(),
-            ['multiple' => true, 'size' => 6]
+            'select', 'mpexcludedtypes', get_string('excludedpaymenttypes', 'enrol_mercadopagocpro'),
+            $this->get_payment_type_options(), ['multiple' => true, 'size' => 6]
         );
-        $mform->addHelpButton('mpexcludedtypes', 'excludedpaymenttypes', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpexcludedtypes', 'excludedpaymenttypes', 'enrol_mercadopagocpro');
         $mform->setDefault('mpexcludedtypes', $settings->excludedpaymenttypes);
 
         $mform->addElement(
-            'text',
-            'mpexcludedmethods',
-            get_string('excludedpaymentmethods', 'enrol_mpcheckoutpro'),
+            'text', 'mpexcludedmethods', get_string('excludedpaymentmethods', 'enrol_mercadopagocpro'),
             ['size' => 40]
         );
         $mform->setType('mpexcludedmethods', PARAM_TEXT);
-        $mform->addHelpButton('mpexcludedmethods', 'excludedpaymentmethods', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpexcludedmethods', 'excludedpaymentmethods', 'enrol_mercadopagocpro');
         $mform->setDefault('mpexcludedmethods', implode(',', $settings->excludedpaymentmethods));
 
         $mform->addElement(
-            'text',
-            'customchar2',
-            get_string('defaultpaymentmethodid', 'enrol_mpcheckoutpro'),
+            'text', 'customchar2', get_string('defaultpaymentmethodid', 'enrol_mercadopagocpro'),
             ['size' => 20]
         );
         $mform->setType('customchar2', PARAM_ALPHANUMEXT);
-        $mform->addHelpButton('customchar2', 'defaultpaymentmethodid', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('customchar2', 'defaultpaymentmethodid', 'enrol_mercadopagocpro');
 
         $mform->addElement(
-            'textarea',
-            'mpitemdescription',
-            get_string('itemdescription', 'enrol_mpcheckoutpro'),
+            'textarea', 'mpitemdescription', get_string('itemdescription', 'enrol_mercadopagocpro'),
             ['rows' => 3, 'cols' => 50]
         );
         $mform->setType('mpitemdescription', PARAM_TEXT);
-        $mform->addHelpButton('mpitemdescription', 'itemdescription', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpitemdescription', 'itemdescription', 'enrol_mercadopagocpro');
         $mform->setDefault('mpitemdescription', $settings->itemdescription);
 
-        $mform->addElement('text', 'mpcategoryid', get_string('categoryid', 'enrol_mpcheckoutpro'), ['size' => 20]);
+        $mform->addElement('text', 'mpcategoryid', get_string('categoryid', 'enrol_mercadopagocpro'), ['size' => 20]);
         $mform->setType('mpcategoryid', PARAM_ALPHANUMEXT);
-        $mform->addHelpButton('mpcategoryid', 'categoryid', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpcategoryid', 'categoryid', 'enrol_mercadopagocpro');
         $mform->setDefault('mpcategoryid', $settings->categoryid);
 
         $metadatalines = [];
@@ -777,41 +759,36 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
             $metadatalines[] = $key . '=' . $value;
         }
         $mform->addElement(
-            'textarea',
-            'mpmetadata',
-            get_string('custommetadata', 'enrol_mpcheckoutpro'),
+            'textarea', 'mpmetadata', get_string('custommetadata', 'enrol_mercadopagocpro'),
             ['rows' => 4, 'cols' => 50]
         );
         $mform->setType('mpmetadata', PARAM_TEXT);
-        $mform->addHelpButton('mpmetadata', 'custommetadata', 'enrol_mpcheckoutpro');
+        $mform->addHelpButton('mpmetadata', 'custommetadata', 'enrol_mercadopagocpro');
         $mform->setDefault('mpmetadata', implode("\n", $metadatalines));
 
         // ------------------------------------------------------- Split payments.
         if ((bool)$this->get_config('marketplaceenabled')) {
-            $mform->addElement('header', 'mpmarketplace', get_string('splitpayments', 'enrol_mpcheckoutpro'));
+            $mform->addElement('header', 'mpmarketplace', get_string('splitpayments', 'enrol_mercadopagocpro'));
 
-            $mform->addElement('advcheckbox', 'customint8', get_string('splitenabled', 'enrol_mpcheckoutpro'));
-            $mform->addHelpButton('customint8', 'splitenabled', 'enrol_mpcheckoutpro');
+            $mform->addElement('advcheckbox', 'customint8', get_string('splitenabled', 'enrol_mercadopagocpro'));
+            $mform->addHelpButton('customint8', 'splitenabled', 'enrol_mercadopagocpro');
 
             $mform->addElement(
-                'text',
-                'customdec1',
-                get_string('marketplacefee', 'enrol_mpcheckoutpro'),
+                'text', 'customdec1', get_string('marketplacefee', 'enrol_mercadopagocpro'),
                 ['size' => 8]
             );
             $mform->setType('customdec1', PARAM_RAW);
-            $mform->addHelpButton('customdec1', 'marketplacefee', 'enrol_mpcheckoutpro');
+            $mform->addHelpButton('customdec1', 'marketplacefee', 'enrol_mercadopagocpro');
             $mform->disabledIf('customdec1', 'customint8', 'notchecked');
 
-            $mform->addElement('text', 'customchar3', get_string('sellerid', 'enrol_mpcheckoutpro'), ['size' => 20]);
+            $mform->addElement('text', 'customchar3', get_string('sellerid', 'enrol_mercadopagocpro'), ['size' => 20]);
             $mform->setType('customchar3', PARAM_ALPHANUMEXT);
-            $mform->addHelpButton('customchar3', 'sellerid', 'enrol_mpcheckoutpro');
+            $mform->addHelpButton('customchar3', 'sellerid', 'enrol_mercadopagocpro');
             $mform->disabledIf('customchar3', 'customint8', 'notchecked');
 
-            if (!empty($instance->id) && \enrol_mpcheckoutpro\local\oauth_helper::is_enabled()) {
+            if (!empty($instance->id) && \enrol_mercadopagocpro\local\oauth_helper::is_enabled()) {
                 $connecturl = util::plugin_url(
-                    'oauth.php',
-                    [
+                    'oauth.php', [
                     'action' => 'connect',
                     'instanceid' => $instance->id,
                     'sesskey' => sesskey(),
@@ -819,14 +796,11 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
                 );
                 $connected = credentials::instance_has_credentials((int)$instance->id);
                 $mform->addElement(
-                    'static',
-                    'mpconnect',
-                    get_string('sellerconnection', 'enrol_mpcheckoutpro'),
+                    'static', 'mpconnect', get_string('sellerconnection', 'enrol_mercadopagocpro'),
                     html_writer::link(
-                        $connecturl,
-                        get_string(
+                        $connecturl, get_string(
                             $connected ? 'reconnectseller' : 'connectseller',
-                            'enrol_mpcheckoutpro'
+                            'enrol_mercadopagocpro'
                         )
                     )
                 );
@@ -835,47 +809,40 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
 
         // ---------------------------------------------- Per instance credentials.
         if (credentials::instance_override_allowed()) {
-            $mform->addElement('header', 'mpcredentials', get_string('instancecredentials', 'enrol_mpcheckoutpro'));
+            $mform->addElement('header', 'mpcredentials', get_string('instancecredentials', 'enrol_mercadopagocpro'));
             $mform->addElement(
-                'static',
-                'mpcredentialsinfo',
-                '',
-                get_string('instancecredentials_desc', 'enrol_mpcheckoutpro')
+                'static', 'mpcredentialsinfo', '',
+                get_string('instancecredentials_desc', 'enrol_mercadopagocpro')
             );
 
             $mform->addElement(
-                'passwordunmask',
-                'mpaccesstoken',
-                get_string('accesstoken', 'enrol_mpcheckoutpro')
+                'passwordunmask', 'mpaccesstoken',
+                get_string('accesstoken', 'enrol_mercadopagocpro')
             );
             $mform->setType('mpaccesstoken', PARAM_RAW_TRIMMED);
 
-            $mform->addElement('passwordunmask', 'mppublickey', get_string('publickey', 'enrol_mpcheckoutpro'));
+            $mform->addElement('passwordunmask', 'mppublickey', get_string('publickey', 'enrol_mercadopagocpro'));
             $mform->setType('mppublickey', PARAM_RAW_TRIMMED);
 
             $mform->addElement(
-                'passwordunmask',
-                'mpwebhooksecret',
-                get_string('webhooksecret', 'enrol_mpcheckoutpro')
+                'passwordunmask', 'mpwebhooksecret',
+                get_string('webhooksecret', 'enrol_mercadopagocpro')
             );
             $mform->setType('mpwebhooksecret', PARAM_RAW_TRIMMED);
 
             if (!empty($instance->id) && credentials::instance_has_credentials((int)$instance->id)) {
                 $mform->addElement(
-                    'advcheckbox',
-                    'mpkeepcredentials',
-                    get_string('keepcredentials', 'enrol_mpcheckoutpro')
+                    'advcheckbox', 'mpkeepcredentials',
+                    get_string('keepcredentials', 'enrol_mercadopagocpro')
                 );
                 $mform->setDefault('mpkeepcredentials', 1);
-                $mform->addHelpButton('mpkeepcredentials', 'keepcredentials', 'enrol_mpcheckoutpro');
+                $mform->addHelpButton('mpkeepcredentials', 'keepcredentials', 'enrol_mercadopagocpro');
             }
         }
 
         if (enrol_accessing_via_instance($instance)) {
             $mform->addElement(
-                'static',
-                'selfwarn',
-                get_string('instanceeditselfwarning', 'core_enrol'),
+                'static', 'selfwarn', get_string('instanceeditselfwarning', 'core_enrol'),
                 get_string('instanceeditselfwarningtext', 'core_enrol')
             );
         }
@@ -890,21 +857,21 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  context $context
      * @return array
      */
-    public function edit_instance_validation($data, $files, $instance, $context) {
+    public function edit_instance_validation($data, $files, $instance, $context)
+    {
         $errors = [];
 
         $cost = str_replace(get_string('decsep', 'langconfig'), '.', (string)($data['cost'] ?? ''));
         if (!is_numeric($cost)) {
-            $errors['cost'] = get_string('error:costnotnumeric', 'enrol_mpcheckoutpro');
+            $errors['cost'] = get_string('error:costnotnumeric', 'enrol_mercadopagocpro');
         } else if ((float)$cost <= 0 && (int)($data['status'] ?? 0) === ENROL_INSTANCE_ENABLED) {
-            $errors['cost'] = get_string('error:costpositive', 'enrol_mpcheckoutpro');
+            $errors['cost'] = get_string('error:costpositive', 'enrol_mercadopagocpro');
         }
 
-        if (
-            !empty($data['enrolenddate']) && !empty($data['enrolstartdate'])
+        if (!empty($data['enrolenddate']) && !empty($data['enrolstartdate'])
             && $data['enrolenddate'] < $data['enrolstartdate']
         ) {
-            $errors['enrolenddate'] = get_string('error:enrolenddate', 'enrol_mpcheckoutpro');
+            $errors['enrolenddate'] = get_string('error:enrolenddate', 'enrol_mercadopagocpro');
         }
 
         if (!empty($data['expirynotify']) && $data['expirynotify'] > 0 && $data['expirythreshold'] < DAYSECS) {
@@ -913,19 +880,19 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
 
         $installments = (int)($data['customint2'] ?? 0);
         if ($installments < 0 || $installments > 36) {
-            $errors['customint2'] = get_string('error:installmentsrange', 'enrol_mpcheckoutpro');
+            $errors['customint2'] = get_string('error:installmentsrange', 'enrol_mercadopagocpro');
         }
         $definstallments = (int)($data['customint7'] ?? 0);
         if ($definstallments < 0 || ($installments > 0 && $definstallments > $installments)) {
-            $errors['customint7'] = get_string('error:definstallmentsrange', 'enrol_mpcheckoutpro');
+            $errors['customint7'] = get_string('error:definstallmentsrange', 'enrol_mercadopagocpro');
         }
 
         if (!empty($data['customint8'])) {
             $fee = str_replace(get_string('decsep', 'langconfig'), '.', (string)($data['customdec1'] ?? '0'));
             if (!is_numeric($fee) || (float)$fee < 0) {
-                $errors['customdec1'] = get_string('error:feenotnumeric', 'enrol_mpcheckoutpro');
+                $errors['customdec1'] = get_string('error:feenotnumeric', 'enrol_mercadopagocpro');
             } else if (is_numeric($cost) && (float)$fee >= (float)$cost) {
-                $errors['customdec1'] = get_string('error:feetoolarge', 'enrol_mpcheckoutpro');
+                $errors['customdec1'] = get_string('error:feetoolarge', 'enrol_mercadopagocpro');
             }
         }
 
@@ -933,7 +900,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
             foreach (explode(',', (string)$data['mpexcludedmethods']) as $id) {
                 $id = trim($id);
                 if ($id !== '' && !preg_match('/^[a-z0-9_]{1,32}$/', $id)) {
-                    $errors['mpexcludedmethods'] = get_string('error:invalidmethodid', 'enrol_mpcheckoutpro');
+                    $errors['mpexcludedmethods'] = get_string('error:invalidmethodid', 'enrol_mercadopagocpro');
                     break;
                 }
             }
@@ -944,10 +911,10 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
         if (isset($data['status']) && (int)$data['status'] === ENROL_INSTANCE_ENABLED) {
             $probe = (object)['id' => $instance->id ?? 0];
             if (!credentials::resolve($probe)->is_usable()) {
-                $errors['status'] = get_string('error:nocredentials', 'enrol_mpcheckoutpro');
+                $errors['status'] = get_string('error:nocredentials', 'enrol_mercadopagocpro');
             }
             if (!util::site_is_https()) {
-                $errors['status'] = get_string('error:httpsrequired', 'enrol_mpcheckoutpro');
+                $errors['status'] = get_string('error:httpsrequired', 'enrol_mercadopagocpro');
             }
         }
 
@@ -982,7 +949,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array
      */
-    protected function get_welcome_email_options(): array {
+    protected function get_welcome_email_options(): array
+    {
         $options = enrol_send_welcome_email_options();
         unset($options[ENROL_SEND_EMAIL_FROM_KEY_HOLDER]);
         return $options;
@@ -993,7 +961,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array
      */
-    public function get_instance_defaults() {
+    public function get_instance_defaults()
+    {
         return [
             'status' => $this->get_config('status', ENROL_INSTANCE_DISABLED),
             'roleid' => $this->get_config('roleid'),
@@ -1011,7 +980,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array
      */
-    protected function get_status_options() {
+    protected function get_status_options()
+    {
         return [
             ENROL_INSTANCE_ENABLED => get_string('yes'),
             ENROL_INSTANCE_DISABLED => get_string('no'),
@@ -1025,7 +995,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  context $context
      * @return array
      */
-    protected function get_roleid_options($instance, $context) {
+    protected function get_roleid_options($instance, $context)
+    {
         if (!empty($instance->id)) {
             return get_default_enrol_roles($context, $instance->roleid);
         }
@@ -1037,7 +1008,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array
      */
-    protected function get_expirynotify_options() {
+    protected function get_expirynotify_options()
+    {
         return [
             0 => get_string('no'),
             1 => get_string('expirynotifyenroller', 'core_enrol'),
@@ -1054,14 +1026,15 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      *
      * @return array
      */
-    protected function get_payment_type_options(): array {
+    protected function get_payment_type_options(): array
+    {
         return [
-            'credit_card' => get_string('paymenttype_credit_card', 'enrol_mpcheckoutpro'),
-            'debit_card' => get_string('paymenttype_debit_card', 'enrol_mpcheckoutpro'),
-            'prepaid_card' => get_string('paymenttype_prepaid_card', 'enrol_mpcheckoutpro'),
-            'ticket' => get_string('paymenttype_ticket', 'enrol_mpcheckoutpro'),
-            'bank_transfer' => get_string('paymenttype_bank_transfer', 'enrol_mpcheckoutpro'),
-            'atm' => get_string('paymenttype_atm', 'enrol_mpcheckoutpro'),
+            'credit_card' => get_string('paymenttype_credit_card', 'enrol_mercadopagocpro'),
+            'debit_card' => get_string('paymenttype_debit_card', 'enrol_mercadopagocpro'),
+            'prepaid_card' => get_string('paymenttype_prepaid_card', 'enrol_mercadopagocpro'),
+            'ticket' => get_string('paymenttype_ticket', 'enrol_mercadopagocpro'),
+            'bank_transfer' => get_string('paymenttype_bank_transfer', 'enrol_mercadopagocpro'),
+            'atm' => get_string('paymenttype_atm', 'enrol_mercadopagocpro'),
         ];
     }
 
@@ -1077,7 +1050,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  int                               $oldid
      * @return void
      */
-    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid) {
+    public function restore_instance(restore_enrolments_structure_step $step, stdClass $data, $course, $oldid)
+    {
         global $DB;
 
         if ($step->get_task()->get_target() == backup::TARGET_NEW_COURSE) {
@@ -1112,11 +1086,7 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  int                               $oldinstancestatus
      * @return void
      */
-    public function restore_user_enrolment(
-        restore_enrolments_structure_step $step,
-        $data,
-        $instance,
-        $userid,
+    public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid,
         $oldinstancestatus
     ) {
         $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $data->status);
@@ -1131,7 +1101,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  int      $userid
      * @return void
      */
-    public function restore_group_member($instance, $groupid, $userid) {
+    public function restore_group_member($instance, $groupid, $userid)
+    {
         global $CFG;
         require_once $CFG->dirroot . '/group/lib.php';
         groups_add_member($groupid, $userid);
@@ -1144,7 +1115,8 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  progress_trace $trace
      * @return int exit code, 0 means ok
      */
-    public function sync(progress_trace $trace) {
+    public function sync(progress_trace $trace)
+    {
         $this->process_expirations($trace);
         return 0;
     }
@@ -1156,21 +1128,21 @@ class enrol_mpcheckoutpro_plugin extends enrol_plugin
      * @param  stdClass                 $ue
      * @return array
      */
-    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
+    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue)
+    {
         $actions = parent::get_user_enrolment_actions($manager, $ue);
         $context = $manager->get_context();
 
-        if (has_capability('enrol/mpcheckoutpro:viewtransactions', $context)) {
+        if (has_capability('enrol/mercadopagocpro:viewtransactions', $context)) {
             $url = util::plugin_url(
-                'transactions.php',
-                [
+                'transactions.php', [
                 'courseid' => $context->instanceid,
                 'userid' => $ue->userid,
                 ]
             );
             $actions[] = new user_enrolment_action(
-                new pix_icon('i/report', get_string('transactions', 'enrol_mpcheckoutpro')),
-                get_string('transactions', 'enrol_mpcheckoutpro'),
+                new pix_icon('i/report', get_string('transactions', 'enrol_mercadopagocpro')),
+                get_string('transactions', 'enrol_mercadopagocpro'),
                 $url,
                 ['class' => 'viewmptransactions']
             );

@@ -17,7 +17,7 @@
 /**
  * Capabilities for the Mercado Pago Checkout Pro enrolment plugin.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
 
     // Configure the enrolment instance inside a course.
-    'enrol/mpcheckoutpro:config' => [
+    'enrol/mercadopagocpro:config' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -36,7 +36,7 @@ $capabilities = [
     ],
 
     // Edit period and status of an existing enrolment.
-    'enrol/mpcheckoutpro:manage' => [
+    'enrol/mercadopagocpro:manage' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -46,7 +46,7 @@ $capabilities = [
     ],
 
     // Unenrol other users from this enrolment method.
-    'enrol/mpcheckoutpro:unenrol' => [
+    'enrol/mercadopagocpro:unenrol' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -55,14 +55,14 @@ $capabilities = [
     ],
 
     // Unenrol yourself.
-    'enrol/mpcheckoutpro:unenrolself' => [
+    'enrol/mercadopagocpro:unenrolself' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [],
     ],
 
     // See the payment transaction report for a course.
-    'enrol/mpcheckoutpro:viewtransactions' => [
+    'enrol/mercadopagocpro:viewtransactions' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => [
@@ -72,7 +72,7 @@ $capabilities = [
     ],
 
     // Trigger a manual re-check of a payment against the Mercado Pago API.
-    'enrol/mpcheckoutpro:reconcile' => [
+    'enrol/mercadopagocpro:reconcile' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,

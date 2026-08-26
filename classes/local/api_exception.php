@@ -14,24 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\local;
+namespace enrol_mercadopagocpro\local;
 
 /**
  * Raised when a call to the Mercado Pago API fails.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api_exception extends \moodle_exception
 {
+
     /**
-     * @var int HTTP status returned by the API, 0 for transport level failures.
+     * @var int HTTP status returned by the API, 0 for transport level failures. 
      */
     protected int $statuscode;
 
     /**
-     * @var string The operation that failed.
+     * @var string The operation that failed. 
      */
     protected string $operation;
 
@@ -43,14 +44,15 @@ class api_exception extends \moodle_exception
      * @param string          $operation  human readable operation name
      * @param \Throwable|null $previous
      */
-    public function __construct(string $message, int $statuscode, string $operation, ?\Throwable $previous = null) {
+    public function __construct(string $message, int $statuscode, string $operation, ?\Throwable $previous = null)
+    {
         $this->statuscode = $statuscode;
         $this->operation = $operation;
         $a = (object)[
             'operation' => $operation,
             'status' => $statuscode,
         ];
-        parent::__construct('error:apicall', 'enrol_mpcheckoutpro', '', $a, $message);
+        parent::__construct('error:apicall', 'enrol_mercadopagocpro', '', $a, $message);
         if ($previous !== null) {
             // moodle_exception does not accept a previous exception, keep it for the log.
             $this->debuginfo = $message . ' (' . get_class($previous) . ')';
@@ -62,7 +64,8 @@ class api_exception extends \moodle_exception
      *
      * @return int
      */
-    public function get_status_code(): int {
+    public function get_status_code(): int
+    {
         return $this->statuscode;
     }
 
@@ -71,7 +74,8 @@ class api_exception extends \moodle_exception
      *
      * @return string
      */
-    public function get_operation(): string {
+    public function get_operation(): string
+    {
         return $this->operation;
     }
 
@@ -80,7 +84,8 @@ class api_exception extends \moodle_exception
      *
      * @return bool
      */
-    public function is_retryable(): bool {
+    public function is_retryable(): bool
+    {
         return $this->statuscode === 0
             || $this->statuscode === 408
             || $this->statuscode === 429

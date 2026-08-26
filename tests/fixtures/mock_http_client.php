@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\tests\fixtures;
+namespace enrol_mercadopagocpro\tests\fixtures;
 
 use MercadoPago\Exceptions\MPApiException;
 use MercadoPago\Net\MPHttpClient;
@@ -25,19 +25,20 @@ use MercadoPago\Net\MPResponse;
  * In-memory HTTP client that answers Mercado Pago API calls from a queue of
  * canned responses, so the test suite never reaches the network.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mock_http_client implements MPHttpClient
 {
+
     /**
-     * @var array<int,array{status:int,body:array}> Queued responses.
+     * @var array<int,array{status:int,body:array}> Queued responses. 
      */
     protected array $queue = [];
 
     /**
-     * @var array<int,array{method:string,uri:string,payload:?array,headers:?array}> Requests seen.
+     * @var array<int,array{method:string,uri:string,payload:?array,headers:?array}> Requests seen. 
      */
     public array $requests = [];
 
@@ -48,7 +49,8 @@ class mock_http_client implements MPHttpClient
      * @param  int   $status HTTP status
      * @return self
      */
-    public function push(array $body, int $status = 200): self {
+    public function push(array $body, int $status = 200): self
+    {
         $this->queue[] = ['status' => $status, 'body' => $body];
         return $this;
     }
@@ -60,7 +62,8 @@ class mock_http_client implements MPHttpClient
      * @param  string $initpoint
      * @return self
      */
-    public function push_preference(string $id = 'PREF-1', string $initpoint = 'https://mp.test/checkout/PREF-1'): self {
+    public function push_preference(string $id = 'PREF-1', string $initpoint = 'https://mp.test/checkout/PREF-1'): self
+    {
         return $this->push(
             [
             'id' => $id,
@@ -78,7 +81,8 @@ class mock_http_client implements MPHttpClient
      * @param  array $overrides fields to override on the default payment body
      * @return self
      */
-    public function push_payment(array $overrides = []): self {
+    public function push_payment(array $overrides = []): self
+    {
         return $this->push(
             array_merge(
                 [
@@ -94,8 +98,7 @@ class mock_http_client implements MPHttpClient
                 'live_mode' => true,
                 'date_approved' => '2026-08-21T10:05:00.000-03:00',
                 'order' => ['id' => 99887766, 'type' => 'mercadopago'],
-                ],
-                $overrides
+                ], $overrides
             )
         );
     }
@@ -107,7 +110,8 @@ class mock_http_client implements MPHttpClient
      * @return MPResponse
      * @throws MPApiException when the queued status is not 2xx
      */
-    public function send(MPRequest $request): MPResponse {
+    public function send(MPRequest $request): MPResponse
+    {
         $payload = $request->getPayload();
         $this->requests[] = [
             'method' => $request->getMethod(),
@@ -135,7 +139,8 @@ class mock_http_client implements MPHttpClient
      *
      * @return array|null
      */
-    public function last_payload(): ?array {
+    public function last_payload(): ?array
+    {
         $last = end($this->requests);
         return $last ? $last['payload'] : null;
     }
@@ -145,7 +150,8 @@ class mock_http_client implements MPHttpClient
      *
      * @return string
      */
-    public function last_uri(): string {
+    public function last_uri(): string
+    {
         $last = end($this->requests);
         return $last ? $last['uri'] : '';
     }

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Scheduled task definitions for enrol_mpcheckoutpro.
+ * Scheduled task definitions for enrol_mercadopagocpro.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,7 +28,7 @@ $tasks = [
     [
         // Re-queries Mercado Pago for every transaction that is not in a final
         // state, so a lost or never delivered webhook can never strand a payment.
-        'classname' => '\enrol_mpcheckoutpro\task\reconcile_payments',
+        'classname' => '\enrol_mercadopagocpro\task\reconcile_payments',
         'blocking' => 0,
         'minute' => '*/10',
         'hour' => '*',
@@ -40,7 +40,7 @@ $tasks = [
     [
         // Re-processes webhook notifications that were accepted but could not be
         // processed at reception time (API timeout, DB lock, ...).
-        'classname' => '\enrol_mpcheckoutpro\task\retry_webhooks',
+        'classname' => '\enrol_mercadopagocpro\task\retry_webhooks',
         'blocking' => 0,
         'minute' => '*/5',
         'hour' => '*',
@@ -51,7 +51,7 @@ $tasks = [
     ],
     [
         // Standard enrolment expiration handling.
-        'classname' => '\enrol_mpcheckoutpro\task\process_expirations',
+        'classname' => '\enrol_mercadopagocpro\task\process_expirations',
         'blocking' => 0,
         'minute' => '*',
         'hour' => '*',
@@ -62,7 +62,7 @@ $tasks = [
     ],
     [
         // Removes stale abandoned transactions and old webhook log rows.
-        'classname' => '\enrol_mpcheckoutpro\task\cleanup_records',
+        'classname' => '\enrol_mercadopagocpro\task\cleanup_records',
         'blocking' => 0,
         'minute' => '25',
         'hour' => '3',

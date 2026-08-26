@@ -17,19 +17,19 @@
 /**
  * Creates the Checkout Pro preference and sends the buyer to Mercado Pago.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require __DIR__ . '/../../config.php';
 
-use enrol_mpcheckoutpro\local\checkout_service;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\checkout_service;
+use enrol_mercadopagocpro\local\util;
 
 $instanceid = required_param('instanceid', PARAM_INT);
 
-$instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mpcheckoutpro'], '*', MUST_EXIST);
+$instance = $DB->get_record('enrol', ['id' => $instanceid, 'enrol' => 'mercadopagocpro'], '*', MUST_EXIST);
 $course = $DB->get_record('course', ['id' => $instance->courseid], '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);
 
@@ -42,19 +42,18 @@ $PAGE->set_context($context);
 $PAGE->set_url(util::plugin_url('checkout.php', ['instanceid' => $instanceid]));
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('pluginname', 'enrol_mpcheckoutpro'));
+$PAGE->set_title(get_string('pluginname', 'enrol_mercadopagocpro'));
 $PAGE->set_heading($course->fullname);
 
 if (isguestuser()) {
-    throw new moodle_exception('error:mustbeloggedin', 'enrol_mpcheckoutpro', $courseurl);
+    throw new moodle_exception('error:mustbeloggedin', 'enrol_mercadopagocpro', $courseurl);
 }
 
 try {
     $result = (new checkout_service())->start($instance, $USER);
 } catch (moodle_exception $e) {
     util::log_debug(
-        'Checkout could not be started',
-        [
+        'Checkout could not be started', [
         'instanceid' => $instanceid,
         'userid' => $USER->id,
         'message' => $e->getMessage(),

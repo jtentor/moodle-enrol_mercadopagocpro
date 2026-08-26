@@ -14,27 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro;
+namespace enrol_mercadopagocpro;
 
-use enrol_mpcheckoutpro\local\credentials;
-use enrol_mpcheckoutpro\local\instance_settings;
-use enrol_mpcheckoutpro\local\transaction;
+use enrol_mercadopagocpro\local\credentials;
+use enrol_mercadopagocpro\local\instance_settings;
+use enrol_mercadopagocpro\local\transaction;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/helper_trait.php';
+require_once $CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php';
 
 /**
  * Tests for the enrolment plugin class itself.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers    \enrol_mpcheckoutpro_plugin
+ * @covers    \enrol_mercadopagocpro_plugin
  */
 final class plugin_test extends \advanced_testcase
 {
+
     use helper_trait;
 
     /**
@@ -42,11 +43,12 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_basics(): void {
+    public function test_basics(): void
+    {
         $this->resetAfterTest();
 
-        $plugin = enrol_get_plugin('mpcheckoutpro');
-        $this->assertInstanceOf(\enrol_mpcheckoutpro_plugin::class, $plugin);
+        $plugin = enrol_get_plugin('mercadopagocpro');
+        $this->assertInstanceOf(\enrol_mercadopagocpro_plugin::class, $plugin);
         $this->assertFalse($plugin->roles_protected());
         $this->assertArrayHasKey('ARS', $plugin->get_possible_currencies());
     }
@@ -56,7 +58,8 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_add_instance(): void {
+    public function test_add_instance(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(
             [
@@ -76,13 +79,14 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_advanced_options_roundtrip(): void {
+    public function test_advanced_options_roundtrip(): void
+    {
         global $DB;
 
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
 
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
         $data = (object)(array)$instance;
         $data->mpexcludedtypes = ['ticket', 'atm'];
         $data->mpexcludedmethods = 'amex, master';
@@ -107,11 +111,12 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_edit_instance_validation(): void {
+    public function test_edit_instance_validation(): void
+    {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
         $context = \context_course::instance($course->id);
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
 
         $base = [
             'name' => 'Payment',
@@ -177,11 +182,12 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_instance_credentials(): void {
+    public function test_instance_credentials(): void
+    {
         global $DB;
 
         $this->setup_plugin();
-        set_config('allowinstancecredentials', 1, 'enrol_mpcheckoutpro');
+        set_config('allowinstancecredentials', 1, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance();
 
         credentials::store_for_instance((int)$instance->id, 'INSTANCE-TOKEN', 'INSTANCE-KEY', 'INSTANCE-SECRET');
@@ -204,9 +210,10 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_instance_credentials_can_be_forbidden(): void {
+    public function test_instance_credentials_can_be_forbidden(): void
+    {
         $this->setup_plugin();
-        set_config('allowinstancecredentials', 0, 'enrol_mpcheckoutpro');
+        set_config('allowinstancecredentials', 0, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance();
 
         credentials::store_for_instance((int)$instance->id, 'INSTANCE-TOKEN');
@@ -219,18 +226,19 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_delete_instance_keeps_transactions(): void {
+    public function test_delete_instance_keeps_transactions(): void
+    {
         global $DB;
 
         $this->setup_plugin();
-        set_config('allowinstancecredentials', 1, 'enrol_mpcheckoutpro');
+        set_config('allowinstancecredentials', 1, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
 
         credentials::store_for_instance((int)$instance->id, 'INSTANCE-TOKEN');
         transaction::create($instance, $user, instance_settings::from_instance($instance));
 
-        enrol_get_plugin('mpcheckoutpro')->delete_instance($instance);
+        enrol_get_plugin('mercadopagocpro')->delete_instance($instance);
 
         $this->assertFalse($DB->record_exists(credentials::TABLE, ['enrolid' => $instance->id]));
         $this->assertSame(1, $DB->count_records(transaction::TABLE));
@@ -242,10 +250,11 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_settings_fall_back_to_site_defaults(): void {
+    public function test_settings_fall_back_to_site_defaults(): void
+    {
         $this->setup_plugin();
-        set_config('installments', 12, 'enrol_mpcheckoutpro');
-        set_config('pendingholding', 1, 'enrol_mpcheckoutpro');
+        set_config('installments', 12, 'enrol_mercadopagocpro');
+        set_config('pendingholding', 1, 'enrol_mercadopagocpro');
 
         [, $instance] = $this->create_course_with_instance(['customint2' => 0, 'customint3' => -1]);
         $settings = instance_settings::from_instance($instance);
@@ -265,23 +274,20 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_sync_expires_enrolments(): void {
+    public function test_sync_expires_enrolments(): void
+    {
         global $DB;
 
         $this->setup_plugin();
-        set_config('expiredaction', ENROL_EXT_REMOVED_SUSPENDNOROLES, 'enrol_mpcheckoutpro');
+        set_config('expiredaction', ENROL_EXT_REMOVED_SUSPENDNOROLES, 'enrol_mercadopagocpro');
 
         [, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
 
         $plugin->enrol_user(
-            $instance,
-            $user->id,
-            $instance->roleid,
-            time() - DAYSECS * 3,
-            time() - DAYSECS,
-            ENROL_USER_ACTIVE
+            $instance, $user->id, $instance->roleid, time() - DAYSECS * 3,
+            time() - DAYSECS, ENROL_USER_ACTIVE
         );
 
         $trace = new \null_progress_trace();
@@ -296,7 +302,8 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_settings_roundtrip(): void {
+    public function test_welcome_message_settings_roundtrip(): void
+    {
         global $DB;
 
         $this->setup_plugin();
@@ -319,7 +326,8 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_is_sent_on_approval(): void {
+    public function test_welcome_message_is_sent_on_approval(): void
+    {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance(
             [
@@ -337,7 +345,7 @@ final class plugin_test extends \advanced_testcase
             'status' => 'approved',
             ]
         );
-        (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
+        (new \enrol_mercadopagocpro\local\payment_processor())->process_payment('1122334455', $txn);
 
         $welcome = array_values(
             $sink->get_messages_by_component_and_type(
@@ -355,7 +363,8 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_can_be_disabled(): void {
+    public function test_welcome_message_can_be_disabled(): void
+    {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(['customint4' => ENROL_DO_NOT_SEND_EMAIL]);
         $user = $this->getDataGenerator()->create_user();
@@ -368,7 +377,7 @@ final class plugin_test extends \advanced_testcase
             'status' => 'approved',
             ]
         );
-        (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
+        (new \enrol_mercadopagocpro\local\payment_processor())->process_payment('1122334455', $txn);
 
         $welcome = $sink->get_messages_by_component_and_type('moodle', 'enrolcoursewelcomemessage');
         $this->assertCount(0, $welcome);
@@ -379,9 +388,10 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_not_sent_while_pending(): void {
+    public function test_welcome_message_not_sent_while_pending(): void
+    {
         $this->setup_plugin();
-        set_config('pendingholding', 1, 'enrol_mpcheckoutpro');
+        set_config('pendingholding', 1, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance(
             [
             'customint4' => ENROL_SEND_EMAIL_FROM_NOREPLY,
@@ -397,7 +407,7 @@ final class plugin_test extends \advanced_testcase
             'status' => 'pending',
             ]
         );
-        (new \enrol_mpcheckoutpro\local\payment_processor())->process_payment('1122334455', $txn);
+        (new \enrol_mercadopagocpro\local\payment_processor())->process_payment('1122334455', $txn);
 
         $welcome = $sink->get_messages_by_component_and_type('moodle', 'enrolcoursewelcomemessage');
         $this->assertCount(0, $welcome);

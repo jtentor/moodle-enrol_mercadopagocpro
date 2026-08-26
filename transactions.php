@@ -17,18 +17,18 @@
 /**
  * Payment transaction report for a course.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require __DIR__ . '/../../config.php';
 
-use enrol_mpcheckoutpro\local\payment_processor;
-use enrol_mpcheckoutpro\local\status;
-use enrol_mpcheckoutpro\local\transaction;
-use enrol_mpcheckoutpro\local\util;
-use enrol_mpcheckoutpro\output\transactions_table;
+use enrol_mercadopagocpro\local\payment_processor;
+use enrol_mercadopagocpro\local\status;
+use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\util;
+use enrol_mercadopagocpro\output\transactions_table;
 
 $courseid = required_param('courseid', PARAM_INT);
 $instanceid = optional_param('instanceid', 0, PARAM_INT);
@@ -42,11 +42,10 @@ $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);
 
 require_login($course);
-require_capability('enrol/mpcheckoutpro:viewtransactions', $context);
+require_capability('enrol/mercadopagocpro:viewtransactions', $context);
 
 $pageurl = util::plugin_url(
-    'transactions.php',
-    array_filter(
+    'transactions.php', array_filter(
         [
         'courseid' => $courseid,
         'instanceid' => $instanceid ?: null,
@@ -60,23 +59,23 @@ $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
 $PAGE->set_course($course);
 $PAGE->set_pagelayout('report');
-$PAGE->set_title(get_string('transactions', 'enrol_mpcheckoutpro'));
+$PAGE->set_title(get_string('transactions', 'enrol_mercadopagocpro'));
 $PAGE->set_heading($course->fullname);
 
 // ------------------------------------------------------- Manual reconciliation.
 if ($action === 'reconcile' && $txnid > 0) {
     require_sesskey();
-    require_capability('enrol/mpcheckoutpro:reconcile', $context);
+    require_capability('enrol/mercadopagocpro:reconcile', $context);
 
     $record = transaction::get($txnid);
     if ($record === null || (int)$record->courseid !== (int)$course->id) {
-        throw new moodle_exception('error:unknowntransaction', 'enrol_mpcheckoutpro', $pageurl);
+        throw new moodle_exception('error:unknowntransaction', 'enrol_mercadopagocpro', $pageurl);
     }
 
     $result = (new payment_processor())->reconcile($record);
     redirect(
         $pageurl,
-        get_string('reconcileresult', 'enrol_mpcheckoutpro', $result->message),
+        get_string('reconcileresult', 'enrol_mercadopagocpro', $result->message),
         null,
         $result->is_handled()
             ? \core\output\notification::NOTIFY_SUCCESS
@@ -84,13 +83,13 @@ if ($action === 'reconcile' && $txnid > 0) {
     );
 }
 
-$statusoptions = ['' => get_string('allstatuses', 'enrol_mpcheckoutpro')];
+$statusoptions = ['' => get_string('allstatuses', 'enrol_mercadopagocpro')];
 foreach (array_merge([status::LOCAL_CREATED], status::all()) as $value) {
     $statusoptions[$value] = status::label($value);
 }
 
 $table = new transactions_table(
-    'enrol_mpcheckoutpro_transactions',
+    'enrol_mercadopagocpro_transactions',
     $context,
     (int)$course->id,
     (int)$instanceid,
@@ -98,16 +97,15 @@ $table = new transactions_table(
     $statusfilter
 );
 $table->define_baseurl($pageurl);
-$table->is_downloading($download, 'mpcheckoutpro_transactions_' . $course->shortname, 'transactions');
+$table->is_downloading($download, 'mercadopagocpro_transactions_' . $course->shortname, 'transactions');
 
 if (!$table->is_downloading()) {
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('transactions', 'enrol_mpcheckoutpro'));
+    echo $OUTPUT->heading(get_string('transactions', 'enrol_mercadopagocpro'));
 
     // Simple status filter.
     echo html_writer::start_tag(
-        'form',
-        ['method' => 'get', 'action' => $pageurl->out_omit_querystring(),
+        'form', ['method' => 'get', 'action' => $pageurl->out_omit_querystring(),
         'class' => 'mb-3 d-flex gap-2 align-items-end flex-wrap']
     );
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'courseid', 'value' => $courseid]);
@@ -115,22 +113,19 @@ if (!$table->is_downloading()) {
         echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'instanceid', 'value' => $instanceid]);
     }
     echo html_writer::tag(
-        'label',
-        get_string('paymentstatus', 'enrol_mpcheckoutpro'),
+        'label', get_string('paymentstatus', 'enrol_mercadopagocpro'),
         ['for' => 'mpstatusfilter', 'class' => 'me-1']
     );
     echo html_writer::select($statusoptions, 'status', $statusfilter, false, ['id' => 'mpstatusfilter']);
     echo html_writer::empty_tag(
-        'input',
-        ['type' => 'submit', 'class' => 'btn btn-secondary',
+        'input', ['type' => 'submit', 'class' => 'btn btn-secondary',
         'value' => get_string('filter')]
     );
     echo html_writer::end_tag('form');
 
     echo $OUTPUT->render_from_template(
-        'enrol_mpcheckoutpro/summary',
-        [
-        'stats' => enrol_mpcheckoutpro_summary_rows((int)$course->id, (int)$instanceid),
+        'enrol_mercadopagocpro/summary', [
+        'stats' => enrol_mercadopagocpro_summary_rows((int)$course->id, (int)$instanceid),
         ]
     );
 }
@@ -148,7 +143,8 @@ if (!$table->is_downloading()) {
  * @param  int $instanceid
  * @return array
  */
-function enrol_mpcheckoutpro_summary_rows(int $courseid, int $instanceid): array {
+function enrol_mercadopagocpro_summary_rows(int $courseid, int $instanceid): array
+{
     global $DB;
 
     $where = 'courseid = :courseid';
@@ -159,7 +155,7 @@ function enrol_mpcheckoutpro_summary_rows(int $courseid, int $instanceid): array
     }
 
     $sql = "SELECT status, COUNT(1) AS total, SUM(amount) AS amount, MAX(currency) AS currency
-              FROM {enrol_mpcheckoutpro_txn}
+              FROM {enrol_mercadopagocpro_txn}
              WHERE $where
           GROUP BY status
           ORDER BY status ASC";

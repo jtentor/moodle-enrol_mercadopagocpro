@@ -14,19 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\local;
+namespace enrol_mercadopagocpro\local;
 
-use enrol_mpcheckoutpro\event\preference_created;
+use enrol_mercadopagocpro\event\preference_created;
 
 /**
  * Creates the Checkout Pro preference and hands back the URL the buyer is sent to.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class checkout_service
 {
+
     /**
      * Constructor.
      *
@@ -34,7 +35,7 @@ class checkout_service
      */
     public function __construct(
         /**
-         * @var api_client|null
+         * @var api_client|null 
          */
         protected ?api_client $client = null,
     ) {
@@ -48,7 +49,8 @@ class checkout_service
      * @return array{transaction:\stdClass,redirecturl:string}
      * @throws \moodle_exception on any condition that prevents the purchase
      */
-    public function start(\stdClass $instance, \stdClass $user): array {
+    public function start(\stdClass $instance, \stdClass $user): array
+    {
         global $DB;
 
         $settings = instance_settings::from_instance($instance);
@@ -61,13 +63,13 @@ class checkout_service
         }
 
         if (!rate_limiter::for_checkout()->allow('user_' . $user->id)) {
-            throw new \moodle_exception('error:ratelimited', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:ratelimited', 'enrol_mercadopagocpro');
         }
 
         $course = $DB->get_record('course', ['id' => $instance->courseid], '*', MUST_EXIST);
         $credentials = credentials::resolve($instance);
         if (!$credentials->is_usable()) {
-            throw new \moodle_exception('error:nocredentials', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:nocredentials', 'enrol_mercadopagocpro');
         }
 
         $transaction = transaction::create($instance, $user, $settings);
@@ -79,16 +81,16 @@ class checkout_service
         try {
             // The idempotency key ties one preference to one local transaction, so a
             // retried HTTP request can never produce a duplicate preference.
-            $preference = $client->create_preference($request, 'enrol_mpcheckoutpro-' . $transaction->id);
+            $preference = $client->create_preference($request, 'enrol_mercadopagocpro-' . $transaction->id);
         } catch (api_exception $e) {
             transaction::record_error((int)$transaction->id, $e->getMessage());
-            throw new \moodle_exception('error:preferencefailed', 'enrol_mpcheckoutpro', '', null, $e->getMessage());
+            throw new \moodle_exception('error:preferencefailed', 'enrol_mercadopagocpro', '', null, $e->getMessage());
         }
 
         $initpoint = $this->pick_init_point($preference, $credentials);
         if ($initpoint === '') {
             transaction::record_error((int)$transaction->id, 'The API response carried no init_point.');
-            throw new \moodle_exception('error:noinitpoint', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:noinitpoint', 'enrol_mercadopagocpro');
         }
 
         $transaction = transaction::set_preference(
@@ -119,7 +121,8 @@ class checkout_service
      * @return string
      * @see    https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/integration-test/test-purchases
      */
-    protected function pick_init_point(object $preference, credentials $credentials): string {
+    protected function pick_init_point(object $preference, credentials $credentials): string
+    {
         unset($credentials);
         return (string)($preference->init_point ?? '');
     }
@@ -133,50 +136,50 @@ class checkout_service
      * @return void
      * @throws \moodle_exception
      */
-    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void {
+    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void
+    {
         global $DB;
 
         if ((int)$instance->status !== ENROL_INSTANCE_ENABLED) {
-            throw new \moodle_exception('error:instancedisabled', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:instancedisabled', 'enrol_mercadopagocpro');
         }
         if (isguestuser($user) || !isloggedin()) {
-            throw new \moodle_exception('error:mustbeloggedin', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:mustbeloggedin', 'enrol_mercadopagocpro');
         }
         if ($settings->cost <= 0) {
-            throw new \moodle_exception('error:nocost', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:nocost', 'enrol_mercadopagocpro');
         }
         if (!in_array($settings->currency, util::supported_currencies(), true)) {
-            throw new \moodle_exception('error:unsupportedcurrency', 'enrol_mpcheckoutpro', '', $settings->currency);
+            throw new \moodle_exception('error:unsupportedcurrency', 'enrol_mercadopagocpro', '', $settings->currency);
         }
         if (!util::site_is_https()) {
-            throw new \moodle_exception('error:httpsrequired', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:httpsrequired', 'enrol_mercadopagocpro');
         }
         if (!sdk::is_available()) {
-            throw new \moodle_exception('error:sdkmissing', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:sdkmissing', 'enrol_mercadopagocpro');
         }
 
         $now = time();
         if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > $now) {
-            throw new \moodle_exception('error:enrolmentnotopen', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:enrolmentnotopen', 'enrol_mercadopagocpro');
         }
         if ($instance->enrolenddate != 0 && $instance->enrolenddate < $now) {
-            throw new \moodle_exception('error:enrolmentclosed', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:enrolmentclosed', 'enrol_mercadopagocpro');
         }
 
         $ue = $DB->get_record('user_enrolments', ['enrolid' => $instance->id, 'userid' => $user->id]);
         if ($ue && (int)$ue->status === ENROL_USER_ACTIVE) {
-            throw new \moodle_exception('error:alreadyenrolled', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:alreadyenrolled', 'enrol_mercadopagocpro');
         }
 
         if (!enrolment_manager::has_capacity($instance, $settings)) {
-            throw new \moodle_exception('error:coursefull', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:coursefull', 'enrol_mercadopagocpro');
         }
 
-        if (
-            $settings->marketplaceenabled && $settings->marketplacefee > 0
+        if ($settings->marketplaceenabled && $settings->marketplacefee > 0
             && $settings->marketplacefee >= $settings->cost
         ) {
-            throw new \moodle_exception('error:feetoolarge', 'enrol_mpcheckoutpro');
+            throw new \moodle_exception('error:feetoolarge', 'enrol_mercadopagocpro');
         }
     }
 }

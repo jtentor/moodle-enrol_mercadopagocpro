@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\local;
+namespace enrol_mercadopagocpro\local;
 
 /**
  * Applies enrolment decisions to Moodle.
@@ -22,17 +22,18 @@ namespace enrol_mpcheckoutpro\local;
  * All public methods here are expected to run while the caller holds the
  * transaction lock obtained through {@see self::get_lock()}.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see       https://moodledev.io/docs/5.2/apis/core/lock
  */
 class enrolment_manager
 {
+
     /**
-     * @var string Lock factory namespace.
+     * @var string Lock factory namespace. 
      */
-    public const LOCK_TYPE = 'enrol_mpcheckoutpro_transaction';
+    public const LOCK_TYPE = 'enrol_mercadopagocpro_transaction';
 
     /**
      * Acquire the per transaction lock.
@@ -45,7 +46,8 @@ class enrolment_manager
      * @param  int $timeout seconds to wait
      * @return \core\lock\lock|null null when the lock could not be obtained
      */
-    public static function get_lock(int $txnid, int $timeout = 10): ?\core\lock\lock {
+    public static function get_lock(int $txnid, int $timeout = 10): ?\core\lock\lock
+    {
         $factory = \core\lock\lock_config::get_lock_factory(self::LOCK_TYPE);
         $lock = $factory->get_lock('txn_' . $txnid, $timeout);
         return $lock === false ? null : $lock;
@@ -59,12 +61,13 @@ class enrolment_manager
      * @param  instance_settings $settings
      * @return void
      */
-    public static function activate(\stdClass $instance, \stdClass $transaction, instance_settings $settings): void {
+    public static function activate(\stdClass $instance, \stdClass $transaction, instance_settings $settings): void
+    {
         global $DB;
 
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
         if (!$plugin) {
-            throw new \coding_exception('The mpcheckoutpro enrolment plugin could not be loaded.');
+            throw new \coding_exception('The mercadopagocpro enrolment plugin could not be loaded.');
         }
 
         $userid = (int)$transaction->userid;
@@ -76,21 +79,13 @@ class enrolment_manager
             $plugin->update_user_enrol($instance, $userid, ENROL_USER_ACTIVE, $existing->timestart, $timeend);
             // enrol_user is still called so the role assignment is (re)created.
             $plugin->enrol_user(
-                $instance,
-                $userid,
-                $settings->roleid ?: null,
-                $existing->timestart,
-                $timeend,
-                ENROL_USER_ACTIVE
+                $instance, $userid, $settings->roleid ?: null,
+                $existing->timestart, $timeend, ENROL_USER_ACTIVE
             );
         } else {
             $plugin->enrol_user(
-                $instance,
-                $userid,
-                $settings->roleid ?: null,
-                $timestart,
-                $timeend,
-                ENROL_USER_ACTIVE
+                $instance, $userid, $settings->roleid ?: null,
+                $timestart, $timeend, ENROL_USER_ACTIVE
             );
         }
 
@@ -109,12 +104,13 @@ class enrolment_manager
      * @param  instance_settings $settings
      * @return void
      */
-    public static function hold(\stdClass $instance, \stdClass $transaction, instance_settings $settings): void {
+    public static function hold(\stdClass $instance, \stdClass $transaction, instance_settings $settings): void
+    {
         global $DB;
 
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
         if (!$plugin) {
-            throw new \coding_exception('The mpcheckoutpro enrolment plugin could not be loaded.');
+            throw new \coding_exception('The mercadopagocpro enrolment plugin could not be loaded.');
         }
 
         $userid = (int)$transaction->userid;
@@ -125,12 +121,8 @@ class enrolment_manager
 
         [$timestart, $timeend] = self::calculate_period($instance, $settings, $userid);
         $plugin->enrol_user(
-            $instance,
-            $userid,
-            $settings->roleid ?: null,
-            $timestart,
-            $timeend,
-            ENROL_USER_SUSPENDED
+            $instance, $userid, $settings->roleid ?: null,
+            $timestart, $timeend, ENROL_USER_SUSPENDED
         );
     }
 
@@ -142,12 +134,13 @@ class enrolment_manager
      * @param  instance_settings $settings
      * @return string the resulting enrolment state
      */
-    public static function revoke(\stdClass $instance, \stdClass $transaction, instance_settings $settings): string {
+    public static function revoke(\stdClass $instance, \stdClass $transaction, instance_settings $settings): string
+    {
         global $DB;
 
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
         if (!$plugin) {
-            throw new \coding_exception('The mpcheckoutpro enrolment plugin could not be loaded.');
+            throw new \coding_exception('The mercadopagocpro enrolment plugin could not be loaded.');
         }
 
         $userid = (int)$transaction->userid;
@@ -158,8 +151,7 @@ class enrolment_manager
         // Never revoke access that a different, still valid payment is paying for.
         if (self::has_other_granting_transaction($transaction)) {
             util::log_debug(
-                'Reversal ignored: another approved transaction still grants access',
-                [
+                'Reversal ignored: another approved transaction still grants access', [
                 'txnid' => (int)$transaction->id,
                 'userid' => $userid,
                 ]
@@ -168,18 +160,18 @@ class enrolment_manager
         }
 
         switch ($settings->reversalaction) {
-            case instance_settings::REVERSAL_UNENROL:
-                $plugin->unenrol_user($instance, $userid);
-                return status::ENROLMENT_UNENROLLED;
+        case instance_settings::REVERSAL_UNENROL:
+            $plugin->unenrol_user($instance, $userid);
+            return status::ENROLMENT_UNENROLLED;
 
-            case instance_settings::REVERSAL_SUSPEND:
-                $plugin->update_user_enrol($instance, $userid, ENROL_USER_SUSPENDED);
-                self::remove_roles($instance, $userid);
-                return status::ENROLMENT_SUSPENDED;
+        case instance_settings::REVERSAL_SUSPEND:
+            $plugin->update_user_enrol($instance, $userid, ENROL_USER_SUSPENDED);
+            self::remove_roles($instance, $userid);
+            return status::ENROLMENT_SUSPENDED;
 
-            case instance_settings::REVERSAL_KEEP:
-            default:
-                return (string)$transaction->enrolmentstate;
+        case instance_settings::REVERSAL_KEEP:
+        default:
+            return (string)$transaction->enrolmentstate;
         }
     }
 
@@ -190,7 +182,8 @@ class enrolment_manager
      * @param  \stdClass $transaction
      * @return bool
      */
-    protected static function has_other_granting_transaction(\stdClass $transaction): bool {
+    protected static function has_other_granting_transaction(\stdClass $transaction): bool
+    {
         global $DB;
 
         [$insql, $params] = $DB->get_in_or_equal(status::granting(), SQL_PARAMS_NAMED, 'gs');
@@ -217,7 +210,8 @@ class enrolment_manager
      * @param  int       $userid
      * @return void
      */
-    protected static function remove_roles(\stdClass $instance, int $userid): void {
+    protected static function remove_roles(\stdClass $instance, int $userid): void
+    {
         global $DB;
 
         $context = \context_course::instance($instance->courseid);
@@ -235,10 +229,9 @@ class enrolment_manager
             [
             'userid' => $userid,
             'contextid' => $context->id,
-            'component' => 'enrol_mpcheckoutpro',
+            'component' => 'enrol_mercadopagocpro',
             'itemid' => $instance->id,
-            ],
-            true
+            ], true
         );
 
         if (0 == $DB->count_records('role_assignments', ['userid' => $userid, 'contextid' => $context->id])) {
@@ -254,7 +247,8 @@ class enrolment_manager
      * @param  instance_settings $settings
      * @return void
      */
-    protected static function assign_group(\stdClass $instance, int $userid, instance_settings $settings): void {
+    protected static function assign_group(\stdClass $instance, int $userid, instance_settings $settings): void
+    {
         global $CFG, $DB;
 
         if ($settings->groupid <= 0) {
@@ -266,8 +260,7 @@ class enrolment_manager
         $group = $DB->get_record('groups', ['id' => $settings->groupid, 'courseid' => $instance->courseid]);
         if (!$group) {
             util::log_error(
-                'Configured group no longer exists, skipping group assignment',
-                [
+                'Configured group no longer exists, skipping group assignment', [
                 'groupid' => $settings->groupid,
                 'courseid' => $instance->courseid,
                 ]
@@ -289,7 +282,8 @@ class enrolment_manager
      * @param  int               $userid
      * @return array{0:int,1:int}
      */
-    protected static function calculate_period(\stdClass $instance, instance_settings $settings, int $userid): array {
+    protected static function calculate_period(\stdClass $instance, instance_settings $settings, int $userid): array
+    {
         $timestart = time();
         // Align the start with the beginning of the day, as core enrolment plugins do.
         $timestart = ($timestart - ($timestart % 60));
@@ -317,7 +311,8 @@ class enrolment_manager
      * @param  instance_settings $settings
      * @return bool
      */
-    public static function has_capacity(\stdClass $instance, instance_settings $settings): bool {
+    public static function has_capacity(\stdClass $instance, instance_settings $settings): bool
+    {
         if ($settings->maxenrolled <= 0) {
             return true;
         }

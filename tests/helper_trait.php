@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro;
+namespace enrol_mercadopagocpro;
 
-use enrol_mpcheckoutpro\local\sdk;
-use enrol_mpcheckoutpro\tests\fixtures\mock_http_client;
+use enrol_mercadopagocpro\local\sdk;
+use enrol_mercadopagocpro\tests\fixtures\mock_http_client;
 use MercadoPago\MercadoPagoConfig;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,28 +32,29 @@ sdk::register();
 if (!interface_exists(\MercadoPago\Net\MPHttpClient::class)) {
     throw new \coding_exception(
         'The bundled Mercado Pago SDK could not be loaded from ' .
-        'enrol/mpcheckoutpro/vendor/mercadopago/src. The test fixtures implement ' .
+        'enrol/mercadopagocpro/vendor/mercadopago/src. The test fixtures implement ' .
         'its interfaces, so the suite cannot run without it.'
     );
 }
-require_once $CFG->dirroot . '/enrol/mpcheckoutpro/tests/fixtures/mock_http_client.php';
+require_once $CFG->dirroot . '/enrol/mercadopagocpro/tests/fixtures/mock_http_client.php';
 
 /**
- * Shared setup for the enrol_mpcheckoutpro test suite.
+ * Shared setup for the enrol_mercadopagocpro test suite.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait helper_trait
 {
+
     /**
-     * @var mock_http_client|null
+     * @var mock_http_client|null 
      */
     protected ?mock_http_client $mpclient = null;
 
     /**
-     * @var bool Whether message redirection has already been started in this test.
+     * @var bool Whether message redirection has already been started in this test. 
      */
     protected bool $messagesredirected = false;
 
@@ -62,7 +63,8 @@ trait helper_trait
      *
      * @return mock_http_client
      */
-    protected function setup_plugin(): mock_http_client {
+    protected function setup_plugin(): mock_http_client
+    {
         global $CFG;
 
         $this->resetAfterTest();
@@ -75,15 +77,15 @@ trait helper_trait
         // credentials::resolve() deliberately ranks the server configuration above
         // the site settings, so a real access token present on the machine running
         // the tests would override the fake one set below. PHPUnit's bootstrap
-        // already discards $CFG->enrol_mpcheckoutpro, but it cannot discard the
+        // already discards $CFG->enrol_mercadopagocpro, but it cannot discard the
         // process environment, which a production server normally has populated.
         // Clearing it here keeps the tests from ever seeing a live credential.
-        unset($CFG->enrol_mpcheckoutpro);
+        unset($CFG->enrol_mercadopagocpro);
         foreach (
             [
-            'MPCHECKOUTPRO_ACCESS_TOKEN',
-            'MPCHECKOUTPRO_PUBLIC_KEY',
-            'MPCHECKOUTPRO_WEBHOOK_SECRET',
+            'MERCADOPAGOCPRO_ACCESS_TOKEN',
+            'MERCADOPAGOCPRO_PUBLIC_KEY',
+            'MERCADOPAGOCPRO_WEBHOOK_SECRET',
             ] as $envname
         ) {
             putenv($envname);
@@ -91,14 +93,14 @@ trait helper_trait
         }
 
         $enabled = enrol_get_plugins(true);
-        $enabled['mpcheckoutpro'] = true;
+        $enabled['mercadopagocpro'] = true;
         set_config('enrol_plugins_enabled', implode(',', array_keys($enabled)));
 
-        set_config('accesstoken', 'TEST-ACCESS-TOKEN', 'enrol_mpcheckoutpro');
-        set_config('publickey', 'TEST-PUBLIC-KEY', 'enrol_mpcheckoutpro');
-        set_config('webhooksecret', 'TEST-WEBHOOK-SECRET', 'enrol_mpcheckoutpro');
-        set_config('environment', 'production', 'enrol_mpcheckoutpro');
-        set_config('currency', 'ARS', 'enrol_mpcheckoutpro');
+        set_config('accesstoken', 'TEST-ACCESS-TOKEN', 'enrol_mercadopagocpro');
+        set_config('publickey', 'TEST-PUBLIC-KEY', 'enrol_mercadopagocpro');
+        set_config('webhooksecret', 'TEST-WEBHOOK-SECRET', 'enrol_mercadopagocpro');
+        set_config('environment', 'production', 'enrol_mercadopagocpro');
+        set_config('currency', 'ARS', 'enrol_mercadopagocpro');
 
         // Keep notifications out of the real message tables during tests.
         if (!$this->messagesredirected) {
@@ -119,11 +121,12 @@ trait helper_trait
      * @param  array $fields instance overrides
      * @return array{0:\stdClass,1:\stdClass} course and enrol instance
      */
-    protected function create_course_with_instance(array $fields = []): array {
+    protected function create_course_with_instance(array $fields = []): array
+    {
         global $DB;
 
         $course = $this->getDataGenerator()->create_course();
-        $plugin = enrol_get_plugin('mpcheckoutpro');
+        $plugin = enrol_get_plugin('mercadopagocpro');
 
         $studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
         $fields = array_merge(
@@ -132,8 +135,7 @@ trait helper_trait
             'cost' => 100,
             'currency' => 'ARS',
             'roleid' => $studentrole->id,
-            ],
-            $fields
+            ], $fields
         );
 
         $instanceid = $plugin->add_instance($course, $fields);
@@ -151,7 +153,8 @@ trait helper_trait
      * @param  int|null $ts
      * @return string
      */
-    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string {
+    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string
+    {
         $ts = $ts ?? time();
         $manifest = 'id:' . $dataid . ';request-id:' . $requestid . ';ts:' . $ts . ';';
         return 'ts=' . $ts . ',v1=' . hash_hmac('sha256', $manifest, $secret);

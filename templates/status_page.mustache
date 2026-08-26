@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template enrol_mpcheckoutpro/status_page
+    @template enrol_mercadopagocpro/status_page
 
     Payment result shown when the buyer comes back from Mercado Pago.
 
@@ -43,7 +43,7 @@
         "coursename": "Introduction to Databases"
     }
 }}
-<div class="enrol-mpcheckoutpro-result">
+<div class="enrol-mercadopagocpro-result">
     <div class="alert alert-{{#tone}}{{.}}{{/tone}}" role="status">
         {{message}}
     </div>
@@ -52,25 +52,25 @@
         <dt class="col-sm-3">{{#str}} course, core {{/str}}</dt>
         <dd class="col-sm-9">{{coursename}}</dd>
 
-        <dt class="col-sm-3">{{#str}} paymentstatus, enrol_mpcheckoutpro {{/str}}</dt>
+        <dt class="col-sm-3">{{#str}} paymentstatus, enrol_mercadopagocpro {{/str}}</dt>
         <dd class="col-sm-9">{{statuslabel}}</dd>
 
-        <dt class="col-sm-3">{{#str}} cost, enrol_mpcheckoutpro {{/str}}</dt>
+        <dt class="col-sm-3">{{#str}} cost, enrol_mercadopagocpro {{/str}}</dt>
         <dd class="col-sm-9">{{amount}}</dd>
 
         {{#paymentid}}
-            <dt class="col-sm-3">{{#str}} paymentid, enrol_mpcheckoutpro {{/str}}</dt>
+            <dt class="col-sm-3">{{#str}} paymentid, enrol_mercadopagocpro {{/str}}</dt>
             <dd class="col-sm-9"><code>{{paymentid}}</code></dd>
         {{/paymentid}}
 
-        <dt class="col-sm-3">{{#str}} externalreference, enrol_mpcheckoutpro {{/str}}</dt>
+        <dt class="col-sm-3">{{#str}} externalreference, enrol_mercadopagocpro {{/str}}</dt>
         <dd class="col-sm-9"><code>{{reference}}</code></dd>
 
-        <dt class="col-sm-3">{{#str}} lastupdate, enrol_mpcheckoutpro {{/str}}</dt>
+        <dt class="col-sm-3">{{#str}} lastupdate, enrol_mercadopagocpro {{/str}}</dt>
         <dd class="col-sm-9">{{date}}</dd>
     </dl>
 
     {{^isenrolled}}
-        <p class="small text-muted">{{#str}} keepthisreference, enrol_mpcheckoutpro {{/str}}</p>
+        <p class="small text-muted">{{#str}} keepthisreference, enrol_mercadopagocpro {{/str}}</p>
     {{/isenrolled}}
 </div>

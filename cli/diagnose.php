@@ -22,10 +22,10 @@
  * when the language cache is the thing that is broken.
  *
  * Usage:
- *   php enrol/mpcheckoutpro/cli/diagnose.php
- *   php enrol/mpcheckoutpro/cli/diagnose.php --courseid=12 --username=jperez
+ *   php enrol/mercadopagocpro/cli/diagnose.php
+ *   php enrol/mercadopagocpro/cli/diagnose.php --courseid=12 --username=jperez
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,6 +35,16 @@ define('CLI_SCRIPT', true);
 require __DIR__ . '/../../../config.php';
 require_once $CFG->libdir . '/clilib.php';
 require_once $CFG->libdir . '/ddllib.php';
+
+/**
+ * Plugin names this component used before it was renamed. Rows in the enrol table
+ * carrying any of these belong to no installed plugin.
+ *
+ * "mp" is what enrol_plugin::get_name() derived from enrol_mp_checkoutpro_plugin,
+ * because core takes the second word of the class name; "mpcheckoutpro" was the
+ * name that had to change because the Moodle plugins directory already has one.
+ */
+define('MERCADOPAGOCPRO_LEGACY_NAMES', ['mp', 'mpcheckoutpro']);
 
 [$options, $unrecognised] = cli_get_params(
     [
@@ -66,18 +76,18 @@ Options:
       --keep          With --tryadd, leave the created instance in place.
       --cost=N        Cost to use for the save test (default 1000).
       --name=TEXT     Instance name to use for the save test.
-      --fixorphans    Delete enrol rows left behind by the old enrol_mp_checkoutpro.
+      --fixorphans    Delete enrol rows left behind by an earlier name of this plugin.
 
 EOT;
     exit(0);
 }
 
 /**
- * @var int Number of blocking problems found.
+ * @var int Number of blocking problems found. 
 */
 $failures = 0;
 /**
- * @var int Number of warnings found.
+ * @var int Number of warnings found. 
 */
 $warnings = 0;
 
@@ -90,7 +100,8 @@ $warnings = 0;
  * @param  string    $fix    what to do about it
  * @return void
  */
-function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void {
+function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
+{
     global $failures, $warnings;
 
     if ($ok === true) {
@@ -110,17 +121,17 @@ function mpcp_report(?bool $ok, string $label, string $detail, string $fix = '')
 }
 
 echo PHP_EOL;
-echo '=== enrol_mpcheckoutpro diagnostics ===' . PHP_EOL . PHP_EOL;
+echo '=== enrol_mercadopagocpro diagnostics ===' . PHP_EOL . PHP_EOL;
 
 // ---------------------------------------------------------------- 1. Location.
 echo '1. Installation' . PHP_EOL;
 
-$expecteddir = $CFG->dirroot . '/enrol/mpcheckoutpro';
+$expecteddir = $CFG->dirroot . '/enrol/mercadopagocpro';
 mpcp_report(
     is_dir($expecteddir),
     'Plugin directory',
     $expecteddir,
-    'The directory must be named exactly "mpcheckoutpro" and sit inside the enrol '
+    'The directory must be named exactly "mercadopagocpro" and sit inside the enrol '
         . 'directory of $CFG->dirroot (on Moodle 5.x that is usually .../public/enrol/).'
 );
 
@@ -128,7 +139,7 @@ mpcp_report(
     file_exists($expecteddir . '/version.php'),
     'version.php present',
     file_exists($expecteddir . '/version.php') ? 'found' : 'MISSING',
-    'The zip was probably unpacked one level too deep. enrol/mpcheckoutpro/version.php must exist.'
+    'The zip was probably unpacked one level too deep. enrol/mercadopagocpro/version.php must exist.'
 );
 
 $diskversion = null;
@@ -139,10 +150,10 @@ if (file_exists($expecteddir . '/version.php')) {
     $requires = $plugin->requires ?? null;
 
     mpcp_report(
-        ($plugin->component ?? '') === 'enrol_mpcheckoutpro',
+        ($plugin->component ?? '') === 'enrol_mercadopagocpro',
         'Component name in version.php',
         (string)($plugin->component ?? '(none)'),
-        'It must be exactly enrol_mpcheckoutpro and match the directory name.'
+        'It must be exactly enrol_mercadopagocpro and match the directory name.'
     );
 
     mpcp_report(
@@ -155,7 +166,7 @@ if (file_exists($expecteddir . '/version.php')) {
     );
 }
 
-$dbversion = get_config('enrol_mpcheckoutpro', 'version');
+$dbversion = get_config('enrol_mercadopagocpro', 'version');
 mpcp_report(
     !empty($dbversion),
     'Installed in the database',
@@ -175,20 +186,20 @@ if ($dbversion && $diskversion && (float)$dbversion < (float)$diskversion) {
 // ----------------------------------------------------------------- 2. Classes.
 echo PHP_EOL . '2. Code loading' . PHP_EOL;
 
-$classloadable = class_exists('enrol_mpcheckoutpro_plugin');
+$classloadable = class_exists('enrol_mercadopagocpro_plugin');
 mpcp_report(
     $classloadable,
-    'Class enrol_mpcheckoutpro_plugin',
+    'Class enrol_mercadopagocpro_plugin',
     $classloadable ? 'loadable' : 'NOT LOADABLE',
     'This is the silent killer: enrol_get_plugins() skips a plugin whose class cannot be '
         . 'loaded, with no error at all. Run php admin/cli/purge_caches.php. If it still '
         . 'fails, check that classes/plugin.php exists and has no parse error.'
 );
 
-$instance = enrol_get_plugin('mpcheckoutpro');
+$instance = enrol_get_plugin('mercadopagocpro');
 mpcp_report(
     $instance !== null,
-    'enrol_get_plugin("mpcheckoutpro")',
+    'enrol_get_plugin("mercadopagocpro")',
     $instance !== null ? 'returns an instance' : 'returns null',
     'Same cause as above.'
 );
@@ -201,38 +212,43 @@ if ($instance !== null) {
     );
 
     // enrol_plugin::get_name() does explode('_', get_class($this))[1]. The plugin
-    // name deliberately has no underscore, so core derives "mpcheckoutpro" by
+    // name deliberately has no underscore, so core derives "mercadopagocpro" by
     // itself. A name like mp_checkoutpro would resolve to "mp" instead, and every
     // instance would be stored under a plugin that does not exist and vanish from
     // the course. This is the regression guard for that.
     $pluginname = $instance->get_name();
     mpcp_report(
-        $pluginname === 'mpcheckoutpro',
+        $pluginname === 'mercadopagocpro',
         'get_name()',
         '"' . $pluginname . '"',
-        'It must return "mpcheckoutpro". Core derives the name from the second word '
+        'It must return "mercadopagocpro". Core derives the name from the second word '
             . 'of the class name, so the plugin directory must never contain an '
             . 'underscore. Check the directory name and the class name.'
     );
 
-    // Left over from the earlier enrol_mp_checkoutpro build, whose name resolved
-    // to "mp". Those rows belong to no plugin and cannot be removed from the UI.
-    $orphans = $DB->count_records('enrol', ['enrol' => 'mp']);
-    mpcp_report(
-        $orphans === 0 ? true : null,
-        'Orphan enrol rows with enrol="mp"',
-        $orphans . ' found',
-        'Left behind by the previous enrol_mp_checkoutpro build. They belong to no '
-            . 'plugin, so they cannot be edited or removed from the course interface. '
-            . 'Run this script with --fixorphans to delete them.'
-    );
+    // Rows left behind by an earlier name of this plugin. "mp" came from
+    // enrol_mp_checkoutpro, whose underscore made get_name() resolve to "mp";
+    // "mpcheckoutpro" was the name before the move to enrol_mercadopagocpro.
+    // Either way the rows belong to no installed plugin, so the course interface
+    // cannot edit or remove them.
+    foreach (MERCADOPAGOCPRO_LEGACY_NAMES as $legacy) {
+        $orphans = $DB->count_records('enrol', ['enrol' => $legacy]);
+        mpcp_report(
+            $orphans === 0 ? true : null,
+            'Orphan enrol rows with enrol="' . $legacy . '"',
+            $orphans . ' found',
+            'Left behind by an earlier name of this plugin. They belong to no '
+                . 'plugin, so they cannot be edited or removed from the course '
+                . 'interface. Run this script with --fixorphans to delete them.'
+        );
+    }
 }
 
 // ----------------------------------------------------------------- 3. Enabled.
 echo PHP_EOL . '3. Enabled state' . PHP_EOL;
 
 $enabledlist = isset($CFG->enrol_plugins_enabled) ? explode(',', $CFG->enrol_plugins_enabled) : [];
-$isenabled = enrol_is_enabled('mpcheckoutpro');
+$isenabled = enrol_is_enabled('mercadopagocpro');
 mpcp_report(
     $isenabled,
     'Enrolment method enabled',
@@ -250,7 +266,7 @@ $capsindb = $DB->get_fieldset_select(
     'capabilities',
     'name',
     $DB->sql_like('name', ':pattern'),
-    ['pattern' => 'enrol/mpcheckoutpro:%']
+    ['pattern' => 'enrol/mercadopagocpro:%']
 );
 mpcp_report(
     count($capsindb) >= 6,
@@ -301,14 +317,14 @@ if ($options['courseid']) {
         'Without it no enrolment method can be added at all.'
     );
 
-    $canconfig = has_capability('enrol/mpcheckoutpro:config', $coursecontext);
+    $canconfig = has_capability('enrol/mercadopagocpro:config', $coursecontext);
     mpcp_report(
         $canconfig,
-        'enrol/mpcheckoutpro:config',
+        'enrol/mercadopagocpro:config',
         $canconfig ? 'allowed for ' . $wholabel : 'DENIED for ' . $wholabel,
         'By default this capability is granted to Manager only, exactly like enrol/fee. '
             . 'An editing teacher can add "Self enrolment" but not this method. Either use a '
-            . 'Manager account, or allow enrol/mpcheckoutpro:config for the editing teacher '
+            . 'Manager account, or allow enrol/mercadopagocpro:config for the editing teacher '
             . 'role in Site administration > Users > Permissions > Define roles.'
     );
 
@@ -322,11 +338,11 @@ if ($options['courseid']) {
         );
     }
 
-    $existing = $DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mpcheckoutpro']);
+    $existing = $DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mercadopagocpro']);
     echo '         existing instances in this course: ' . $existing . PHP_EOL;
 
     // Reproduce exactly what enrol/instances.php does to build the dropdown.
-    // This is the ground truth: if mpcheckoutpro is listed here, the browser
+    // This is the ground truth: if mercadopagocpro is listed here, the browser
     // will list it too for this user.
     echo PHP_EOL . '5b. Simulated "Add method" dropdown' . PHP_EOL;
 
@@ -342,9 +358,9 @@ if ($options['courseid']) {
     }
 
     mpcp_report(
-        in_array('mpcheckoutpro', $candidates, true),
-        'mpcheckoutpro offered in the dropdown',
-        in_array('mpcheckoutpro', $candidates, true) ? 'yes' : 'NO',
+        in_array('mercadopagocpro', $candidates, true),
+        'mercadopagocpro offered in the dropdown',
+        in_array('mercadopagocpro', $candidates, true) ? 'yes' : 'NO',
         'If every check above passed and this still says NO, the cause is outside this '
             . 'plugin. Compare with the other methods listed below.'
     );
@@ -365,15 +381,15 @@ mpcp_report(
 
 $sdkok = false;
 if ($classloadable) {
-    $sdkok = \enrol_mpcheckoutpro\local\sdk::is_available();
+    $sdkok = \enrol_mercadopagocpro\local\sdk::is_available();
 }
 mpcp_report(
     $sdkok,
     'Mercado Pago PHP SDK',
-    $sdkok ? 'version ' . \enrol_mpcheckoutpro\local\sdk::get_version() : 'NOT FOUND',
+    $sdkok ? 'version ' . \enrol_mercadopagocpro\local\sdk::get_version() : 'NOT FOUND',
     'vendor/mercadopago/src/MercadoPago is missing from the plugin directory. Some zip '
         . 'tools skip a directory named vendor. Restore it, or run composer install --no-dev '
-        . 'inside enrol/mpcheckoutpro.'
+        . 'inside enrol/mercadopagocpro.'
 );
 
 mpcp_report(
@@ -397,7 +413,7 @@ mpcp_report(
 echo PHP_EOL . '7. Database tables' . PHP_EOL;
 
 $dbman = $DB->get_manager();
-foreach (['enrol_mpcheckoutpro_txn', 'enrol_mpcheckoutpro_wh', 'enrol_mpcheckoutpro_cred'] as $table) {
+foreach (['enrol_mercadopagocpro_txn', 'enrol_mercadopagocpro_wh', 'enrol_mercadopagocpro_cred'] as $table) {
     $exists = $dbman->table_exists(new xmldb_table($table));
     mpcp_report(
         $exists,
@@ -411,15 +427,15 @@ foreach (['enrol_mpcheckoutpro_txn', 'enrol_mpcheckoutpro_wh', 'enrol_mpcheckout
 echo PHP_EOL . '8. Configuration' . PHP_EOL;
 
 if ($classloadable) {
-    $credentials = \enrol_mpcheckoutpro\local\credentials::resolve(null);
+    $credentials = \enrol_mercadopagocpro\local\credentials::resolve(null);
     mpcp_report(
         $credentials->is_usable(),
         'Access token resolved',
         $credentials->is_usable()
             ? 'yes (source: ' . $credentials->get_source() . ', env: ' . $credentials->get_environment() . ')'
             : 'NO',
-        'Set it in the plugin settings, in $CFG->enrol_mpcheckoutpro, or in '
-            . 'MPCHECKOUTPRO_ACCESS_TOKEN. Remember that the Environment switch selects '
+        'Set it in the plugin settings, in $CFG->enrol_mercadopagocpro, or in '
+            . 'MERCADOPAGOCPRO_ACCESS_TOKEN. Remember that the Environment switch selects '
             . 'between the production and the test token.'
     );
     mpcp_report(
@@ -434,7 +450,7 @@ $tasks = $DB->get_fieldset_select(
     'task_scheduled',
     'classname',
     $DB->sql_like('classname', ':pattern'),
-    ['pattern' => '%enrol_mpcheckoutpro%']
+    ['pattern' => '%enrol_mercadopagocpro%']
 );
 mpcp_report(
     count($tasks) >= 4,
@@ -524,7 +540,7 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
 
     $studentrole = get_archetype_roles('student');
     $studentrole = $studentrole ? reset($studentrole) : null;
-    $roleid = (int)($data['roleid'] ?? 0) ?: (int)(get_config('enrol_mpcheckoutpro', 'roleid')
+    $roleid = (int)($data['roleid'] ?? 0) ?: (int)(get_config('enrol_mercadopagocpro', 'roleid')
         ?: ($studentrole->id ?? 0));
 
     // What the operator actually types in.
@@ -532,7 +548,7 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
     $data['cost'] = (string)($options['cost'] !== '' ? $options['cost'] : '1000');
     $data['status'] = ENROL_INSTANCE_ENABLED;
     $data['roleid'] = $roleid;
-    $data['currency'] = (string)($data['currency'] ?: (get_config('enrol_mpcheckoutpro', 'currency') ?: 'ARS'));
+    $data['currency'] = (string)($data['currency'] ?: (get_config('enrol_mercadopagocpro', 'currency') ?: 'ARS'));
 
     echo '         fields posted: ' . implode(', ', array_keys($data)) . PHP_EOL;
     echo '         name="' . $data['name'] . '", cost=' . $data['cost'] . ' ' . $data['currency'] .
@@ -562,10 +578,10 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
     } else if (!empty($errors)) {
         echo '         not attempting add_instance(): validation already failed' . PHP_EOL;
     } else {
-        $before = (int)$DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mpcheckoutpro']);
+        $before = (int)$DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mercadopagocpro']);
         try {
             $newid = $instance->add_instance($course, $data);
-            $after = (int)$DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mpcheckoutpro']);
+            $after = (int)$DB->count_records('enrol', ['courseid' => $course->id, 'enrol' => 'mercadopagocpro']);
             $record = $newid ? $DB->get_record('enrol', ['id' => $newid]) : null;
 
             mpcp_report(
@@ -608,7 +624,8 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
 if ($options['fixorphans']) {
     echo PHP_EOL . '11. Orphan cleanup' . PHP_EOL;
 
-    $orphanrows = $DB->get_records('enrol', ['enrol' => 'mp']);
+    [$insql, $inparams] = $DB->get_in_or_equal(MERCADOPAGOCPRO_LEGACY_NAMES);
+    $orphanrows = $DB->get_records_select('enrol', 'enrol ' . $insql, $inparams);
     if (!$orphanrows) {
         echo '         nothing to clean up' . PHP_EOL;
     } else {
@@ -616,8 +633,9 @@ if ($options['fixorphans']) {
             $ues = $DB->count_records('user_enrolments', ['enrolid' => $row->id]);
             $DB->delete_records('user_enrolments', ['enrolid' => $row->id]);
             $DB->delete_records('enrol', ['id' => $row->id]);
-            echo '         deleted enrol id ' . $row->id . ' (course ' . $row->courseid
-                . ', ' . $ues . ' user enrolment(s)) name="' . ($row->name ?: '(default)') . '"' . PHP_EOL;
+            echo '         deleted enrol id ' . $row->id . ' (enrol="' . $row->enrol
+                . '", course ' . $row->courseid . ', ' . $ues . ' user enrolment(s)) name="'
+                . ($row->name ?: '(default)') . '"' . PHP_EOL;
         }
         echo '         ' . count($orphanrows) . ' orphan row(s) removed' . PHP_EOL;
     }

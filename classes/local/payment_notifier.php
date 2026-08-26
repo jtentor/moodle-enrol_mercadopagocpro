@@ -14,38 +14,39 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\local;
+namespace enrol_mercadopagocpro\local;
 
 use core\message\message;
 
 /**
  * Sends the payment related notifications to buyers and to course staff.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class payment_notifier
 {
+
     /**
-     * @var string Payment approved and enrolment active.
+     * @var string Payment approved and enrolment active. 
      */
     public const EVENT_APPROVED = 'approved';
     /**
-     * @var string Payment pending / in process.
+     * @var string Payment pending / in process. 
      */
     public const EVENT_PENDING = 'pending';
     /**
-     * @var string Payment rejected or cancelled before approval.
+     * @var string Payment rejected or cancelled before approval. 
      */
     public const EVENT_FAILED = 'failed';
     /**
-     * @var string Payment refunded or charged back.
+     * @var string Payment refunded or charged back. 
      */
     public const EVENT_REVERSED = 'reversed';
 
     /**
-     * @var array<string,string> Event to message provider mapping.
+     * @var array<string,string> Event to message provider mapping. 
      */
     private const PROVIDERS = [
         self::EVENT_APPROVED => 'payment_approved',
@@ -55,7 +56,7 @@ class payment_notifier
     ];
 
     /**
-     * @var string[] Events that also notify course staff.
+     * @var string[] Events that also notify course staff. 
      */
     private const STAFF_EVENTS = [self::EVENT_APPROVED, self::EVENT_REVERSED];
 
@@ -67,7 +68,8 @@ class payment_notifier
      * @param  \stdClass $transaction transaction record
      * @return void
      */
-    public function send(string $event, \stdClass $instance, \stdClass $transaction): void {
+    public function send(string $event, \stdClass $instance, \stdClass $transaction): void
+    {
         global $DB;
 
         if (!isset(self::PROVIDERS[$event])) {
@@ -108,16 +110,17 @@ class payment_notifier
      * @param  \stdClass $a      placeholders
      * @return void
      */
-    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void {
+    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void
+    {
         $provider = self::PROVIDERS[$event];
 
         $message = new message();
-        $message->component = 'enrol_mpcheckoutpro';
+        $message->component = 'enrol_mercadopagocpro';
         $message->name = $provider;
         $message->userfrom = \core_user::get_noreply_user();
         $message->userto = $user;
-        $message->subject = get_string('message_' . $provider . '_subject', 'enrol_mpcheckoutpro', $a);
-        $message->fullmessage = get_string('message_' . $provider . '_body', 'enrol_mpcheckoutpro', $a);
+        $message->subject = get_string('message_' . $provider . '_subject', 'enrol_mercadopagocpro', $a);
+        $message->fullmessage = get_string('message_' . $provider . '_body', 'enrol_mercadopagocpro', $a);
         $message->fullmessageformat = FORMAT_PLAIN;
         $message->fullmessagehtml = text_to_html($message->fullmessage, false, false, true);
         $message->smallmessage = $message->subject;
@@ -146,14 +149,14 @@ class payment_notifier
         \stdClass $buyer,
         \stdClass $a,
     ): void {
-        $recipients = get_users_by_capability($context, 'enrol/mpcheckoutpro:viewtransactions', 'u.*');
+        $recipients = get_users_by_capability($context, 'enrol/mercadopagocpro:viewtransactions', 'u.*');
         if (!$recipients) {
             return;
         }
 
         $stringkey = $event === self::EVENT_APPROVED ? 'staffapproved' : 'staffreversed';
-        $subject = get_string('message_' . $stringkey . '_subject', 'enrol_mpcheckoutpro', $a);
-        $body = get_string('message_' . $stringkey . '_body', 'enrol_mpcheckoutpro', $a);
+        $subject = get_string('message_' . $stringkey . '_subject', 'enrol_mercadopagocpro', $a);
+        $body = get_string('message_' . $stringkey . '_body', 'enrol_mercadopagocpro', $a);
         $reporturl = util::plugin_url('transactions.php', ['courseid' => $course->id])->out(false);
 
         foreach ($recipients as $recipient) {
@@ -161,7 +164,7 @@ class payment_notifier
                 continue;
             }
             $message = new message();
-            $message->component = 'enrol_mpcheckoutpro';
+            $message->component = 'enrol_mercadopagocpro';
             $message->name = 'teacher_notification';
             $message->userfrom = \core_user::get_noreply_user();
             $message->userto = $recipient;
@@ -172,7 +175,7 @@ class payment_notifier
             $message->smallmessage = $subject;
             $message->notification = 1;
             $message->contexturl = $reporturl;
-            $message->contexturlname = get_string('transactions', 'enrol_mpcheckoutpro');
+            $message->contexturlname = get_string('transactions', 'enrol_mercadopagocpro');
             $message->courseid = $course->id;
 
             message_send($message);
@@ -185,7 +188,8 @@ class payment_notifier
      * @param  \stdClass $transaction
      * @return string
      */
-    protected function format_amount(\stdClass $transaction): string {
+    protected function format_amount(\stdClass $transaction): string
+    {
         $amount = (float)$transaction->amount;
         $currency = (string)$transaction->currency;
         $locale = get_string('localecldr', 'langconfig');

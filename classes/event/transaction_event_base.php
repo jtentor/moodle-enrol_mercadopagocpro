@@ -14,26 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\event;
+namespace enrol_mercadopagocpro\event;
 
 /**
  * Shared behaviour for the events raised about a payment transaction.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class transaction_event_base extends \core\event\base
 {
+
     /**
      * Common initialisation: read only, course level, on the transaction table.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_OTHER;
-        $this->data['objecttable'] = 'enrol_mpcheckoutpro_txn';
+        $this->data['objecttable'] = 'enrol_mercadopagocpro_txn';
     }
 
     /**
@@ -44,7 +46,8 @@ abstract class transaction_event_base extends \core\event\base
      * @param  array     $other       extra values for the `other` payload
      * @return static
      */
-    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self {
+    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self
+    {
         $event = static::create(
             [
             'context' => \context_course::instance($instance->courseid),
@@ -61,12 +64,11 @@ abstract class transaction_event_base extends \core\event\base
                 'currency' => (string)$transaction->currency,
                 'enrolmentstate' => (string)$transaction->enrolmentstate,
                 'livemode' => (int)$transaction->livemode,
-                ],
-                $other
+                ], $other
             ),
             ]
         );
-        $event->add_record_snapshot('enrol_mpcheckoutpro_txn', $transaction);
+        $event->add_record_snapshot('enrol_mercadopagocpro_txn', $transaction);
         return $event;
     }
 
@@ -75,10 +77,10 @@ abstract class transaction_event_base extends \core\event\base
      *
      * @return \moodle_url
      */
-    public function get_url() {
+    public function get_url()
+    {
         return new \moodle_url(
-            '/enrol/mpcheckoutpro/transactions.php',
-            [
+            '/enrol/mercadopagocpro/transactions.php', [
             'courseid' => $this->contextinstanceid,
             'txn' => $this->objectid,
             ]

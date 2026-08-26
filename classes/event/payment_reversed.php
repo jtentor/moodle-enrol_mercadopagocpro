@@ -14,23 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\event;
+namespace enrol_mercadopagocpro\event;
 
 /**
  * A Mercado Pago payment was refunded, cancelled or charged back.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class payment_reversed extends transaction_event_base
 {
+
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         parent::init();
         $this->data['crud'] = 'u';
     }
@@ -40,8 +42,9 @@ class payment_reversed extends transaction_event_base
      *
      * @return string
      */
-    public static function get_name() {
-        return get_string('event:payment_reversed', 'enrol_mpcheckoutpro');
+    public static function get_name()
+    {
+        return get_string('event:payment_reversed', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -49,7 +52,8 @@ class payment_reversed extends transaction_event_base
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "The Mercado Pago payment '{$this->other['paymentid']}' for the user with id "
             . "'{$this->relateduserid}' moved to '{$this->other['status']}'; the enrolment in the course "
             . "with id '{$this->contextinstanceid}' is now '{$this->other['enrolmentstate']}'.";

@@ -1,10 +1,31 @@
 # Changelog
 
-All notable changes to `enrol_mpcheckoutpro` are documented here.
+All notable changes to `enrol_mercadopagocpro` are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] - 2026-08-25
+
+First release, under the component name `enrol_mercadopagocpro`.
+Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
+
+> **Two earlier component names were abandoned before release.**
+> `enrol_mp_checkoutpro` could not work at all: the underscore inside the plugin
+> name made core's `enrol_plugin::get_name()` resolve it to `mp`, so every instance
+> was stored under a plugin that does not exist and vanished from its course.
+> `enrol_mpcheckoutpro` worked, but that name is already taken in the Moodle
+> plugins directory by an unrelated project.
+>
+> `mercadopagocpro` is 15 characters, which matters: the core `enrol.enrol` column
+> is `char(20)`, so a longer plugin name is rejected outright on a strict database
+> and silently truncated on a lax one. `mercadopagocheckoutpro` (22) was ruled out
+> for exactly this reason.
+>
+> There is no upgrade path from either earlier name and none is needed — uninstall
+> the old plugin, then install this one. `cli/diagnose.php --fixorphans` clears
+> `enrol` rows left behind under `mp` or `mpcheckoutpro`.
+
+### Verified by the first PHPUnit run
 
 First execution of the PHPUnit suite (65 tests, 191 assertions, all passing on
 Moodle 5.2.2 / PHP 8.4.14 / MariaDB 12.0.2). It found three defects, fixed here:
@@ -28,23 +49,13 @@ Moodle 5.2.2 / PHP 8.4.14 / MariaDB 12.0.2). It found three defects, fixed here:
 - The test suite no longer inherits server level credentials. `credentials::resolve()`
   ranks the server configuration above the site settings, and PHPUnit's bootstrap
   discards `$CFG` but not the process environment, so a production
-  `MPCHECKOUTPRO_ACCESS_TOKEN` would have overridden the fake test token.
+  `MERCADOPAGOCPRO_ACCESS_TOKEN` would have overridden the fake test token.
 - Log context is typed and formatted consistently: `txnid` is always an integer,
   and both sides of an amount mismatch are formatted to two decimals.
 
-## [1.0.0] - 2026-08-23
-
-First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
-
-> **Replaces the unreleased `enrol_mp_checkoutpro`.** That component name put an
-> underscore inside the plugin name, which core cannot carry: `enrol_plugin::get_name()`
-> derives the name from the second word of the class, so every instance was stored
-> under a plugin called `mp` and disappeared from its course. There is no upgrade
-> path and none is needed — uninstall the old plugin, then install this one.
-
 ### Added
 
-- Checkout Pro enrolment method (`enrol_mpcheckoutpro_plugin`) with per course
+- Checkout Pro enrolment method (`enrol_mercadopagocpro_plugin`) with per course
   price, currency, role, duration, start/end dates, group assignment and a cap on
   the number of enrolled users.
 - **Course welcome message**, following `enrol_self`: a send option and a custom
@@ -88,7 +99,7 @@ First release. Requires Moodle 5.2.2 (2026042002.00) or a later 5.2 release.
   building and saving the instance form.
 - PHPUnit test suite with a mock HTTP client, and a Behat feature.
 
-### Fixed relative to the unreleased `enrol_mp_checkoutpro`
+### Fixed relative to the earlier unreleased builds
 
 - The plugin name no longer contains an underscore, so `get_name()` resolves
   correctly without an override and instances stay attached to their course.

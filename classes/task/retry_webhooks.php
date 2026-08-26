@@ -14,24 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\task;
+namespace enrol_mercadopagocpro\task;
 
-use enrol_mpcheckoutpro\local\util;
-use enrol_mpcheckoutpro\local\webhook_handler;
+use enrol_mercadopagocpro\local\util;
+use enrol_mercadopagocpro\local\webhook_handler;
 
 /**
  * Re-processes webhook notifications that were accepted but not settled at
  * reception time, either because the endpoint runs in deferred mode or because
  * the API call failed.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class retry_webhooks extends \core\task\scheduled_task
 {
+
     /**
-     * @var int Maximum notifications handled in one run.
+     * @var int Maximum notifications handled in one run. 
      */
     private const BATCH_SIZE = 50;
 
@@ -40,8 +41,9 @@ class retry_webhooks extends \core\task\scheduled_task
      *
      * @return string
      */
-    public function get_name() {
-        return get_string('task:retry_webhooks', 'enrol_mpcheckoutpro');
+    public function get_name()
+    {
+        return get_string('task:retry_webhooks', 'enrol_mercadopagocpro');
     }
 
     /**
@@ -49,9 +51,10 @@ class retry_webhooks extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
-        if (!enrol_is_enabled('mpcheckoutpro')) {
-            mtrace('enrol_mpcheckoutpro is disabled, skipping webhook retries.');
+    public function execute()
+    {
+        if (!enrol_is_enabled('mercadopagocpro')) {
+            mtrace('enrol_mercadopagocpro is disabled, skipping webhook retries.');
             return;
         }
 

@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace enrol_mpcheckoutpro\output;
+namespace enrol_mercadopagocpro\output;
 
-use enrol_mpcheckoutpro\local\status;
-use enrol_mpcheckoutpro\local\util;
+use enrol_mercadopagocpro\local\status;
+use enrol_mercadopagocpro\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -27,19 +27,20 @@ require_once $CFG->libdir . '/tablelib.php';
 /**
  * Transaction report table.
  *
- * @package   enrol_mpcheckoutpro
+ * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor <jtentor@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class transactions_table extends \core_table\sql_table
 {
+
     /**
-     * @var \context_course
+     * @var \context_course 
      */
     protected \context_course $context;
 
     /**
-     * @var bool Whether the viewer may trigger a manual reconciliation.
+     * @var bool Whether the viewer may trigger a manual reconciliation. 
      */
     protected bool $canreconcile;
 
@@ -64,17 +65,17 @@ class transactions_table extends \core_table\sql_table
         parent::__construct($uniqueid);
 
         $this->context = $context;
-        $this->canreconcile = has_capability('enrol/mpcheckoutpro:reconcile', $context);
+        $this->canreconcile = has_capability('enrol/mercadopagocpro:reconcile', $context);
 
         $columns = ['timecreated', 'user', 'amount', 'status', 'enrolmentstate', 'paymentmethod', 'paymentid'];
         $headers = [
             get_string('date'),
             get_string('user'),
-            get_string('cost', 'enrol_mpcheckoutpro'),
-            get_string('paymentstatus', 'enrol_mpcheckoutpro'),
-            get_string('enrolmentstate', 'enrol_mpcheckoutpro'),
-            get_string('paymentmethod', 'enrol_mpcheckoutpro'),
-            get_string('paymentid', 'enrol_mpcheckoutpro'),
+            get_string('cost', 'enrol_mercadopagocpro'),
+            get_string('paymentstatus', 'enrol_mercadopagocpro'),
+            get_string('enrolmentstate', 'enrol_mercadopagocpro'),
+            get_string('paymentmethod', 'enrol_mercadopagocpro'),
+            get_string('paymentid', 'enrol_mercadopagocpro'),
         ];
         if ($this->canreconcile) {
             $columns[] = 'actions';
@@ -109,7 +110,7 @@ class transactions_table extends \core_table\sql_table
 
         $this->set_sql(
             't.*, u.id AS uid, u.email' . $userfields->selects,
-            '{enrol_mpcheckoutpro_txn} t LEFT JOIN {user} u ON u.id = t.userid',
+            '{enrol_mercadopagocpro_txn} t LEFT JOIN {user} u ON u.id = t.userid',
             $where,
             $params
         );
@@ -121,7 +122,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_timecreated($row) {
+    public function col_timecreated($row)
+    {
         return userdate($row->timecreated);
     }
 
@@ -131,9 +133,10 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_user($row) {
+    public function col_user($row)
+    {
         if (empty($row->uid)) {
-            return get_string('deleteduser', 'enrol_mpcheckoutpro');
+            return get_string('deleteduser', 'enrol_mercadopagocpro');
         }
         $url = new \moodle_url('/user/view.php', ['id' => $row->uid, 'course' => $row->courseid]);
         return \html_writer::link($url, fullname($row));
@@ -145,19 +148,19 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_amount($row) {
+    public function col_amount($row)
+    {
         $text = $row->currency . ' ' . format_float((float)$row->amount, 2);
         if (!empty($row->marketplacefee)) {
             $text .= ' ' . \html_writer::tag(
                 'small',
-                '(' . get_string('marketplacefee', 'enrol_mpcheckoutpro') . ': '
+                '(' . get_string('marketplacefee', 'enrol_mercadopagocpro') . ': '
                 . format_float((float)$row->marketplacefee, 2) . ')'
             );
         }
         if (empty($row->livemode)) {
             $text .= ' ' . \html_writer::tag(
-                'span',
-                get_string('testmode', 'enrol_mpcheckoutpro'),
+                'span', get_string('testmode', 'enrol_mercadopagocpro'),
                 ['class' => 'badge bg-warning text-dark']
             );
         }
@@ -170,7 +173,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_status($row) {
+    public function col_status($row)
+    {
         $classes = [
             status::APPROVED => 'bg-success',
             status::PENDING => 'bg-info',
@@ -196,8 +200,9 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_enrolmentstate($row) {
-        return get_string('enrolmentstate_' . $row->enrolmentstate, 'enrol_mpcheckoutpro');
+    public function col_enrolmentstate($row)
+    {
+        return get_string('enrolmentstate_' . $row->enrolmentstate, 'enrol_mercadopagocpro');
     }
 
     /**
@@ -206,7 +211,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentmethod($row) {
+    public function col_paymentmethod($row)
+    {
         $parts = array_filter(
             [
             (string)$row->paymenttypeid,
@@ -215,7 +221,7 @@ class transactions_table extends \core_table\sql_table
         );
         $text = $parts ? s(implode(' / ', $parts)) : '-';
         if (!empty($row->installments) && $row->installments > 1) {
-            $text .= ' ' . get_string('installmentsx', 'enrol_mpcheckoutpro', $row->installments);
+            $text .= ' ' . get_string('installmentsx', 'enrol_mercadopagocpro', $row->installments);
         }
         return $text;
     }
@@ -226,7 +232,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentid($row) {
+    public function col_paymentid($row)
+    {
         $text = $row->paymentid ? s($row->paymentid) : '-';
         return $text . \html_writer::empty_tag('br')
             . \html_writer::tag('small', s($row->externalreference));
@@ -238,15 +245,15 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_actions($row) {
+    public function col_actions($row)
+    {
         global $OUTPUT;
 
         if (in_array($row->status, status::terminal(), true) && $row->status !== status::APPROVED) {
             return '';
         }
         $url = util::plugin_url(
-            'transactions.php',
-            [
+            'transactions.php', [
             'courseid' => $row->courseid,
             'action' => 'reconcile',
             'txn' => $row->id,
@@ -255,7 +262,7 @@ class transactions_table extends \core_table\sql_table
         );
         return $OUTPUT->action_icon(
             $url,
-            new \pix_icon('t/reload', get_string('reconcilenow', 'enrol_mpcheckoutpro'))
+            new \pix_icon('t/reload', get_string('reconcilenow', 'enrol_mercadopagocpro'))
         );
     }
 }
