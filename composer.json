@@ -1,11 +1,11 @@
 {
     "name": "jtentor/moodle-enrol_mercadopagocpro",
-    "description": "Moodle enrolment plugin that enrols students after payment through Mercado Pago Checkout Pro.",
+    "description": "Moodle enrolment plugin that enrols students after payment through Mercado Pago Checkout Pro. NOTE: this file records how the bundled SDK under vendor/mercadopago/src was produced. Do NOT run composer install in this directory on a live site: it creates vendor/autoload.php, which sdk::register() prefers, so a second copy of the SDK would shadow the audited bundle. Development tools belong in the Moodle root vendor/.",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "require": {
         "php": ">=8.2",
-        "mercadopago/dx-php": "^3.14"
+        "mercadopago/dx-php": "3.14.0"
     },
     "config": {
         "vendor-dir": "vendor",

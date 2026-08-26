@@ -383,13 +383,61 @@ $sdkok = false;
 if ($classloadable) {
     $sdkok = \enrol_mercadopagocpro\local\sdk::is_available();
 }
+$loadedversion = $sdkok ? \enrol_mercadopagocpro\local\sdk::get_version() : null;
 mpcp_report(
     $sdkok,
     'Mercado Pago PHP SDK',
-    $sdkok ? 'version ' . \enrol_mercadopagocpro\local\sdk::get_version() : 'NOT FOUND',
+    $sdkok ? 'version ' . $loadedversion : 'NOT FOUND',
     'vendor/mercadopago/src/MercadoPago is missing from the plugin directory. Some zip '
-        . 'tools skip a directory named vendor. Restore it, or run composer install --no-dev '
-        . 'inside enrol/mercadopagocpro.'
+        . 'tools skip a directory named vendor. Restore it.'
+);
+
+// The version that actually loaded must be the one thirdpartylibs.xml declares.
+// Running composer inside the plugin directory creates vendor/autoload.php, which
+// sdk::register() prefers over the bundled sources, so a second copy of the SDK
+// silently shadows the audited one. thirdpartylibs.xml is the source of truth.
+$declaredversion = null;
+$tplfile = $expecteddir . '/thirdpartylibs.xml';
+if (file_exists($tplfile)) {
+    $tpl = @simplexml_load_file($tplfile);
+    if ($tpl !== false) {
+        foreach ($tpl->library as $lib) {
+            if (strpos((string)$lib->location, 'mercadopago') !== false) {
+                $declaredversion = trim((string)$lib->version);
+            }
+        }
+    }
+}
+if ($sdkok && $declaredversion !== null) {
+    mpcp_report(
+        $loadedversion === $declaredversion,
+        'SDK version matches thirdpartylibs.xml',
+        'loaded ' . $loadedversion . ', declared ' . $declaredversion,
+        'The SDK that loaded is not the one this plugin ships and audits. The usual '
+            . 'cause is a composer install run inside enrol/mercadopagocpro, which '
+            . 'creates vendor/autoload.php and a second copy of the SDK under '
+            . 'vendor/mercadopago/dx-php. sdk::register() prefers that autoloader, so '
+            . 'the bundled sources are ignored. Remove vendor/autoload.php, '
+            . 'vendor/composer and vendor/mercadopago/dx-php, or update '
+            . 'thirdpartylibs.xml to match.'
+    );
+}
+
+// Development tooling must never travel inside a released plugin.
+$strays = [];
+foreach (['vendor/autoload.php', 'vendor/composer', 'vendor/mercadopago/dx-php',
+    'vendor/squizlabs', 'vendor/moodlehq', 'vendor/phpcsstandards', 'composer.lock'] as $stray) {
+    if (file_exists($expecteddir . '/' . $stray)) {
+        $strays[] = $stray;
+    }
+}
+mpcp_report(
+    empty($strays) ? true : null,
+    'No composer artefacts in the plugin directory',
+    empty($strays) ? 'clean' : implode(', ', $strays),
+    'These come from running composer inside enrol/mercadopagocpro. The plugin ships '
+        . 'the SDK sources directly and needs no composer install; development tools '
+        . 'belong in the Moodle root vendor directory. Delete them before packaging.'
 );
 
 mpcp_report(

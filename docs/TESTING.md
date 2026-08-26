@@ -46,16 +46,34 @@ Mercado Pago checkout itself is out of Behat's reach.
 
 ### Code checks
 
-Run `phpcs` and `phpcbf` from **inside the plugin directory** so they pick up the
-bundled `.phpcs.xml`, which is the only configuration that is safe here:
+Install the tooling **in the Moodle root**, never inside the plugin:
 
 ```bash
-cd enrol/mercadopagocpro
-../../vendor/bin/phpcs           # uses .phpcs.xml
-../../vendor/bin/phpcbf          # same rules, applies the fixes
-cd ../..
-php admin/cli/check_database_schema.php
+cd /path/to/moodle          # the Moodle root, NOT enrol/mercadopagocpro
+composer require --dev moodlehq/moodle-cs
 ```
+
+Running composer inside `enrol/mercadopagocpro` looks equivalent and is not: the
+plugin has its own `composer.json`, so composer would resolve it, install a second
+copy of the Mercado Pago SDK under `vendor/mercadopago/dx-php`, and create
+`vendor/autoload.php`. `sdk::register()` prefers that autoloader over the bundled
+sources, so the audited SDK would be silently shadowed — and the development tools
+would end up inside the plugin, ready to ship with it. `cli/diagnose.php` checks
+for both situations.
+
+Then run `phpcs` and `phpcbf` from **inside the plugin directory** so they pick up
+the bundled `.phpcs.xml`, which is the only configuration that is safe here:
+
+```bash
+cd public/enrol/mercadopagocpro       # drop "public/" on a pre-5.0 layout
+../../../vendor/bin/phpcs             # uses .phpcs.xml
+../../../vendor/bin/phpcbf            # same rules, applies the fixes
+cd ../../..
+php public/admin/cli/check_database_schema.php
+```
+
+The binary comes from the Moodle root `vendor/`; the ruleset comes from the
+current directory. That is why the `cd` matters.
 
 `.phpcs.xml` does two things that matter, and running `phpcbf` without it will
 damage the plugin:

@@ -17,7 +17,7 @@ Checkout Pro** and be enrolled automatically once the payment is credited.
 
 ## How it works
 
-```
+```text
 Student clicks "Pay with Mercado Pago"
         │
         ▼
@@ -81,7 +81,7 @@ If you are moving from one of those builds, uninstall it first — *Site adminis
 If an earlier build left rows behind in the `enrol` table under the names `mp` or `mpcheckoutpro`, `php enrol/mercadopagocpro/cli/diagnose.php --fixorphans`
 removes them.
 
-## AI-Assisted Technology Statement:
+## AI-Assisted Technology Statement
 
 During the development and documentation of this project, the large languages models Claude Opus 5 (Anthropic, 2026), ChatGPT GPT-5.6 Sol (OpenAI, 2026) and GitHub Copilot (Microsoft, 2026), was utilized.
 
@@ -163,4 +163,3 @@ It also carries a **course welcome message**, behaving exactly as in `enrol_self
 - [Anthropic. Claude Opus 5](https://claude.ai)
 - [OpenAI. ChatGPT GPT-5.6 Sol](https://chat.openai.com)
 - [Microsoft. GitHub Copilot](https://github.com/features/copilot)
-
