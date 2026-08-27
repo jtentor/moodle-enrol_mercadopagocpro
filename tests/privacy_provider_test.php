@@ -39,6 +39,7 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
  */
 final class privacy_provider_test extends \advanced_testcase
 {
+
     use helper_trait;
 
     /**
@@ -46,7 +47,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return array{0:\stdClass,1:\stdClass,2:\stdClass}
      */
-    protected function create_transaction(): array {
+    protected function create_transaction(): array
+    {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
         $user = $this->getDataGenerator()->create_user();
@@ -59,7 +61,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_get_metadata(): void {
+    public function test_get_metadata(): void
+    {
         $collection = provider::get_metadata(new \core_privacy\local\metadata\collection('enrol_mercadopagocpro'));
         $items = $collection->get_collection();
         $this->assertNotEmpty($items);
@@ -70,7 +73,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_get_contexts_for_userid(): void {
+    public function test_get_contexts_for_userid(): void
+    {
         [$course, , $user] = $this->create_transaction();
 
         $contextlist = provider::get_contexts_for_userid((int)$user->id);
@@ -86,7 +90,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_get_users_in_context(): void {
+    public function test_get_users_in_context(): void
+    {
         [$course, , $user] = $this->create_transaction();
 
         $context = \context_course::instance($course->id);
@@ -101,7 +106,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_export_user_data(): void {
+    public function test_export_user_data(): void
+    {
         [$course, , $user] = $this->create_transaction();
         $context = \context_course::instance($course->id);
 
@@ -124,7 +130,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_delete_data_for_all_users_in_context(): void {
+    public function test_delete_data_for_all_users_in_context(): void
+    {
         global $DB;
 
         [$course] = $this->create_transaction();
@@ -138,7 +145,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_delete_data_for_user(): void {
+    public function test_delete_data_for_user(): void
+    {
         global $DB;
 
         [$course, $instance, $user] = $this->create_transaction();
@@ -162,7 +170,8 @@ final class privacy_provider_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_delete_data_for_users(): void {
+    public function test_delete_data_for_users(): void
+    {
         global $DB;
 
         [$course, $instance, $user] = $this->create_transaction();

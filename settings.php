@@ -31,6 +31,7 @@ use enrol_mercadopagocpro\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
+
     // Diagnostics.
     $notices = [];
     if (!sdk::is_available()) {
@@ -52,8 +53,7 @@ if ($ADMIN->fulltree) {
     }
     $notices[] = new \core\output\notification(
         get_string(
-            'webhookurl_desc',
-            'enrol_mercadopagocpro',
+            'webhookurl_desc', 'enrol_mercadopagocpro',
             util::plugin_url('webhook.php')->out(false)
         ),
         \core\output\notification::NOTIFY_INFO
@@ -357,9 +357,7 @@ if ($ADMIN->fulltree) {
             'enrol_mercadopagocpro_marketplace',
             get_string('settings_marketplace', 'enrol_mercadopagocpro'),
             get_string(
-                'settings_marketplace_desc',
-                'enrol_mercadopagocpro',
-                [
+                'settings_marketplace_desc', 'enrol_mercadopagocpro', [
                 'redirecturi' => oauth_helper::get_redirect_uri()->out(false),
                 ]
             )

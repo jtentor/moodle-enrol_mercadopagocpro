@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $string['accesstoken'] = 'Access token';
 $string['accesstoken_desc'] = 'Production access token of your Mercado Pago application. Used as the Bearer token for every API call.';
 $string['advancedpreference'] = 'Checkout Pro advanced options';
-
-// Enrolment page.
 $string['allowinstancecredentials'] = 'Allow per-course credentials';
 $string['allowinstancecredentials_desc'] = 'Let each enrolment instance store its own Mercado Pago credentials. Useful when different departments collect into different accounts. Instance credentials are encrypted and are never included in course backups.';
 $string['allstatuses'] = 'All statuses';
@@ -45,8 +43,6 @@ $string['binarymode'] = 'Binary mode';
 $string['binarymode_desc'] = 'When enabled, a payment can only be approved or rejected - never left pending. This reduces the approval rate, so leave it off unless you need it.';
 $string['categoryid'] = 'Item category';
 $string['categoryid_help'] = 'Mercado Pago item <code>category_id</code>. <code>learnings</code> is the category for courses and training.';
-
-// Split payments.
 $string['checkoutratelimit'] = 'Checkout rate limit';
 $string['checkoutratelimit_desc'] = 'Maximum payment preferences a single user may create per minute. Set to 0 to disable.';
 $string['cleanupafter'] = 'Retention period';
@@ -78,8 +74,6 @@ $string['enrolmentstate_none'] = 'Not enrolled';
 $string['enrolmentstate_pending'] = 'Holding place';
 $string['enrolmentstate_suspended'] = 'Suspended';
 $string['enrolmentstate_unenrolled'] = 'Unenrolled';
-
-// Payment types.
 $string['enrolperiod'] = 'Enrolment duration';
 $string['enrolperiod_desc'] = 'Default length of the enrolment bought. Set to 0 for unlimited.';
 $string['enrolperiod_help'] = 'How long the access bought lasts, counted from the moment the payment is approved. Leave empty for unlimited access.';
@@ -111,8 +105,6 @@ $string['error:noinitpoint'] = 'Mercado Pago did not return a checkout URL for t
 $string['error:notavailable'] = 'This enrolment method is not available right now. Please contact the course administrator.';
 $string['error:oauthdenied'] = 'The Mercado Pago seller did not authorise the connection ({$a}).';
 $string['error:oauthexchange'] = 'The authorisation code could not be exchanged for a seller token.';
-
-// Events.
 $string['error:oauthincomplete'] = 'Mercado Pago did not return an authorisation code.';
 $string['error:oauthstate'] = 'The authorisation response could not be matched to a request. Please start the connection again.';
 $string['error:preferencefailed'] = 'The payment could not be created at Mercado Pago. Please try again in a few minutes.';
@@ -127,8 +119,6 @@ $string['event:payment_updated'] = 'Payment status updated';
 $string['event:preference_created'] = 'Checkout preference created';
 $string['event:webhook_received'] = 'Mercado Pago notification received';
 $string['event:webhook_rejected'] = 'Mercado Pago notification rejected';
-
-// Tasks.
 $string['excludedpaymentmethods'] = 'Excluded payment methods';
 $string['excludedpaymentmethods_desc'] = 'Comma separated list of payment method ids that will not be offered, for example <code>master,amex</code>.';
 $string['excludedpaymentmethods_help'] = 'Maps to <code>payment_methods.excluded_payment_methods</code> in the preference. Use the ids returned by <code>GET /v1/payment_methods</code>.';
@@ -148,8 +138,6 @@ $string['expirymessageenrollerbody'] = 'Mercado Pago enrolments in the course \'
 {$a->users}
 
 To change this, go to {$a->extendurl}';
-
-// Privacy.
 $string['expirymessageenrollersubject'] = 'Mercado Pago enrolment expiry notification';
 $string['externalreference'] = 'Reference';
 $string['installments'] = 'Maximum installments';
@@ -169,8 +157,6 @@ $string['itemdescription_help'] = 'Shown to the buyer on the Mercado Pago checko
 $string['keepcredentials'] = 'Keep the stored credentials';
 $string['keepcredentials_help'] = 'This instance already has its own credentials. Leave this checked to keep them; uncheck it and save with the fields empty to delete them and fall back to the site credentials.';
 $string['keepthisreference'] = 'Keep the reference above if you need to contact support about this payment.';
-
-// Report.
 $string['lastupdate'] = 'Last update';
 $string['marketplaceclientid'] = 'Application client id';
 $string['marketplaceclientid_desc'] = 'The client id (application number) of your Mercado Pago marketplace application.';
@@ -187,8 +173,6 @@ $string['maxenrolled_help'] = 'Once this many users hold an active enrolment thr
 $string['mercadopagocpro:config'] = 'Configure Mercado Pago Checkout Pro enrolment instances';
 $string['mercadopagocpro:manage'] = 'Manage enrolled users';
 $string['mercadopagocpro:reconcile'] = 'Re-check a payment against the Mercado Pago API';
-
-// Setting groups.
 $string['mercadopagocpro:unenrol'] = 'Unenrol users from the course';
 $string['mercadopagocpro:unenrolself'] = 'Unenrol self from the course';
 $string['mercadopagocpro:viewtransactions'] = 'View Mercado Pago payment transactions';
@@ -247,8 +231,6 @@ $string['paymentmethod'] = 'Payment method';
 $string['paymentresult'] = 'Payment result';
 $string['paymentstatus'] = 'Payment status';
 $string['paymenttype_atm'] = 'ATM';
-
-// Errors.
 $string['paymenttype_bank_transfer'] = 'Bank transfer';
 $string['paymenttype_credit_card'] = 'Credit card';
 $string['paymenttype_debit_card'] = 'Debit card';
@@ -258,16 +240,10 @@ $string['pendingholding'] = 'Hold a place for pending payments';
 $string['pendingholding_desc'] = 'Create a suspended enrolment as soon as an offline payment (cash coupon, bank transfer) is generated, and activate it when the money is credited.';
 $string['pendingholding_help'] = 'A suspended enrolment does not give access to the course, but it shows on the participants list so teachers can see who is in the middle of paying.';
 $string['pendingpaymentnotice'] = 'You already have a payment being processed ({$a}). You will be enrolled automatically as soon as it is credited.';
-
-// Result page.
 $string['platformid'] = 'Platform id';
 $string['platformid_desc'] = 'Optional platform id supplied by Mercado Pago for platform tracking.';
-
-// Instance form.
 $string['pluginname'] = 'Mercado Pago Checkout Pro';
 $string['pluginname_desc'] = 'The Mercado Pago Checkout Pro enrolment method lets students pay for a course through Mercado Pago and be enrolled automatically once the payment is credited.';
-
-// Capabilities.
 $string['preferenceexpiry'] = 'Preference validity';
 $string['preferenceexpiry_desc'] = 'How long a payment link stays valid. Set to 0 to send no expiration dates.';
 $string['privacy:metadata:mercadopago'] = 'To take a payment, some data has to be sent to Mercado Pago.';
@@ -275,8 +251,6 @@ $string['privacy:metadata:mercadopago:email'] = 'The email address of the buyer,
 $string['privacy:metadata:mercadopago:external_reference'] = 'An internal reference that identifies the purchase on this site.';
 $string['privacy:metadata:mercadopago:firstname'] = 'The first name of the buyer.';
 $string['privacy:metadata:mercadopago:item'] = 'The name and price of the course being purchased.';
-
-// Course welcome message.
 $string['privacy:metadata:mercadopago:lastname'] = 'The last name of the buyer.';
 $string['privacy:metadata:mercadopago:metadata'] = 'The internal Moodle site, course, user and transaction ids of the purchase.';
 $string['privacy:metadata:txn'] = 'Information about payments made through Mercado Pago Checkout Pro to enrol in a course.';
@@ -296,14 +270,10 @@ $string['publickey'] = 'Public key';
 $string['publickey_desc'] = 'Production public key of your Mercado Pago application.';
 $string['reconcilemaxage'] = 'Maximum reconciliation age';
 $string['reconcilemaxage_desc'] = 'Stop re-checking transactions older than this.';
-
-// Preference.
 $string['reconcilemaxattempts'] = 'Maximum reconciliation attempts';
 $string['reconcilemaxattempts_desc'] = 'Stop re-checking a transaction against the API after this many attempts.';
 $string['reconcilenow'] = 'Re-check with Mercado Pago';
 $string['reconcileresult'] = 'Re-check finished: {$a}';
-
-// Payment statuses.
 $string['reconnectseller'] = 'Reconnect the Mercado Pago seller';
 $string['redirectnotice'] = 'You will be taken to Mercado Pago to complete the payment and brought back here afterwards.';
 $string['requiresignature'] = 'Require a valid signature';
@@ -326,8 +296,6 @@ $string['reversalsuspend'] = 'Suspend the enrolment and remove the role';
 $string['reversalunenrol'] = 'Unenrol the user';
 $string['sdkversion'] = 'Mercado Pago PHP SDK version {$a} detected.';
 $string['sellerconnected'] = 'The Mercado Pago seller {$a} is now connected to this enrolment method.';
-
-// Enrolment behaviour.
 $string['sellerconnection'] = 'Seller account';
 $string['sellerid'] = 'Seller id';
 $string['sellerid_help'] = 'The Mercado Pago user id of the seller that collects for this course. It is filled in automatically when you connect a seller.';
@@ -336,14 +304,10 @@ $string['sendcoursewelcomemessage_desc'] = 'Default for new enrolment instances.
 $string['sendcoursewelcomemessage_help'] = 'The welcome message is sent once, when the payment is approved and the enrolment becomes active. It is not sent for a pending payment, and not sent again if a reversed payment is later reinstated.
 
 Core\'s "From the key holder" option is not offered here: it resolves the sender through the self enrolment key holder capability, and a paid enrolment has no key holder.';
-
-// Mercado Pago account only.
 $string['settings_behaviour'] = 'Enrolment behaviour';
 $string['settings_credentials'] = 'Mercado Pago credentials';
 $string['settings_credentials_desc'] = 'Credentials come from <em>Your integrations</em> in the Mercado Pago developer dashboard. They can also be supplied from config.php as <code>$CFG->enrol_mercadopagocpro</code> or from the <code>MERCADOPAGOCPRO_ACCESS_TOKEN</code>, <code>MERCADOPAGOCPRO_PUBLIC_KEY</code> and <code>MERCADOPAGOCPRO_WEBHOOK_SECRET</code> environment variables, which take precedence over the values stored here.';
 $string['settings_diagnostics'] = 'Diagnostics and performance';
-
-// Credentials.
 $string['settings_marketplace'] = 'Split payments (marketplace)';
 $string['settings_marketplace_desc'] = 'Split payments let a marketplace collect a commission on each sale. Register <code>{$a->redirecturi}</code> as the redirect URI of your Mercado Pago application before connecting any seller.';
 $string['settings_preference'] = 'Checkout Pro preference';
@@ -372,8 +336,6 @@ $string['status_refunded'] = 'Refunded';
 $string['status_rejected'] = 'Rejected';
 $string['status_unknown'] = 'Unknown ({$a})';
 $string['task:cleanup_records'] = 'Clean up Mercado Pago records';
-
-// Messages.
 $string['task:process_expirations'] = 'Process Mercado Pago enrolment expirations';
 $string['task:reconcile_payments'] = 'Reconcile Mercado Pago payments';
 $string['task:retry_webhooks'] = 'Retry Mercado Pago notifications';
@@ -385,8 +347,6 @@ $string['testpublickey'] = 'Test public key';
 $string['testwebhooksecret'] = 'Test webhook secret signature';
 $string['transactions'] = 'Mercado Pago transactions';
 $string['usesitedefault'] = 'Use the site default';
-
-// Diagnostics.
 $string['walletpurchase'] = 'Require a Mercado Pago account';
 $string['walletpurchase_desc'] = 'Sends <code>purpose=wallet_purchase</code> in the preference, so only buyers logged in to a Mercado Pago account can pay. That is what makes account money and saved cards available at the checkout. The trade-off is real: buyers without an account cannot pay at all, and cash coupons and bank transfer disappear. Leave this off to accept guests paying by card.';
 $string['webhookratelimit'] = 'Webhook rate limit';
@@ -394,5 +354,3 @@ $string['webhookratelimit_desc'] = 'Maximum notifications accepted per minute pe
 $string['webhooksecret'] = 'Webhook secret signature';
 $string['webhooksecret_desc'] = 'The secret signature shown next to your webhook configuration in <em>Your integrations</em>. Without it, incoming notifications cannot be verified.';
 $string['webhookurl_desc'] = 'Configure this URL as the webhook endpoint of your Mercado Pago application: <code>{$a}</code>';
-
-// Webhooks.

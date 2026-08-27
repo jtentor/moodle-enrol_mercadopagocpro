@@ -25,13 +25,14 @@ namespace enrol_mercadopagocpro\local;
  */
 final class util
 {
+
     /**
-     * @var string Prefix of every external_reference this plugin generates.
+     * @var string Prefix of every external_reference this plugin generates. 
      */
     public const REFERENCE_PREFIX = 'mpcp';
 
     /**
-     * @var string[] Keys that must never be written to the database or the log.
+     * @var string[] Keys that must never be written to the database or the log. 
      */
     private const REDACT_KEYS = [
         'access_token', 'refresh_token', 'client_secret', 'public_key', 'authorization',
@@ -51,7 +52,8 @@ final class util
      * @param  int $userid  buyer id
      * @return string
      */
-    public static function build_external_reference(int $txnid, int $enrolid, int $userid): string {
+    public static function build_external_reference(int $txnid, int $enrolid, int $userid): string
+    {
         $body = sprintf('%s-%d-%d-%d', self::REFERENCE_PREFIX, $enrolid, $userid, $txnid);
         return $body . '-' . substr(self::sign($body), 0, 16);
     }
@@ -62,7 +64,8 @@ final class util
      * @param  string|null $reference
      * @return array{enrolid:int,userid:int,txnid:int}|null null when it is not ours or the signature fails.
      */
-    public static function parse_external_reference(?string $reference): ?array {
+    public static function parse_external_reference(?string $reference): ?array
+    {
         if ($reference === null || $reference === '') {
             return null;
         }
@@ -92,7 +95,8 @@ final class util
      * @param  string $value
      * @return string hex digest
      */
-    private static function sign(string $value): string {
+    private static function sign(string $value): string
+    {
         return hash_hmac('sha256', $value, self::get_reference_secret());
     }
 
@@ -101,7 +105,8 @@ final class util
      *
      * @return string
      */
-    private static function get_reference_secret(): string {
+    private static function get_reference_secret(): string
+    {
         $secret = get_config('enrol_mercadopagocpro', 'referencesecret');
         if (empty($secret)) {
             $secret = bin2hex(random_bytes(32));
@@ -117,7 +122,8 @@ final class util
      * @param  int   $depth internal guard against pathological structures
      * @return mixed
      */
-    public static function redact($data, int $depth = 0) {
+    public static function redact($data, int $depth = 0)
+    {
         if ($depth > 12) {
             return '(truncated)';
         }
@@ -146,7 +152,8 @@ final class util
      * @param  int   $maxlength
      * @return string
      */
-    public static function encode_for_storage($data, int $maxlength = 60000): string {
+    public static function encode_for_storage($data, int $maxlength = 60000): string
+    {
         $json = json_encode(self::redact($data), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($json === false) {
             return '{"error":"json_encode failed"}';
@@ -170,7 +177,8 @@ final class util
      * @param  array  $context
      * @return void
      */
-    public static function log_debug(string $message, array $context = []): void {
+    public static function log_debug(string $message, array $context = []): void
+    {
         if (!get_config('enrol_mercadopagocpro', 'debuglogging')) {
             return;
         }
@@ -184,7 +192,8 @@ final class util
      * @param  array  $context
      * @return void
      */
-    public static function log_error(string $message, array $context = []): void {
+    public static function log_error(string $message, array $context = []): void
+    {
         self::write_log('ERROR', $message, $context);
     }
 
@@ -196,7 +205,8 @@ final class util
      * @param  array  $context
      * @return void
      */
-    private static function write_log(string $level, string $message, array $context): void {
+    private static function write_log(string $level, string $message, array $context): void
+    {
         $line = '[enrol_mercadopagocpro][' . $level . '] ' . $message;
         if ($context) {
             $line .= ' ' . self::encode_for_storage($context, 4000);
@@ -215,7 +225,8 @@ final class util
      * @param  array  $params query parameters
      * @return \moodle_url
      */
-    public static function plugin_url(string $script, array $params = []): \moodle_url {
+    public static function plugin_url(string $script, array $params = []): \moodle_url
+    {
         return new \moodle_url('/enrol/mercadopagocpro/' . $script, $params);
     }
 
@@ -225,7 +236,8 @@ final class util
      *
      * @return bool
      */
-    public static function site_is_https(): bool {
+    public static function site_is_https(): bool
+    {
         global $CFG;
         return strpos((string)$CFG->wwwroot, 'https://') === 0;
     }
@@ -236,7 +248,8 @@ final class util
      * @param  float $amount
      * @return float
      */
-    public static function normalise_amount(float $amount): float {
+    public static function normalise_amount(float $amount): float
+    {
         return round($amount, 2);
     }
 
@@ -245,7 +258,8 @@ final class util
      *
      * @return string[] ISO-4217 codes
      */
-    public static function supported_currencies(): array {
+    public static function supported_currencies(): array
+    {
         return ['ARS', 'BRL', 'CLP', 'COP', 'MXN', 'PEN', 'UYU'];
     }
 }

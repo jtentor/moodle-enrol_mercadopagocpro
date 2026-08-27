@@ -32,12 +32,14 @@ use enrol_mercadopagocpro\local\webhook_handler;
  */
 class cleanup_records extends \core\task\scheduled_task
 {
+
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:cleanup_records', 'enrol_mercadopagocpro');
     }
 
@@ -46,7 +48,8 @@ class cleanup_records extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         global $DB;
 
         $keepfor = (int)get_config('enrol_mercadopagocpro', 'cleanupafter');

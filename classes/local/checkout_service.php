@@ -27,6 +27,7 @@ use enrol_mercadopagocpro\event\preference_created;
  */
 class checkout_service
 {
+
     /**
      * Constructor.
      *
@@ -34,7 +35,7 @@ class checkout_service
      */
     public function __construct(
         /**
-         * @var api_client|null
+         * @var api_client|null 
          */
         protected ?api_client $client = null,
     ) {
@@ -48,7 +49,8 @@ class checkout_service
      * @return array{transaction:\stdClass,redirecturl:string}
      * @throws \moodle_exception on any condition that prevents the purchase
      */
-    public function start(\stdClass $instance, \stdClass $user): array {
+    public function start(\stdClass $instance, \stdClass $user): array
+    {
         global $DB;
 
         $settings = instance_settings::from_instance($instance);
@@ -119,7 +121,8 @@ class checkout_service
      * @return string
      * @see    https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/integration-test/test-purchases
      */
-    protected function pick_init_point(object $preference, credentials $credentials): string {
+    protected function pick_init_point(object $preference, credentials $credentials): string
+    {
         unset($credentials);
         return (string)($preference->init_point ?? '');
     }
@@ -133,7 +136,8 @@ class checkout_service
      * @return void
      * @throws \moodle_exception
      */
-    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void {
+    protected function validate(\stdClass $instance, \stdClass $user, instance_settings $settings): void
+    {
         global $DB;
 
         if ((int)$instance->status !== ENROL_INSTANCE_ENABLED) {
@@ -172,8 +176,7 @@ class checkout_service
             throw new \moodle_exception('error:coursefull', 'enrol_mercadopagocpro');
         }
 
-        if (
-            $settings->marketplaceenabled && $settings->marketplacefee > 0
+        if ($settings->marketplaceenabled && $settings->marketplacefee > 0
             && $settings->marketplacefee >= $settings->cost
         ) {
             throw new \moodle_exception('error:feetoolarge', 'enrol_mercadopagocpro');

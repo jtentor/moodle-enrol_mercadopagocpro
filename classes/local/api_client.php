@@ -41,6 +41,7 @@ use MercadoPago\Exceptions\MPApiException;
  */
 class api_client
 {
+
     /**
      * Constructor.
      *
@@ -48,7 +49,7 @@ class api_client
      */
     public function __construct(
         /**
-         * @var credentials
+         * @var credentials 
          */
         protected credentials $credentials,
     ) {
@@ -61,7 +62,8 @@ class api_client
      * @param  string|null $idempotencykey value for the X-Idempotency-Key header
      * @return RequestOptions
      */
-    protected function request_options(?string $idempotencykey = null): RequestOptions {
+    protected function request_options(?string $idempotencykey = null): RequestOptions
+    {
         $options = new RequestOptions();
         $options->setAccessToken($this->credentials->get_access_token());
         if ($idempotencykey !== null && $idempotencykey !== '') {
@@ -78,13 +80,13 @@ class api_client
      * @return \MercadoPago\Resources\Preference
      * @throws api_exception
      */
-    public function create_preference(array $request, ?string $idempotencykey = null) {
+    public function create_preference(array $request, ?string $idempotencykey = null)
+    {
         return $this->call(
             function () use ($request, $idempotencykey) {
                 $client = new PreferenceClient();
                 return $client->create($request, $this->request_options($idempotencykey));
-            },
-            'POST /checkout/preferences'
+            }, 'POST /checkout/preferences'
         );
     }
 
@@ -95,13 +97,13 @@ class api_client
      * @return \MercadoPago\Resources\Preference
      * @throws api_exception
      */
-    public function get_preference(string $preferenceid) {
+    public function get_preference(string $preferenceid)
+    {
         return $this->call(
             function () use ($preferenceid) {
                 $client = new PreferenceClient();
                 return $client->get($preferenceid, $this->request_options());
-            },
-            'GET /checkout/preferences/' . $preferenceid
+            }, 'GET /checkout/preferences/' . $preferenceid
         );
     }
 
@@ -115,14 +117,14 @@ class api_client
      * @return \MercadoPago\Resources\Payment
      * @throws api_exception
      */
-    public function get_payment($paymentid) {
+    public function get_payment($paymentid)
+    {
         $id = (int)$paymentid;
         return $this->call(
             function () use ($id) {
                 $client = new PaymentClient();
                 return $client->get($id, $this->request_options());
-            },
-            'GET /v1/payments/' . $id
+            }, 'GET /v1/payments/' . $id
         );
     }
 
@@ -133,14 +135,14 @@ class api_client
      * @return \MercadoPago\Resources\MerchantOrder
      * @throws api_exception
      */
-    public function get_merchant_order($merchantorderid) {
+    public function get_merchant_order($merchantorderid)
+    {
         $id = (int)$merchantorderid;
         return $this->call(
             function () use ($id) {
                 $client = new MerchantOrderClient();
                 return $client->get($id, $this->request_options());
-            },
-            'GET /merchant_orders/' . $id
+            }, 'GET /merchant_orders/' . $id
         );
     }
 
@@ -152,13 +154,13 @@ class api_client
      * @return mixed
      * @throws api_exception
      */
-    protected function call(callable $callable, string $operation) {
+    protected function call(callable $callable, string $operation)
+    {
         $start = microtime(true);
         try {
             $result = $callable();
             util::log_debug(
-                'Mercado Pago call succeeded',
-                [
+                'Mercado Pago call succeeded', [
                 'operation' => $operation,
                 'ms' => (int)round((microtime(true) - $start) * 1000),
                 'source' => $this->credentials->get_source(),
@@ -180,8 +182,7 @@ class api_client
                 $body = null;
             }
             util::log_error(
-                'Mercado Pago API error',
-                [
+                'Mercado Pago API error', [
                 'operation' => $operation,
                 'status' => $statuscode,
                 'message' => $e->getMessage(),
@@ -191,8 +192,7 @@ class api_client
             throw new api_exception($e->getMessage(), $statuscode, $operation, $e);
         } catch (\Throwable $e) {
             util::log_error(
-                'Mercado Pago transport error',
-                [
+                'Mercado Pago transport error', [
                 'operation' => $operation,
                 'message' => $e->getMessage(),
                 ]
@@ -206,7 +206,8 @@ class api_client
      *
      * @return credentials
      */
-    public function get_credentials(): credentials {
+    public function get_credentials(): credentials
+    {
         return $this->credentials;
     }
 }

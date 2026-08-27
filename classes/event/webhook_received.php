@@ -25,12 +25,14 @@ namespace enrol_mercadopagocpro\event;
  */
 class webhook_received extends \core\event\base
 {
+
     /**
      * Initialise the event data.
      *
      * @return void
      */
-    protected function init() {
+    protected function init()
+    {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_OTHER;
     }
@@ -40,7 +42,8 @@ class webhook_received extends \core\event\base
      *
      * @return string
      */
-    public static function get_name() {
+    public static function get_name()
+    {
         return get_string('event:webhook_received', 'enrol_mercadopagocpro');
     }
 
@@ -49,7 +52,8 @@ class webhook_received extends \core\event\base
      *
      * @return string
      */
-    public function get_description() {
+    public function get_description()
+    {
         return "A Mercado Pago '{$this->other['type']}' notification for resource "
             . "'{$this->other['dataid']}' was accepted.";
     }
@@ -60,7 +64,8 @@ class webhook_received extends \core\event\base
      * @param  array $notification
      * @return self
      */
-    public static function create_from_notification(array $notification): self {
+    public static function create_from_notification(array $notification): self
+    {
         return self::create(
             [
             'context' => \context_system::instance(),

@@ -32,8 +32,9 @@ use enrol_mercadopagocpro\local\util;
  */
 class reconcile_payments extends \core\task\scheduled_task
 {
+
     /**
-     * @var int Maximum transactions handled in one run.
+     * @var int Maximum transactions handled in one run. 
      */
     private const BATCH_SIZE = 100;
 
@@ -42,7 +43,8 @@ class reconcile_payments extends \core\task\scheduled_task
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:reconcile_payments', 'enrol_mercadopagocpro');
     }
 
@@ -51,7 +53,8 @@ class reconcile_payments extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         if (!enrol_is_enabled('mercadopagocpro')) {
             mtrace('enrol_mercadopagocpro is disabled, skipping reconciliation.');
             return;
@@ -79,8 +82,7 @@ class reconcile_payments extends \core\task\scheduled_task
                 mtrace('  txn ' . $record->id . ': ' . $result->outcome . ' - ' . $result->message);
             } catch (\Throwable $e) {
                 util::log_error(
-                    'Reconciliation failed for a transaction: ' . $e->getMessage(),
-                    [
+                    'Reconciliation failed for a transaction: ' . $e->getMessage(), [
                     'txnid' => (int)$record->id,
                     ]
                 );

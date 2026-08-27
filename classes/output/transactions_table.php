@@ -33,13 +33,14 @@ require_once($CFG->libdir . '/tablelib.php');
  */
 class transactions_table extends \core_table\sql_table
 {
+
     /**
-     * @var \context_course
+     * @var \context_course 
      */
     protected \context_course $context;
 
     /**
-     * @var bool Whether the viewer may trigger a manual reconciliation.
+     * @var bool Whether the viewer may trigger a manual reconciliation. 
      */
     protected bool $canreconcile;
 
@@ -89,7 +90,7 @@ class transactions_table extends \core_table\sql_table
         $this->no_sorting('actions');
         $this->collapsible(false);
 
-        // get_sql() adds its own leading comma, so it is appended, not glued on.
+        // The get_sql() call adds its own leading comma, so it is appended, not glued on.
         $userfields = \core_user\fields::for_name()->get_sql('u');
 
         $where = 't.courseid = :courseid';
@@ -121,7 +122,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_timecreated($row) {
+    public function col_timecreated($row)
+    {
         return userdate($row->timecreated);
     }
 
@@ -131,7 +133,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_user($row) {
+    public function col_user($row)
+    {
         if (empty($row->uid)) {
             return get_string('deleteduser', 'enrol_mercadopagocpro');
         }
@@ -145,7 +148,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_amount($row) {
+    public function col_amount($row)
+    {
         $text = $row->currency . ' ' . format_float((float)$row->amount, 2);
         if (!empty($row->marketplacefee)) {
             $text .= ' ' . \html_writer::tag(
@@ -156,8 +160,7 @@ class transactions_table extends \core_table\sql_table
         }
         if (empty($row->livemode)) {
             $text .= ' ' . \html_writer::tag(
-                'span',
-                get_string('testmode', 'enrol_mercadopagocpro'),
+                'span', get_string('testmode', 'enrol_mercadopagocpro'),
                 ['class' => 'badge bg-warning text-dark']
             );
         }
@@ -170,7 +173,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_status($row) {
+    public function col_status($row)
+    {
         $classes = [
             status::APPROVED => 'bg-success',
             status::PENDING => 'bg-info',
@@ -196,7 +200,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_enrolmentstate($row) {
+    public function col_enrolmentstate($row)
+    {
         return get_string('enrolmentstate_' . $row->enrolmentstate, 'enrol_mercadopagocpro');
     }
 
@@ -206,7 +211,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentmethod($row) {
+    public function col_paymentmethod($row)
+    {
         $parts = array_filter(
             [
             (string)$row->paymenttypeid,
@@ -226,7 +232,8 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_paymentid($row) {
+    public function col_paymentid($row)
+    {
         $text = $row->paymentid ? s($row->paymentid) : '-';
         return $text . \html_writer::empty_tag('br')
             . \html_writer::tag('small', s($row->externalreference));
@@ -238,15 +245,15 @@ class transactions_table extends \core_table\sql_table
      * @param  \stdClass $row
      * @return string
      */
-    public function col_actions($row) {
+    public function col_actions($row)
+    {
         global $OUTPUT;
 
         if (in_array($row->status, status::terminal(), true) && $row->status !== status::APPROVED) {
             return '';
         }
         $url = util::plugin_url(
-            'transactions.php',
-            [
+            'transactions.php', [
             'courseid' => $row->courseid,
             'action' => 'reconcile',
             'txn' => $row->id,

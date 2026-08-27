@@ -36,22 +36,23 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
  */
 final class webhook_handler_test extends \advanced_testcase
 {
+
     use helper_trait;
 
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $course;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $instance;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $user;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $txn;
 
@@ -60,7 +61,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    protected function prepare(): void {
+    protected function prepare(): void
+    {
         $this->setup_plugin();
         [$this->course, $this->instance] = $this->create_course_with_instance();
         $this->user = $this->getDataGenerator()->create_user();
@@ -76,7 +78,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_extract_notification(): void {
+    public function test_extract_notification(): void
+    {
         $this->resetAfterTest();
         $handler = new webhook_handler();
 
@@ -97,7 +100,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_extract_notification_legacy_topic(): void {
+    public function test_extract_notification_legacy_topic(): void
+    {
         $this->resetAfterTest();
         $handler = new webhook_handler();
 
@@ -115,7 +119,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_valid_signature_is_processed(): void {
+    public function test_valid_signature_is_processed(): void
+    {
         $this->prepare();
         $this->mpclient->push_payment(
             [
@@ -148,7 +153,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_invalid_signature_is_rejected(): void {
+    public function test_invalid_signature_is_rejected(): void
+    {
         $this->prepare();
 
         $headers = [
@@ -168,7 +174,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_missing_signature_is_rejected(): void {
+    public function test_missing_signature_is_rejected(): void
+    {
         $this->prepare();
 
         $response = (new webhook_handler())->handle(
@@ -186,7 +193,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_notifications_are_logged(): void {
+    public function test_notifications_are_logged(): void
+    {
         global $DB;
 
         $this->prepare();
@@ -212,7 +220,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_unknown_resource_is_accepted_and_ignored(): void {
+    public function test_unknown_resource_is_accepted_and_ignored(): void
+    {
         $this->prepare();
 
         $requestid = 'req-zzz';
@@ -236,7 +245,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_unhandled_type_is_acknowledged(): void {
+    public function test_unhandled_type_is_acknowledged(): void
+    {
         $this->prepare();
         set_config('requiresignature', 0, 'enrol_mercadopagocpro');
 
@@ -255,7 +265,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_oversized_body_is_refused(): void {
+    public function test_oversized_body_is_refused(): void
+    {
         $this->prepare();
 
         $response = (new webhook_handler())->handle([], [], str_repeat('x', 70000), '10.0.0.1');
@@ -267,7 +278,8 @@ final class webhook_handler_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_rate_limit(): void {
+    public function test_rate_limit(): void
+    {
         $this->prepare();
         set_config('webhookratelimit', 2, 'enrol_mercadopagocpro');
         set_config('requiresignature', 0, 'enrol_mercadopagocpro');

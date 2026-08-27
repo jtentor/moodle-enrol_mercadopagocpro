@@ -82,13 +82,10 @@ EOT;
     exit(0);
 }
 
-/**
- * @var int Number of blocking problems found.
-*/
+// Number of blocking problems found.
 $failures = 0;
-/**
- * @var int Number of warnings found.
-*/
+
+// Number of warnings found.
 $warnings = 0;
 
 /**
@@ -100,7 +97,8 @@ $warnings = 0;
  * @param  string    $fix    what to do about it
  * @return void
  */
-function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void {
+function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
+{
     global $failures, $warnings;
 
     if ($ok === true) {
@@ -210,7 +208,7 @@ if ($instance !== null) {
         $instance->use_standard_editing_ui() ? 'true' : 'false'
     );
 
-    // enrol_plugin::get_name() does explode('_', get_class($this))[1]. The plugin
+    // Core's enrol_plugin::get_name() does explode('_', get_class($this))[1]. The plugin
     // name deliberately has no underscore, so core derives "mercadopagocpro" by
     // itself. A name like mp_checkoutpro would resolve to "mp" instead, and every
     // instance would be stored under a plugin that does not exist and vanish from
@@ -424,10 +422,8 @@ if ($sdkok && $declaredversion !== null) {
 
 // Development tooling must never travel inside a released plugin.
 $strays = [];
-foreach (
-    ['vendor/autoload.php', 'vendor/composer', 'vendor/mercadopago/dx-php',
-    'vendor/squizlabs', 'vendor/moodlehq', 'vendor/phpcsstandards', 'composer.lock'] as $stray
-) {
+foreach (['vendor/autoload.php', 'vendor/composer', 'vendor/mercadopago/dx-php',
+    'vendor/squizlabs', 'vendor/moodlehq', 'vendor/phpcsstandards', 'composer.lock'] as $stray) {
     if (file_exists($expecteddir . '/' . $stray)) {
         $strays[] = $stray;
     }

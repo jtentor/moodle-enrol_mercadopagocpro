@@ -36,22 +36,23 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
  */
 final class payment_processor_test extends \advanced_testcase
 {
+
     use helper_trait;
 
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $course;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $instance;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $user;
     /**
-     * @var \stdClass
+     * @var \stdClass 
      */
     protected \stdClass $txn;
 
@@ -62,7 +63,8 @@ final class payment_processor_test extends \advanced_testcase
      * @param  array $siteconfig
      * @return void
      */
-    protected function prepare(array $instancefields = [], array $siteconfig = []): void {
+    protected function prepare(array $instancefields = [], array $siteconfig = []): void
+    {
         $this->setup_plugin();
         foreach ($siteconfig as $name => $value) {
             set_config($name, $value, 'enrol_mercadopagocpro');
@@ -81,15 +83,15 @@ final class payment_processor_test extends \advanced_testcase
      * @param  array $overrides
      * @return void
      */
-    protected function queue_payment(array $overrides = []): void {
+    protected function queue_payment(array $overrides = []): void
+    {
         $this->mpclient->push_payment(
             array_merge(
                 [
                 'external_reference' => $this->txn->externalreference,
                 'transaction_amount' => 100.00,
                 'currency_id' => 'ARS',
-                ],
-                $overrides
+                ], $overrides
             )
         );
     }
@@ -99,7 +101,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_approved_payment_enrols_the_user(): void {
+    public function test_approved_payment_enrols_the_user(): void
+    {
         $this->prepare();
         $this->queue_payment(['status' => 'approved']);
 
@@ -121,7 +124,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_approved_payment_is_idempotent(): void {
+    public function test_approved_payment_is_idempotent(): void
+    {
         global $DB;
 
         $this->prepare();
@@ -133,8 +137,7 @@ final class payment_processor_test extends \advanced_testcase
         $processor->process_payment('1122334455', transaction::get((int)$this->txn->id));
 
         $count = $DB->count_records(
-            'user_enrolments',
-            [
+            'user_enrolments', [
             'enrolid' => $this->instance->id,
             'userid' => $this->user->id,
             ]
@@ -147,7 +150,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_rejected_payment_does_not_enrol(): void {
+    public function test_rejected_payment_does_not_enrol(): void
+    {
         $this->prepare();
         $this->queue_payment(['status' => 'rejected', 'status_detail' => 'cc_rejected_insufficient_amount']);
 
@@ -166,7 +170,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_pending_payment_creates_holding_enrolment(): void {
+    public function test_pending_payment_creates_holding_enrolment(): void
+    {
         global $DB;
 
         $this->prepare([], ['pendingholding' => 1]);
@@ -175,8 +180,7 @@ final class payment_processor_test extends \advanced_testcase
         (new payment_processor())->process_payment('1122334455', $this->txn);
 
         $ue = $DB->get_record(
-            'user_enrolments',
-            [
+            'user_enrolments', [
             'enrolid' => $this->instance->id,
             'userid' => $this->user->id,
             ]
@@ -196,7 +200,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_pending_payment_is_activated_on_approval(): void {
+    public function test_pending_payment_is_activated_on_approval(): void
+    {
         $this->prepare([], ['pendingholding' => 1]);
 
         $this->queue_payment(['status' => 'pending']);
@@ -216,7 +221,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_refund_suspends_the_enrolment(): void {
+    public function test_refund_suspends_the_enrolment(): void
+    {
         global $DB;
 
         $this->prepare([], ['reversalaction' => instance_settings::REVERSAL_SUSPEND]);
@@ -229,8 +235,7 @@ final class payment_processor_test extends \advanced_testcase
         $processor->process_payment('1122334455', transaction::get((int)$this->txn->id));
 
         $ue = $DB->get_record(
-            'user_enrolments',
-            [
+            'user_enrolments', [
             'enrolid' => $this->instance->id,
             'userid' => $this->user->id,
             ]
@@ -244,7 +249,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_chargeback_can_unenrol(): void {
+    public function test_chargeback_can_unenrol(): void
+    {
         global $DB;
 
         $this->prepare([], ['reversalaction' => instance_settings::REVERSAL_UNENROL]);
@@ -258,8 +264,7 @@ final class payment_processor_test extends \advanced_testcase
 
         $this->assertFalse(
             $DB->record_exists(
-                'user_enrolments',
-                [
+                'user_enrolments', [
                 'enrolid' => $this->instance->id,
                 'userid' => $this->user->id,
                 ]
@@ -273,7 +278,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_underpayment_is_withheld(): void {
+    public function test_underpayment_is_withheld(): void
+    {
         $this->prepare();
         $this->queue_payment(['status' => 'approved', 'transaction_amount' => 1.00]);
 
@@ -293,7 +299,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_wrong_currency_is_withheld(): void {
+    public function test_wrong_currency_is_withheld(): void
+    {
         $this->prepare();
         $this->queue_payment(['status' => 'approved', 'currency_id' => 'BRL']);
 
@@ -308,7 +315,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_reference_mismatch_is_ignored(): void {
+    public function test_reference_mismatch_is_ignored(): void
+    {
         $this->prepare();
         $this->queue_payment(['status' => 'approved', 'external_reference' => 'mpcp-1-1-1-0000000000000000']);
 
@@ -324,7 +332,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_group_assignment(): void {
+    public function test_group_assignment(): void
+    {
         $this->setup_plugin();
         $course = $this->getDataGenerator()->create_course();
         $group = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
@@ -333,8 +342,7 @@ final class payment_processor_test extends \advanced_testcase
         $studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
         $plugin = enrol_get_plugin('mercadopagocpro');
         $instanceid = $plugin->add_instance(
-            $course,
-            [
+            $course, [
             'status' => ENROL_INSTANCE_ENABLED,
             'cost' => 100,
             'currency' => 'ARS',
@@ -360,7 +368,8 @@ final class payment_processor_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_enrolment_cap_is_enforced(): void {
+    public function test_enrolment_cap_is_enforced(): void
+    {
         $this->prepare(['customint5' => 1]);
 
         // Fill the only seat with another buyer.

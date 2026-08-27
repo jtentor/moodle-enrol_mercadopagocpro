@@ -30,13 +30,14 @@ namespace enrol_mercadopagocpro\local;
  */
 class preference_builder
 {
+
     /**
-     * @var string Only value documented for auto_return.
+     * @var string Only value documented for auto_return. 
      */
     public const AUTO_RETURN_APPROVED = 'approved';
 
     /**
-     * @var string purpose value that restricts the checkout to logged in Mercado Pago accounts.
+     * @var string purpose value that restricts the checkout to logged in Mercado Pago accounts. 
      */
     public const PURPOSE_WALLET_PURCHASE = 'wallet_purchase';
 
@@ -51,23 +52,23 @@ class preference_builder
      */
     public function __construct(
         /**
-         * @var \stdClass
+         * @var \stdClass 
          */
         protected \stdClass $instance,
         /**
-         * @var \stdClass
+         * @var \stdClass 
          */
         protected \stdClass $course,
         /**
-         * @var \stdClass
+         * @var \stdClass 
          */
         protected \stdClass $user,
         /**
-         * @var \stdClass
+         * @var \stdClass 
          */
         protected \stdClass $transaction,
         /**
-         * @var instance_settings
+         * @var instance_settings 
          */
         protected instance_settings $settings,
     ) {
@@ -78,7 +79,8 @@ class preference_builder
      *
      * @return array
      */
-    public function build(): array {
+    public function build(): array
+    {
         $request = [
             'items' => [$this->build_item()],
             'payer' => $this->build_payer(),
@@ -89,7 +91,7 @@ class preference_builder
             'metadata' => $this->build_metadata(),
         ];
 
-        // auto_return only makes sense together with a success back_url, which we always send.
+        // The auto_return field only makes sense with a success back_url, which we always send.
         if ($this->settings->autoreturn) {
             $request['auto_return'] = self::AUTO_RETURN_APPROVED;
         }
@@ -133,7 +135,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_item(): array {
+    protected function build_item(): array
+    {
         $context = \context_course::instance($this->course->id);
         $title = format_string($this->course->fullname, true, ['context' => $context]);
         $description = $this->settings->itemdescription !== ''
@@ -156,7 +159,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_payer(): array {
+    protected function build_payer(): array
+    {
         $payer = [
             'email' => $this->user->email,
         ];
@@ -175,7 +179,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_back_urls(): array {
+    protected function build_back_urls(): array
+    {
         $base = util::plugin_url('return.php', ['txn' => $this->transaction->id]);
         return [
             'success' => (new \moodle_url($base, ['result' => 'success']))->out(false),
@@ -192,7 +197,8 @@ class preference_builder
      *
      * @return string
      */
-    protected function build_notification_url(): string {
+    protected function build_notification_url(): string
+    {
         return util::plugin_url('webhook.php', ['enrolid' => (int)$this->instance->id])->out(false);
     }
 
@@ -201,7 +207,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_payment_methods(): array {
+    protected function build_payment_methods(): array
+    {
         $block = [];
 
         $excludedtypes = $this->settings->excludedpaymenttypes;
@@ -242,7 +249,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_expiration(): array {
+    protected function build_expiration(): array
+    {
         if ($this->settings->preferenceexpiry <= 0) {
             return [];
         }
@@ -262,7 +270,8 @@ class preference_builder
      *
      * @return array
      */
-    protected function build_metadata(): array {
+    protected function build_metadata(): array
+    {
         global $CFG;
 
         $metadata = [
@@ -297,7 +306,8 @@ class preference_builder
      * @param  int $timestamp
      * @return string
      */
-    public static function format_datetime(int $timestamp): string {
+    public static function format_datetime(int $timestamp): string
+    {
         $date = new \DateTimeImmutable('@' . $timestamp);
         $date = $date->setTimezone(\core_date::get_server_timezone_object());
         return $date->format('Y-m-d\TH:i:s.v') . $date->format('P');
@@ -309,7 +319,8 @@ class preference_builder
      * @param  string $value
      * @return string
      */
-    protected function sanitise_descriptor(string $value): string {
+    protected function sanitise_descriptor(string $value): string
+    {
         $value = preg_replace('/[^A-Za-z0-9 ]/', '', $value);
         return $this->truncate(trim((string)$value), 22);
     }
@@ -321,7 +332,8 @@ class preference_builder
      * @param  int    $length
      * @return string
      */
-    protected function truncate(string $value, int $length): string {
+    protected function truncate(string $value, int $length): string
+    {
         return \core_text::substr($value, 0, $length);
     }
 }

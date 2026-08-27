@@ -25,12 +25,14 @@ namespace enrol_mercadopagocpro\task;
  */
 class process_expirations extends \core\task\scheduled_task
 {
+
     /**
      * Task name shown in the scheduled tasks admin page.
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name()
+    {
         return get_string('task:process_expirations', 'enrol_mercadopagocpro');
     }
 
@@ -39,7 +41,8 @@ class process_expirations extends \core\task\scheduled_task
      *
      * @return void
      */
-    public function execute() {
+    public function execute()
+    {
         $plugin = enrol_get_plugin('mercadopagocpro');
         if (!$plugin) {
             return;

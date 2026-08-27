@@ -39,18 +39,19 @@ use core\encryption;
  */
 final class credentials
 {
+
     /**
-     * @var string Production environment.
+     * @var string Production environment. 
      */
     public const ENV_PRODUCTION = 'production';
 
     /**
-     * @var string Test environment (test credentials + sandbox_init_point).
+     * @var string Test environment (test credentials + sandbox_init_point). 
      */
     public const ENV_TEST = 'test';
 
     /**
-     * @var string The table holding per instance credentials.
+     * @var string The table holding per instance credentials. 
      */
     public const TABLE = 'enrol_mercadopagocpro_cred';
 
@@ -66,27 +67,27 @@ final class credentials
      */
     private function __construct(
         /**
-         * @var string
+         * @var string 
          */
         private string $accesstoken,
         /**
-         * @var string
+         * @var string 
          */
         private string $publickey,
         /**
-         * @var string
+         * @var string 
          */
         private string $webhooksecret,
         /**
-         * @var string
+         * @var string 
          */
         private string $environment,
         /**
-         * @var string
+         * @var string 
          */
         private string $source,
         /**
-         * @var string|null
+         * @var string|null 
          */
         private ?string $sellerid = null,
     ) {
@@ -97,7 +98,8 @@ final class credentials
      *
      * @return string
      */
-    public function get_access_token(): string {
+    public function get_access_token(): string
+    {
         return $this->accesstoken;
     }
 
@@ -107,7 +109,8 @@ final class credentials
      *
      * @return string
      */
-    public function get_public_key(): string {
+    public function get_public_key(): string
+    {
         return $this->publickey;
     }
 
@@ -116,7 +119,8 @@ final class credentials
      *
      * @return string
      */
-    public function get_webhook_secret(): string {
+    public function get_webhook_secret(): string
+    {
         return $this->webhooksecret;
     }
 
@@ -125,7 +129,8 @@ final class credentials
      *
      * @return string
      */
-    public function get_environment(): string {
+    public function get_environment(): string
+    {
         return $this->environment;
     }
 
@@ -134,7 +139,8 @@ final class credentials
      *
      * @return bool
      */
-    public function is_live(): bool {
+    public function is_live(): bool
+    {
         return $this->environment === self::ENV_PRODUCTION;
     }
 
@@ -143,7 +149,8 @@ final class credentials
      *
      * @return string
      */
-    public function get_source(): string {
+    public function get_source(): string
+    {
         return $this->source;
     }
 
@@ -152,7 +159,8 @@ final class credentials
      *
      * @return string|null
      */
-    public function get_seller_id(): ?string {
+    public function get_seller_id(): ?string
+    {
         return $this->sellerid;
     }
 
@@ -161,7 +169,8 @@ final class credentials
      *
      * @return bool
      */
-    public function is_usable(): bool {
+    public function is_usable(): bool
+    {
         return $this->accesstoken !== '';
     }
 
@@ -170,17 +179,23 @@ final class credentials
      *
      * @return bool
      */
-    public function can_validate_signature(): bool {
+    public function can_validate_signature(): bool
+    {
         return $this->webhooksecret !== '';
     }
 
+    // __debugInfo() is a genuine PHP magic method; the moodle-cs list of them is
+    // incomplete, so the naming sniff has to be silenced around this declaration.
+    // The disable has to sit before the docblock, otherwise it separates the
+    // docblock from the function and the MissingDocblock sniff fires instead.
+    // phpcs:disable moodle.NamingConventions.ValidFunctionName.MagicLikeMethod
     /**
      * Never expose secrets through string conversion or debugging output.
      *
      * @return array
      */
-    // phpcs:ignore moodle.NamingConventions.ValidFunctionName.MagicLikeMethod -- __debugInfo is a real PHP magic method.
-    public function __debugInfo(): array {
+    public function __debugInfo(): array
+    {
         return [
             'environment' => $this->environment,
             'source' => $this->source,
@@ -190,6 +205,7 @@ final class credentials
             'webhooksecret' => $this->webhooksecret === '' ? '(empty)' : '(redacted)',
         ];
     }
+    // phpcs:enable moodle.NamingConventions.ValidFunctionName.MagicLikeMethod
 
     /**
      * Resolve the credentials to use for an enrolment instance.
@@ -197,7 +213,8 @@ final class credentials
      * @param  \stdClass|null $instance enrol instance record, or null for site level operations.
      * @return self
      */
-    public static function resolve(?\stdClass $instance = null): self {
+    public static function resolve(?\stdClass $instance = null): self
+    {
         $environment = self::get_environment_setting();
 
         if ($instance !== null && !empty($instance->id) && self::instance_override_allowed()) {
@@ -227,7 +244,8 @@ final class credentials
      *
      * @return string
      */
-    public static function get_environment_setting(): string {
+    public static function get_environment_setting(): string
+    {
         $value = (string)get_config('enrol_mercadopagocpro', 'environment');
         return $value === self::ENV_TEST ? self::ENV_TEST : self::ENV_PRODUCTION;
     }
@@ -237,7 +255,8 @@ final class credentials
      *
      * @return bool
      */
-    public static function instance_override_allowed(): bool {
+    public static function instance_override_allowed(): bool
+    {
         return (bool)get_config('enrol_mercadopagocpro', 'allowinstancecredentials');
     }
 
@@ -251,7 +270,8 @@ final class credentials
      * @param  string $environment
      * @return self|null null when nothing is configured at this level.
      */
-    private static function from_server_configuration(string $environment): ?self {
+    private static function from_server_configuration(string $environment): ?self
+    {
         global $CFG;
 
         $values = [];
@@ -292,7 +312,8 @@ final class credentials
      * @param  string $environment
      * @return self
      */
-    private static function from_site_settings(string $environment): self {
+    private static function from_site_settings(string $environment): self
+    {
         $prefix = $environment === self::ENV_TEST ? 'test' : '';
         return new self(
             trim((string)get_config('enrol_mercadopagocpro', $prefix . 'accesstoken')),
@@ -309,7 +330,8 @@ final class credentials
      * @param  int $enrolid
      * @return array{accesstoken:string,publickey:string,webhooksecret:string,sellerid:?string}|null
      */
-    private static function load_instance_record(int $enrolid): ?array {
+    private static function load_instance_record(int $enrolid): ?array
+    {
         global $DB;
 
         $record = $DB->get_record(self::TABLE, ['enrolid' => $enrolid]);
@@ -410,7 +432,8 @@ final class credentials
      * @param  int $enrolid
      * @return void
      */
-    public static function delete_for_instance(int $enrolid): void {
+    public static function delete_for_instance(int $enrolid): void
+    {
         global $DB;
         $DB->delete_records(self::TABLE, ['enrolid' => $enrolid]);
     }
@@ -421,7 +444,8 @@ final class credentials
      * @param  int $enrolid
      * @return bool
      */
-    public static function instance_has_credentials(int $enrolid): bool {
+    public static function instance_has_credentials(int $enrolid): bool
+    {
         global $DB;
         return $DB->record_exists(self::TABLE, ['enrolid' => $enrolid]);
     }
@@ -433,9 +457,10 @@ final class credentials
      * @return string
      * @throws \moodle_exception when the site has no encryption key available.
      */
-    public static function encrypt(string $value): string {
+    public static function encrypt(string $value): string
+    {
         if (!encryption::key_exists()) {
-            // create_key() is safe to call repeatedly; it does nothing if the key exists.
+            // The create_key() call is safe to repeat; it does nothing if the key exists.
             encryption::create_key();
         }
         return encryption::encrypt($value);
@@ -447,7 +472,8 @@ final class credentials
      * @param  string|null $value
      * @return string
      */
-    public static function decrypt(?string $value): string {
+    public static function decrypt(?string $value): string
+    {
         if ($value === null || $value === '') {
             return '';
         }

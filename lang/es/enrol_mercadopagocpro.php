@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $string['accesstoken'] = 'Access token';
 $string['accesstoken_desc'] = 'Access token de producción de tu aplicación de Mercado Pago. Se usa como Bearer token en todas las llamadas a la API.';
 $string['advancedpreference'] = 'Opciones avanzadas de Checkout Pro';
-
-// Página de inscripción.
 $string['allowinstancecredentials'] = 'Permitir credenciales por curso';
 $string['allowinstancecredentials_desc'] = 'Permite que cada instancia de inscripción guarde sus propias credenciales de Mercado Pago. Es útil cuando distintas áreas cobran en cuentas distintas. Las credenciales de instancia se cifran y nunca se incluyen en las copias de seguridad de cursos.';
 $string['allstatuses'] = 'Todos los estados';
@@ -45,8 +43,6 @@ $string['binarymode'] = 'Modo binario';
 $string['binarymode_desc'] = 'Cuando está activo, un pago solo puede quedar aprobado o rechazado, nunca pendiente. Reduce la tasa de aprobación, así que dejalo desactivado salvo que lo necesites.';
 $string['categoryid'] = 'Categoría del ítem';
 $string['categoryid_help'] = 'El <code>category_id</code> del ítem de Mercado Pago. <code>learnings</code> es la categoría de cursos y capacitación.';
-
-// Split payments.
 $string['checkoutratelimit'] = 'Límite de checkouts';
 $string['checkoutratelimit_desc'] = 'Máximo de preferencias de pago que un mismo usuario puede crear por minuto. 0 desactiva el límite.';
 $string['cleanupafter'] = 'Período de retención';
@@ -78,8 +74,6 @@ $string['enrolmentstate_none'] = 'Sin inscripción';
 $string['enrolmentstate_pending'] = 'Lugar reservado';
 $string['enrolmentstate_suspended'] = 'Suspendida';
 $string['enrolmentstate_unenrolled'] = 'Desinscripto';
-
-// Tipos de pago.
 $string['enrolperiod'] = 'Duración de la inscripción';
 $string['enrolperiod_desc'] = 'Duración por defecto de la inscripción comprada. 0 significa ilimitada.';
 $string['enrolperiod_help'] = 'Cuánto dura el acceso comprado, contado desde el momento en que se aprueba el pago. Dejalo vacío para acceso ilimitado.';
@@ -111,8 +105,6 @@ $string['error:noinitpoint'] = 'Mercado Pago no devolvió una URL de checkout pa
 $string['error:notavailable'] = 'Este método de inscripción no está disponible en este momento. Contactá al administrador del curso.';
 $string['error:oauthdenied'] = 'El vendedor de Mercado Pago no autorizó la conexión ({$a}).';
 $string['error:oauthexchange'] = 'No se pudo canjear el código de autorización por un token de vendedor.';
-
-// Eventos.
 $string['error:oauthincomplete'] = 'Mercado Pago no devolvió un código de autorización.';
 $string['error:oauthstate'] = 'No se pudo asociar la respuesta de autorización a una solicitud. Volvé a iniciar la conexión.';
 $string['error:preferencefailed'] = 'No se pudo crear el pago en Mercado Pago. Volvé a intentarlo en unos minutos.';
@@ -127,8 +119,6 @@ $string['event:payment_updated'] = 'Estado de pago actualizado';
 $string['event:preference_created'] = 'Preferencia de checkout creada';
 $string['event:webhook_received'] = 'Notificación de Mercado Pago recibida';
 $string['event:webhook_rejected'] = 'Notificación de Mercado Pago rechazada';
-
-// Tareas.
 $string['excludedpaymentmethods'] = 'Medios de pago excluidos';
 $string['excludedpaymentmethods_desc'] = 'Lista separada por comas de ids de medios de pago que no se ofrecerán, por ejemplo <code>master,amex</code>.';
 $string['excludedpaymentmethods_help'] = 'Corresponde a <code>payment_methods.excluded_payment_methods</code> en la preferencia. Usá los ids devueltos por <code>GET /v1/payment_methods</code>.';
@@ -148,8 +138,6 @@ $string['expirymessageenrollerbody'] = 'Las inscripciones por Mercado Pago en el
 {$a->users}
 
 Para cambiarlo, ingresá a {$a->extendurl}';
-
-// Privacidad.
 $string['expirymessageenrollersubject'] = 'Aviso de vencimiento de inscripciones de Mercado Pago';
 $string['externalreference'] = 'Referencia';
 $string['installments'] = 'Cuotas máximas';
@@ -169,8 +157,6 @@ $string['itemdescription_help'] = 'Se muestra al comprador en el checkout de Mer
 $string['keepcredentials'] = 'Conservar las credenciales guardadas';
 $string['keepcredentials_help'] = 'Esta instancia ya tiene credenciales propias. Dejá esta casilla marcada para conservarlas; desmarcala y guardá con los campos vacíos para borrarlas y volver a las credenciales del sitio.';
 $string['keepthisreference'] = 'Guardá la referencia de arriba por si necesitás contactar al soporte por este pago.';
-
-// Reporte.
 $string['lastupdate'] = 'Última actualización';
 $string['marketplaceclientid'] = 'Client id de la aplicación';
 $string['marketplaceclientid_desc'] = 'El client id (número de aplicación) de tu aplicación marketplace de Mercado Pago.';
@@ -187,8 +173,6 @@ $string['maxenrolled_help'] = 'Cuando esta cantidad de usuarios tenga una inscri
 $string['mercadopagocpro:config'] = 'Configurar instancias de inscripción Mercado Pago Checkout Pro';
 $string['mercadopagocpro:manage'] = 'Gestionar usuarios inscriptos';
 $string['mercadopagocpro:reconcile'] = 'Reconsultar un pago contra la API de Mercado Pago';
-
-// Grupos de ajustes.
 $string['mercadopagocpro:unenrol'] = 'Desinscribir usuarios del curso';
 $string['mercadopagocpro:unenrolself'] = 'Desinscribirse del curso';
 $string['mercadopagocpro:viewtransactions'] = 'Ver las transacciones de pago de Mercado Pago';
@@ -247,8 +231,6 @@ $string['paymentmethod'] = 'Medio de pago';
 $string['paymentresult'] = 'Resultado del pago';
 $string['paymentstatus'] = 'Estado del pago';
 $string['paymenttype_atm'] = 'Cajero automático';
-
-// Errores.
 $string['paymenttype_bank_transfer'] = 'Transferencia bancaria';
 $string['paymenttype_credit_card'] = 'Tarjeta de crédito';
 $string['paymenttype_debit_card'] = 'Tarjeta de débito';
@@ -258,16 +240,10 @@ $string['pendingholding'] = 'Reservar el lugar para pagos pendientes';
 $string['pendingholding_desc'] = 'Crea una inscripción suspendida apenas se genera un pago offline (cupón de pago en efectivo, transferencia) y la activa cuando el dinero se acredita.';
 $string['pendingholding_help'] = 'Una inscripción suspendida no da acceso al curso, pero aparece en la lista de participantes para que los docentes vean quién está en medio del pago.';
 $string['pendingpaymentnotice'] = 'Ya tenés un pago en proceso ({$a}). Vas a quedar inscripto automáticamente apenas se acredite.';
-
-// Página de resultado.
 $string['platformid'] = 'Platform id';
 $string['platformid_desc'] = 'Platform id opcional provisto por Mercado Pago para el seguimiento de plataformas.';
-
-// Formulario de instancia.
 $string['pluginname'] = 'Mercado Pago Checkout Pro';
 $string['pluginname_desc'] = 'El método de inscripción Mercado Pago Checkout Pro permite que los estudiantes paguen un curso a través de Mercado Pago y queden inscriptos automáticamente cuando se acredita el pago.';
-
-// Capacidades.
 $string['preferenceexpiry'] = 'Validez de la preferencia';
 $string['preferenceexpiry_desc'] = 'Cuánto tiempo sigue siendo válido el enlace de pago. 0 no envía fechas de expiración.';
 $string['privacy:metadata:mercadopago'] = 'Para cobrar un pago hay que enviar algunos datos a Mercado Pago.';
@@ -275,8 +251,6 @@ $string['privacy:metadata:mercadopago:email'] = 'La dirección de correo del com
 $string['privacy:metadata:mercadopago:external_reference'] = 'Una referencia interna que identifica la compra en este sitio.';
 $string['privacy:metadata:mercadopago:firstname'] = 'El nombre del comprador.';
 $string['privacy:metadata:mercadopago:item'] = 'El nombre y el precio del curso que se está comprando.';
-
-// Mensaje de bienvenida al curso.
 $string['privacy:metadata:mercadopago:lastname'] = 'El apellido del comprador.';
 $string['privacy:metadata:mercadopago:metadata'] = 'Los ids internos de sitio, curso, usuario y transacción de Moodle de la compra.';
 $string['privacy:metadata:txn'] = 'Información sobre los pagos hechos con Mercado Pago Checkout Pro para inscribirse en un curso.';
@@ -296,14 +270,10 @@ $string['publickey'] = 'Public key';
 $string['publickey_desc'] = 'Public key de producción de tu aplicación de Mercado Pago.';
 $string['reconcilemaxage'] = 'Antigüedad máxima para conciliar';
 $string['reconcilemaxage_desc'] = 'Deja de reconsultar transacciones más antiguas que este período.';
-
-// Preferencia.
 $string['reconcilemaxattempts'] = 'Máximo de reintentos de conciliación';
 $string['reconcilemaxattempts_desc'] = 'Deja de reconsultar una transacción contra la API después de esta cantidad de intentos.';
 $string['reconcilenow'] = 'Reconsultar en Mercado Pago';
 $string['reconcileresult'] = 'Reconsulta finalizada: {$a}';
-
-// Estados de pago.
 $string['reconnectseller'] = 'Reconectar el vendedor de Mercado Pago';
 $string['redirectnotice'] = 'Te vamos a llevar a Mercado Pago para completar el pago y después volvés acá.';
 $string['requiresignature'] = 'Exigir firma válida';
@@ -326,8 +296,6 @@ $string['reversalsuspend'] = 'Suspender la inscripción y quitar el rol';
 $string['reversalunenrol'] = 'Desinscribir al usuario';
 $string['sdkversion'] = 'SDK PHP de Mercado Pago versión {$a} detectado.';
 $string['sellerconnected'] = 'El vendedor de Mercado Pago {$a} quedó conectado a este método de inscripción.';
-
-// Comportamiento.
 $string['sellerconnection'] = 'Cuenta del vendedor';
 $string['sellerid'] = 'Id del vendedor';
 $string['sellerid_help'] = 'El id de usuario de Mercado Pago del vendedor que cobra este curso. Se completa automáticamente al conectar un vendedor.';
@@ -336,14 +304,10 @@ $string['sendcoursewelcomemessage_desc'] = 'Valor por defecto para las instancia
 $string['sendcoursewelcomemessage_help'] = 'El mensaje de bienvenida se envía una sola vez, cuando el pago se aprueba y la matriculación queda activa. No se envía con un pago pendiente, ni se vuelve a enviar si un pago revertido se reactiva más adelante.
 
 La opción "De parte del poseedor de la clave" que ofrece el núcleo no está disponible acá: resuelve el remitente a través de la capacidad del poseedor de la clave de auto-matriculación, y una matriculación paga no tiene clave.';
-
-// Solo con cuenta de Mercado Pago.
 $string['settings_behaviour'] = 'Comportamiento de la inscripción';
 $string['settings_credentials'] = 'Credenciales de Mercado Pago';
 $string['settings_credentials_desc'] = 'Las credenciales se obtienen en <em>Tus integraciones</em>, en el panel de desarrolladores de Mercado Pago. También pueden definirse en config.php como <code>$CFG->enrol_mercadopagocpro</code> o mediante las variables de entorno <code>MERCADOPAGOCPRO_ACCESS_TOKEN</code>, <code>MERCADOPAGOCPRO_PUBLIC_KEY</code> y <code>MERCADOPAGOCPRO_WEBHOOK_SECRET</code>, que tienen prioridad sobre los valores guardados aquí.';
 $string['settings_diagnostics'] = 'Diagnóstico y rendimiento';
-
-// Credenciales.
 $string['settings_marketplace'] = 'Split payments (marketplace)';
 $string['settings_marketplace_desc'] = 'Split payments permite que un marketplace cobre una comisión sobre cada venta. Registrá <code>{$a->redirecturi}</code> como URI de redirección de tu aplicación de Mercado Pago antes de conectar cualquier vendedor.';
 $string['settings_preference'] = 'Preferencia de Checkout Pro';
@@ -372,8 +336,6 @@ $string['status_refunded'] = 'Devuelto';
 $string['status_rejected'] = 'Rechazado';
 $string['status_unknown'] = 'Desconocido ({$a})';
 $string['task:cleanup_records'] = 'Limpiar registros de Mercado Pago';
-
-// Mensajes.
 $string['task:process_expirations'] = 'Procesar vencimientos de inscripciones de Mercado Pago';
 $string['task:reconcile_payments'] = 'Conciliar pagos de Mercado Pago';
 $string['task:retry_webhooks'] = 'Reintentar notificaciones de Mercado Pago';
@@ -385,8 +347,6 @@ $string['testpublickey'] = 'Public key de prueba';
 $string['testwebhooksecret'] = 'Clave secreta de webhooks de prueba';
 $string['transactions'] = 'Transacciones de Mercado Pago';
 $string['usesitedefault'] = 'Usar el valor del sitio';
-
-// Diagnóstico.
 $string['walletpurchase'] = 'Exigir cuenta de Mercado Pago';
 $string['walletpurchase_desc'] = 'Envía <code>purpose=wallet_purchase</code> en la preferencia, así solo pueden pagar quienes tengan sesión iniciada en Mercado Pago. Eso es lo que habilita el dinero en cuenta y las tarjetas guardadas en el checkout. La contrapartida es concreta: quien no tenga cuenta no puede pagar, y desaparecen el pago en efectivo y la transferencia bancaria. Dejalo desactivado para aceptar invitados pagando con tarjeta.';
 $string['webhookratelimit'] = 'Límite de notificaciones';
@@ -394,5 +354,3 @@ $string['webhookratelimit_desc'] = 'Máximo de notificaciones aceptadas por minu
 $string['webhooksecret'] = 'Clave secreta de webhooks';
 $string['webhooksecret_desc'] = 'La clave secreta que aparece junto a la configuración de webhooks en <em>Tus integraciones</em>. Sin ella no se pueden verificar las notificaciones entrantes.';
 $string['webhookurl_desc'] = 'Configurá esta URL como endpoint de webhooks de tu aplicación de Mercado Pago: <code>{$a}</code>';
-
-// Webhooks.
