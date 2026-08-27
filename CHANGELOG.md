@@ -16,9 +16,30 @@ the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - README: sentences broken mid-line by the same reflow, and grammar in the
   acknowledgements and AI-assistance statement.
 
+### Added
+
+- `docs/TESTING.md` now carries a complete Behat runbook: chromedriver without
+  Selenium, the `behat_profiles` block with the Chrome arguments a headless
+  server needs, why `behat_wwwroot` must differ from `wwwroot` and how Moodle
+  decides a request belongs to the test site, and the mapping between the field
+  labels the feature types and the language strings that produce them.
+
+### Fixed
+
+- **A new enrolment instance form opened on "Allow Mercado Pago enrolments: Yes".**
+  `edit_instance_form()` called `$mform->setDefault('status', $this->get_config('status'))`
+  with no fallback. When the site level setting is unset, `get_config()` returns
+  null, moodleform falls back to the first option, and `ENROL_INSTANCE_ENABLED` is
+  `0` — so the form pre-selected *enabled*, the opposite of the documented safe
+  default and of what `get_instance_defaults()` returns for the same setting. Now
+  `get_config('status', ENROL_INSTANCE_DISABLED)`, matching the instance defaults.
+  **Found by the first Behat run**, which is a defect PHPUnit structurally could
+  not reach: the suite calls `add_instance()` with an array and never builds the
+  form.
+
 ### Pending for this release
 
-- Behat acceptance tests. The feature file exists and has never been executed;
+- Running the Behat suite. The feature file exists and has never been executed;
   it covers the part of the plugin PHPUnit structurally cannot reach — the
   instance form as the browser actually submits it.
 

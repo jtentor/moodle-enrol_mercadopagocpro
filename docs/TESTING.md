@@ -35,14 +35,163 @@ enabled plugin.
 
 ### Behat
 
+The feature covers adding the method to a course, the validation messages and the
+student-facing enrolment page. It deliberately stops at the redirect: the Mercado
+Pago checkout itself is out of Behat's reach.
+
+Three of the four scenarios are `@javascript`, so a real browser is required.
+These instructions use **chromedriver on its own**, with no Selenium and no Java.
+
+Run all of this on a throwaway clone, never on a production site.
+
+#### 1. Browser and driver
+
 ```bash
-php admin/tool/behat/cli/init.php
-vendor/bin/behat --config /path/to/behatdata/behatrun/behat/behat.yml --tags @enrol_mercadopagocpro
+sudo apt install -y chromium chromium-driver
+chromium --version && chromedriver --version    # the major versions must match
 ```
 
-The feature covers adding the method to a course, the validation messages and
-the student-facing enrolment page. It deliberately stops at the redirect: the
-Mercado Pago checkout itself is out of Behat's reach.
+#### 2. Configuration
+
+In `config.php`, before `require_once(__DIR__ . '/public/lib/setup.php');`:
+
+**The Behat site must be served over HTTPS.** The plugin refuses to enable an
+enrolment instance on a site that is not, because Mercado Pago rejects plain http
+`notification_url` and `back_urls`. That check reads `$CFG->wwwroot`, which during
+a Behat run *is* `$CFG->behat_wwwroot` (`lib/setup.php` assigns it). A plain-http
+Behat site therefore cannot exercise any scenario that enables an instance.
+
+Serve the same `public/` directory from a second Apache listener with the
+self-signed certificate the machine already has:
+
+```apache
+Listen 8443
+<VirtualHost _default_:8443>
+    DocumentRoot "/path/to/moodle/public"
+    SSLEngine on
+    SSLCertificateFile    "/opt/bitnami/apache/conf/bitnami/certs/server.crt"
+    SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/server.key"
+    <Directory "/path/to/moodle/public">
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
+
+Then in `config.php`, before `require_once(__DIR__ . '/public/lib/setup.php');`:
+
+```php
+$CFG->behat_wwwroot  = 'https://127.0.0.1:8443';
+$CFG->behat_prefix   = 'beh_';
+$CFG->behat_dataroot = '/var/moodledata_behat';
+$CFG->behat_faildump_path = '/var/behat_faildumps';
+
+$CFG->behat_profiles = [
+    'chrome' => [
+        'browser'  => 'chrome',
+        'wd_host'  => 'http://127.0.0.1:4444/wd/hub',
+        'capabilities' => [
+            'extra_capabilities' => [
+                'goog:chromeOptions' => [
+                    'args' => [
+                        'headless=new',
+                        'no-sandbox',
+                        'disable-dev-shm-usage',
+                        'disable-gpu',
+                        'window-size=1366,768',
+                        'ignore-certificate-errors',
+                        'allow-insecure-localhost',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+Notes on the values, all of which matter:
+
+- **`behat_wwwroot` must differ from `$CFG->wwwroot`** — Moodle refuses to start
+  otherwise (`lib/behat/lib.php`). It decides a request belongs to the Behat site
+  by matching **host, port and path** against this value, which is why a second
+  port on the same machine is enough. Changing it later requires
+  `php public/admin/tool/behat/cli/util.php --drop` and a fresh `init.php`.
+- **`behat_dataroot` must be a new, empty directory**, distinct from both
+  `dataroot` and `phpunit_dataroot`.
+- **Write the Chrome arguments without the leading `--`.** Moodle strips it
+  anyway (`behat_config_util::get_behat_profile()`), so both forms work, but this
+  is the form the code stores.
+- `headless=new` and `no-sandbox` are what make Chrome usable on a server with no
+  display and no desktop user. `disable-dev-shm-usage` avoids crashes on the small
+  `/dev/shm` that container-derived images tend to have.
+- `behat_faildump_path` is worth setting for a first run: Moodle drops a
+  screenshot and an HTML dump there for every failing scenario.
+
+#### 3. Initialise
+
+```bash
+cd /path/to/moodle
+php public/admin/tool/behat/cli/init.php
+```
+
+This takes several minutes: it installs a complete second Moodle site into
+`beh_*` and generates the Behat configuration. **Read its final lines** — it
+prints the exact path of the generated `behat.yml`, which is what the direct
+`vendor/bin/behat` invocation needs.
+
+Re-run `init.php` after installing or upgrading any plugin, exactly as with
+PHPUnit.
+
+#### 4. Start the two background processes
+
+In one terminal:
+
+```bash
+chromedriver --port=4444 --url-base=wd/hub
+```
+
+Port 4444 with `--url-base=wd/hub` is chosen so the address matches what Moodle
+uses by default; chromedriver's own default is port 9515 at the root path.
+
+The Apache listener from step 2 serves the site itself, so chromedriver is the
+only process to start by hand.
+
+PHP's built-in server (`php -S`) also works for a plain-http Behat site, but it
+cannot terminate TLS, and it is single threaded unless `PHP_CLI_SERVER_WORKERS`
+is set — Moodle issues concurrent requests during a scenario, so without workers
+a run can simply hang.
+
+#### 5. Run
+
+```bash
+cd /path/to/moodle
+php public/admin/tool/behat/cli/run.php --profile=chrome --tags=@enrol_mercadopagocpro
+```
+
+To run a single scenario while debugging, use the generated configuration
+directly with the line number of the scenario:
+
+```bash
+vendor/bin/behat --config <behatdataroot>/behatrun/behat/behat.yml \
+  --profile=chrome \
+  public/enrol/mercadopagocpro/tests/behat/enrol_mercadopagocpro.feature:29
+```
+
+#### Field labels
+
+The labels the feature types into the instance form are resolved from language
+strings, and a mismatch is the usual cause of a first-run failure. The current
+mapping is:
+
+| Label in the feature | Source |
+| --- | --- |
+| `Enrolment fee` | `cost`, this plugin |
+| `Currency` | `currency`, this plugin |
+| `Allow Mercado Pago enrolments` | `status`, this plugin |
+| `Custom instance name` | `custominstancename`, core |
+
+If any of those strings change, the feature has to change with them.
 
 ### Code checks
 

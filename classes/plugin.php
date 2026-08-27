@@ -556,7 +556,11 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
             $this->get_status_options()
         );
         $mform->addHelpButton('status', 'status', 'enrol_mercadopagocpro');
-        $mform->setDefault('status', $this->get_config('status'));
+        // The fallback matters. ENROL_INSTANCE_ENABLED is 0 and it is the first
+        // option, so with a null default moodleform selects it and the form opens
+        // on "Yes" — the opposite of the documented safe default, and of what
+        // get_instance_defaults() returns for the same setting.
+        $mform->setDefault('status', $this->get_config('status', ENROL_INSTANCE_DISABLED));
 
         // Price.
         $mform->addElement('text', 'cost', get_string('cost', 'enrol_mercadopagocpro'), ['size' => 8]);

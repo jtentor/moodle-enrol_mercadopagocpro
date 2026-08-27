@@ -30,11 +30,19 @@ Feature: Mercado Pago Checkout Pro enrolment method
     And I am on the "Course 1" "enrolment methods" page
     When I select "Mercado Pago Checkout Pro" from the "Add method" singleselect
     And I set the following fields to these values:
-      | Custom instance name | Standard price |
-      | Enrolment fee        | 15000          |
-      | Currency             | Argentine Peso |
+      | Custom instance name          | Standard price |
+      | Allow Mercado Pago enrolments | No             |
+      | Enrolment fee                 | 15000          |
+      | Currency                      | Argentine Peso |
     And I press "Add method"
     Then I should see "Standard price" in the "generaltable" "table"
+
+  @javascript
+  Scenario: A new instance form defaults to disabled
+    Given I log in as "manager1"
+    And I am on the "Course 1" "enrolment methods" page
+    When I select "Mercado Pago Checkout Pro" from the "Add method" singleselect
+    Then the field "Allow Mercado Pago enrolments" matches value "No"
 
   @javascript
   Scenario: The enrolment fee must be greater than zero to enable the method
@@ -57,6 +65,9 @@ Feature: Mercado Pago Checkout Pro enrolment method
     And I press "Add method"
     Then I should see "The enrolment fee must be a number"
 
+  # This scenario enables the instance, and the plugin refuses to enable one on a
+  # site that is not served over HTTPS. It therefore requires $CFG->behat_wwwroot
+  # to be an https URL. See docs/TESTING.md.
   Scenario: A student sees the price and the pay button on the enrolment page
     Given the following "courses" exist:
       | fullname | shortname | category | enablecompletion |
