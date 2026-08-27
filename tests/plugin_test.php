@@ -35,7 +35,6 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
  */
 final class plugin_test extends \advanced_testcase
 {
-
     use helper_trait;
 
     /**
@@ -43,8 +42,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_basics(): void
-    {
+    public function test_basics(): void {
         $this->resetAfterTest();
 
         $plugin = enrol_get_plugin('mercadopagocpro');
@@ -58,8 +56,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_add_instance(): void
-    {
+    public function test_add_instance(): void {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(
             [
@@ -79,8 +76,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_advanced_options_roundtrip(): void
-    {
+    public function test_advanced_options_roundtrip(): void {
         global $DB;
 
         $this->setup_plugin();
@@ -111,8 +107,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_edit_instance_validation(): void
-    {
+    public function test_edit_instance_validation(): void {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance();
         $context = \context_course::instance($course->id);
@@ -182,8 +177,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_instance_credentials(): void
-    {
+    public function test_instance_credentials(): void {
         global $DB;
 
         $this->setup_plugin();
@@ -210,8 +204,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_instance_credentials_can_be_forbidden(): void
-    {
+    public function test_instance_credentials_can_be_forbidden(): void {
         $this->setup_plugin();
         set_config('allowinstancecredentials', 0, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance();
@@ -226,8 +219,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_delete_instance_keeps_transactions(): void
-    {
+    public function test_delete_instance_keeps_transactions(): void {
         global $DB;
 
         $this->setup_plugin();
@@ -250,8 +242,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_settings_fall_back_to_site_defaults(): void
-    {
+    public function test_settings_fall_back_to_site_defaults(): void {
         $this->setup_plugin();
         set_config('installments', 12, 'enrol_mercadopagocpro');
         set_config('pendingholding', 1, 'enrol_mercadopagocpro');
@@ -274,8 +265,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_sync_expires_enrolments(): void
-    {
+    public function test_sync_expires_enrolments(): void {
         global $DB;
 
         $this->setup_plugin();
@@ -286,8 +276,12 @@ final class plugin_test extends \advanced_testcase
         $plugin = enrol_get_plugin('mercadopagocpro');
 
         $plugin->enrol_user(
-            $instance, $user->id, $instance->roleid, time() - DAYSECS * 3,
-            time() - DAYSECS, ENROL_USER_ACTIVE
+            $instance,
+            $user->id,
+            $instance->roleid,
+            time() - DAYSECS * 3,
+            time() - DAYSECS,
+            ENROL_USER_ACTIVE
         );
 
         $trace = new \null_progress_trace();
@@ -302,8 +296,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_settings_roundtrip(): void
-    {
+    public function test_welcome_message_settings_roundtrip(): void {
         global $DB;
 
         $this->setup_plugin();
@@ -326,8 +319,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_is_sent_on_approval(): void
-    {
+    public function test_welcome_message_is_sent_on_approval(): void {
         $this->setup_plugin();
         [$course, $instance] = $this->create_course_with_instance(
             [
@@ -363,8 +355,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_can_be_disabled(): void
-    {
+    public function test_welcome_message_can_be_disabled(): void {
         $this->setup_plugin();
         [, $instance] = $this->create_course_with_instance(['customint4' => ENROL_DO_NOT_SEND_EMAIL]);
         $user = $this->getDataGenerator()->create_user();
@@ -388,8 +379,7 @@ final class plugin_test extends \advanced_testcase
      *
      * @return void
      */
-    public function test_welcome_message_not_sent_while_pending(): void
-    {
+    public function test_welcome_message_not_sent_while_pending(): void {
         $this->setup_plugin();
         set_config('pendingholding', 1, 'enrol_mercadopagocpro');
         [, $instance] = $this->create_course_with_instance(

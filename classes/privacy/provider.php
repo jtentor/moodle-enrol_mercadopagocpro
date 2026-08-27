@@ -39,15 +39,13 @@ class provider implements
     \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\request\plugin\provider
 {
-
     /**
      * Describe the personal data this plugin stores and sends to Mercado Pago.
      *
      * @param  collection $items
      * @return collection
      */
-    public static function get_metadata(collection $items): collection
-    {
+    public static function get_metadata(collection $items): collection {
         $items->add_database_table(
             transaction::TABLE,
             [
@@ -89,8 +87,7 @@ class provider implements
      * @param  int $userid
      * @return contextlist
      */
-    public static function get_contexts_for_userid(int $userid): contextlist
-    {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         $sql = "SELECT ctx.id
@@ -99,7 +96,8 @@ class provider implements
                  WHERE t.userid = :userid";
 
         $contextlist->add_from_sql(
-            $sql, [
+            $sql,
+            [
             'contextlevel' => CONTEXT_COURSE,
             'userid' => $userid,
             ]
@@ -114,8 +112,7 @@ class provider implements
      * @param  userlist $userlist
      * @return void
      */
-    public static function get_users_in_context(userlist $userlist)
-    {
+    public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
         if (!$context instanceof \context_course) {
             return;
@@ -134,8 +131,7 @@ class provider implements
      * @param  approved_contextlist $contextlist
      * @return void
      */
-    public static function export_user_data(approved_contextlist $contextlist)
-    {
+    public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
         if (empty($contextlist->count())) {
@@ -149,10 +145,12 @@ class provider implements
             }
 
             $records = $DB->get_records(
-                transaction::TABLE, [
+                transaction::TABLE,
+                [
                 'courseid' => $context->instanceid,
                 'userid' => $user->id,
-                ], 'timecreated ASC'
+                ],
+                'timecreated ASC'
             );
 
             if (!$records) {
@@ -193,8 +191,7 @@ class provider implements
      * @param  \context $context
      * @return void
      */
-    public static function delete_data_for_all_users_in_context(\context $context)
-    {
+    public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
 
         if (!$context instanceof \context_course) {
@@ -209,8 +206,7 @@ class provider implements
      * @param  approved_contextlist $contextlist
      * @return void
      */
-    public static function delete_data_for_user(approved_contextlist $contextlist)
-    {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
         $userid = $contextlist->get_user()->id;
@@ -219,7 +215,8 @@ class provider implements
                 continue;
             }
             $DB->delete_records(
-                transaction::TABLE, [
+                transaction::TABLE,
+                [
                 'courseid' => $context->instanceid,
                 'userid' => $userid,
                 ]
@@ -233,8 +230,7 @@ class provider implements
      * @param  approved_userlist $userlist
      * @return void
      */
-    public static function delete_data_for_users(approved_userlist $userlist)
-    {
+    public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
 
         $context = $userlist->get_context();

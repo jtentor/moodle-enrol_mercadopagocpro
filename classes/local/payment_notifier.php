@@ -27,26 +27,25 @@ use core\message\message;
  */
 class payment_notifier
 {
-
     /**
-     * @var string Payment approved and enrolment active. 
+     * @var string Payment approved and enrolment active.
      */
     public const EVENT_APPROVED = 'approved';
     /**
-     * @var string Payment pending / in process. 
+     * @var string Payment pending / in process.
      */
     public const EVENT_PENDING = 'pending';
     /**
-     * @var string Payment rejected or cancelled before approval. 
+     * @var string Payment rejected or cancelled before approval.
      */
     public const EVENT_FAILED = 'failed';
     /**
-     * @var string Payment refunded or charged back. 
+     * @var string Payment refunded or charged back.
      */
     public const EVENT_REVERSED = 'reversed';
 
     /**
-     * @var array<string,string> Event to message provider mapping. 
+     * @var array<string,string> Event to message provider mapping.
      */
     private const PROVIDERS = [
         self::EVENT_APPROVED => 'payment_approved',
@@ -56,7 +55,7 @@ class payment_notifier
     ];
 
     /**
-     * @var string[] Events that also notify course staff. 
+     * @var string[] Events that also notify course staff.
      */
     private const STAFF_EVENTS = [self::EVENT_APPROVED, self::EVENT_REVERSED];
 
@@ -68,8 +67,7 @@ class payment_notifier
      * @param  \stdClass $transaction transaction record
      * @return void
      */
-    public function send(string $event, \stdClass $instance, \stdClass $transaction): void
-    {
+    public function send(string $event, \stdClass $instance, \stdClass $transaction): void {
         global $DB;
 
         if (!isset(self::PROVIDERS[$event])) {
@@ -110,8 +108,7 @@ class payment_notifier
      * @param  \stdClass $a      placeholders
      * @return void
      */
-    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void
-    {
+    protected function send_to_user(string $event, \stdClass $user, \stdClass $course, \stdClass $a): void {
         $provider = self::PROVIDERS[$event];
 
         $message = new message();
@@ -188,8 +185,7 @@ class payment_notifier
      * @param  \stdClass $transaction
      * @return string
      */
-    protected function format_amount(\stdClass $transaction): string
-    {
+    protected function format_amount(\stdClass $transaction): string {
         $amount = (float)$transaction->amount;
         $currency = (string)$transaction->currency;
         $locale = get_string('localecldr', 'langconfig');

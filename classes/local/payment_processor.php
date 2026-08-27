@@ -34,9 +34,8 @@ use enrol_mercadopagocpro\event\payment_updated;
  */
 class payment_processor
 {
-
     /**
-     * @var api_client 
+     * @var api_client
      */
     protected api_client $client;
 
@@ -45,8 +44,7 @@ class payment_processor
      *
      * @param api_client|null $client injected for testing; resolved per instance when null
      */
-    public function __construct(?api_client $client = null)
-    {
+    public function __construct(?api_client $client = null) {
         if ($client !== null) {
             $this->client = $client;
         }
@@ -59,8 +57,7 @@ class payment_processor
      * @param  \stdClass|null $hinttransaction transaction the caller believes this payment belongs to
      * @return processing_result
      */
-    public function process_payment($paymentid, ?\stdClass $hinttransaction = null): processing_result
-    {
+    public function process_payment($paymentid, ?\stdClass $hinttransaction = null): processing_result {
         global $DB;
 
         $paymentid = (string)$paymentid;
@@ -102,8 +99,7 @@ class payment_processor
      * @param  \stdClass $transaction
      * @return processing_result
      */
-    public function reconcile(\stdClass $transaction): processing_result
-    {
+    public function reconcile(\stdClass $transaction): processing_result {
         global $DB;
 
         $instance = $DB->get_record('enrol', ['id' => $transaction->enrolid, 'enrol' => 'mercadopagocpro']);
@@ -130,8 +126,7 @@ class payment_processor
      * @param  \stdClass|null $hinttransaction
      * @return processing_result
      */
-    public function process_merchant_order($merchantorderid, ?\stdClass $hinttransaction = null): processing_result
-    {
+    public function process_merchant_order($merchantorderid, ?\stdClass $hinttransaction = null): processing_result {
         global $DB;
 
         $merchantorderid = (string)$merchantorderid;
@@ -188,8 +183,7 @@ class payment_processor
      * @param  object    $payment     payment resource returned by the SDK
      * @return processing_result
      */
-    public function apply_payment(\stdClass $instance, \stdClass $transaction, object $payment): processing_result
-    {
+    public function apply_payment(\stdClass $instance, \stdClass $transaction, object $payment): processing_result {
         $settings = instance_settings::from_instance($instance);
 
         // The payment must belong to this transaction. Mercado Pago echoes the
@@ -197,7 +191,8 @@ class payment_processor
         $reference = (string)($payment->external_reference ?? '');
         if ($reference !== '' && $reference !== (string)$transaction->externalreference) {
             util::log_error(
-                'Payment external_reference does not match the transaction', [
+                'Payment external_reference does not match the transaction',
+                [
                 'txnid' => (int)$transaction->id,
                 'paymentid' => $payment->id ?? null,
                 ]
@@ -245,7 +240,8 @@ class payment_processor
             if (!$amountok && in_array($newstatus, status::granting(), true)) {
                 $fields['lasterror'] = 'Approved payment does not match the expected amount or currency.';
                 util::log_error(
-                    'Approved payment amount mismatch - enrolment withheld', [
+                    'Approved payment amount mismatch - enrolment withheld',
+                    [
                     'txnid' => (int)$transaction->id,
                     // Both sides are formatted the same way on purpose: the column
                     // is a decimal and the payment amount is a float, so without
@@ -299,7 +295,8 @@ class payment_processor
             if ($state !== status::ENROLMENT_ACTIVE) {
                 if (!enrolment_manager::has_capacity($instance, $settings) && $state !== status::ENROLMENT_PENDING) {
                     util::log_error(
-                        'Course is full, approved payment could not be enrolled', [
+                        'Course is full, approved payment could not be enrolled',
+                        [
                         'txnid' => (int)$transaction->id,
                         ]
                     );
@@ -371,8 +368,7 @@ class payment_processor
      * @param  \stdClass $transaction
      * @return bool
      */
-    protected function amount_matches(float $paidamount, string $paidcurrency, \stdClass $transaction): bool
-    {
+    protected function amount_matches(float $paidamount, string $paidcurrency, \stdClass $transaction): bool {
         $expected = (float)$transaction->amount;
         if ($paidcurrency !== '' && strtoupper($paidcurrency) !== strtoupper((string)$transaction->currency)) {
             return false;
@@ -389,10 +385,11 @@ class payment_processor
      * @param  string    $previousstatus
      * @return void
      */
-    protected function trigger_updated(\stdClass $instance, \stdClass $transaction, string $previousstatus): void
-    {
+    protected function trigger_updated(\stdClass $instance, \stdClass $transaction, string $previousstatus): void {
         payment_updated::create_from_transaction(
-            $instance, $transaction, [
+            $instance,
+            $transaction,
+            [
             'previousstatus' => $previousstatus,
             ]
         )->trigger();
@@ -432,7 +429,8 @@ class payment_processor
         } catch (\Throwable $e) {
             // A welcome message must never cost somebody their paid enrolment.
             util::log_error(
-                'Welcome message could not be sent: ' . $e->getMessage(), [
+                'Welcome message could not be sent: ' . $e->getMessage(),
+                [
                 'txnid' => (int)$transaction->id,
                 ]
             );
@@ -449,8 +447,7 @@ class payment_processor
      * @param  instance_settings $settings
      * @return void
      */
-    protected function notify(string $event, \stdClass $instance, \stdClass $transaction, instance_settings $settings): void
-    {
+    protected function notify(string $event, \stdClass $instance, \stdClass $transaction, instance_settings $settings): void {
         if (!$settings->notifications) {
             return;
         }
@@ -458,7 +455,8 @@ class payment_processor
             (new payment_notifier())->send($event, $instance, $transaction);
         } catch (\Throwable $e) {
             util::log_error(
-                'Notification could not be sent: ' . $e->getMessage(), [
+                'Notification could not be sent: ' . $e->getMessage(),
+                [
                 'event' => $event,
                 'txnid' => (int)$transaction->id,
                 ]
@@ -472,8 +470,7 @@ class payment_processor
      * @param  \stdClass $instance
      * @return api_client
      */
-    protected function get_client(\stdClass $instance): api_client
-    {
+    protected function get_client(\stdClass $instance): api_client {
         if (isset($this->client)) {
             return $this->client;
         }

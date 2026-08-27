@@ -47,14 +47,13 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/fixtures/mock_http_cl
  */
 trait helper_trait
 {
-
     /**
-     * @var mock_http_client|null 
+     * @var mock_http_client|null
      */
     protected ?mock_http_client $mpclient = null;
 
     /**
-     * @var bool Whether message redirection has already been started in this test. 
+     * @var bool Whether message redirection has already been started in this test.
      */
     protected bool $messagesredirected = false;
 
@@ -63,8 +62,7 @@ trait helper_trait
      *
      * @return mock_http_client
      */
-    protected function setup_plugin(): mock_http_client
-    {
+    protected function setup_plugin(): mock_http_client {
         global $CFG;
 
         $this->resetAfterTest();
@@ -121,8 +119,7 @@ trait helper_trait
      * @param  array $fields instance overrides
      * @return array{0:\stdClass,1:\stdClass} course and enrol instance
      */
-    protected function create_course_with_instance(array $fields = []): array
-    {
+    protected function create_course_with_instance(array $fields = []): array {
         global $DB;
 
         $course = $this->getDataGenerator()->create_course();
@@ -135,7 +132,8 @@ trait helper_trait
             'cost' => 100,
             'currency' => 'ARS',
             'roleid' => $studentrole->id,
-            ], $fields
+            ],
+            $fields
         );
 
         $instanceid = $plugin->add_instance($course, $fields);
@@ -153,8 +151,7 @@ trait helper_trait
      * @param  int|null $ts
      * @return string
      */
-    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string
-    {
+    protected function build_signature(string $dataid, string $requestid, string $secret, ?int $ts = null): string {
         $ts = $ts ?? time();
         $manifest = 'id:' . $dataid . ';request-id:' . $requestid . ';ts:' . $ts . ';';
         return 'ts=' . $ts . ',v1=' . hash_hmac('sha256', $manifest, $secret);

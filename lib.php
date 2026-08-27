@@ -29,19 +29,19 @@
  */
 
 /**
- * @var string Plugin component name. 
-*/
+ * @var string Plugin component name.
+ */
 define('ENROL_MERCADOPAGOCPRO_COMPONENT', 'enrol_mercadopagocpro');
 
 /**
- * Action performed when a payment is refunded / charged back: do nothing. 
+ * Action performed when a payment is refunded / charged back: do nothing.
 */
 define('ENROL_MERCADOPAGOCPRO_REVERSAL_KEEP', 0);
 /**
- * Action performed when a payment is refunded / charged back: suspend and remove roles. 
+ * Action performed when a payment is refunded / charged back: suspend and remove roles.
 */
 define('ENROL_MERCADOPAGOCPRO_REVERSAL_SUSPEND', 1);
 /**
- * Action performed when a payment is refunded / charged back: unenrol. 
+ * Action performed when a payment is refunded / charged back: unenrol.
 */
 define('ENROL_MERCADOPAGOCPRO_REVERSAL_UNENROL', 2);

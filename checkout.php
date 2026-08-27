@@ -53,7 +53,8 @@ try {
     $result = (new checkout_service())->start($instance, $USER);
 } catch (moodle_exception $e) {
     util::log_debug(
-        'Checkout could not be started', [
+        'Checkout could not be started',
+        [
         'instanceid' => $instanceid,
         'userid' => $USER->id,
         'message' => $e->getMessage(),
