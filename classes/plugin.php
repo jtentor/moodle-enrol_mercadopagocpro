@@ -556,10 +556,11 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
             $this->get_status_options()
         );
         $mform->addHelpButton('status', 'status', 'enrol_mercadopagocpro');
-        // The fallback matters. ENROL_INSTANCE_ENABLED is 0 and it is the first
-        // option, so with a null default moodleform selects it and the form opens
-        // on "Yes" — the opposite of the documented safe default, and of what
-        // get_instance_defaults() returns for the same setting.
+        // The fallback keeps this consistent with get_instance_defaults(), which
+        // uses the same one. Note that it rarely decides anything: when a person
+        // adds an instance through the UI, enrol/editinstance.php overrides the
+        // status with ENROL_INSTANCE_ENABLED and set_data() beats setDefault(),
+        // so the form opens on "Yes" by core's design, for every enrolment plugin.
         $mform->setDefault('status', $this->get_config('status', ENROL_INSTANCE_DISABLED));
 
         // Price.

@@ -24,22 +24,27 @@ the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   decides a request belongs to the test site, and the mapping between the field
   labels the feature types and the language strings that produce them.
 
-### Fixed
+### Changed
 
-- **A new enrolment instance form opened on "Allow Mercado Pago enrolments: Yes".**
-  `edit_instance_form()` called `$mform->setDefault('status', $this->get_config('status'))`
-  with no fallback. When the site level setting is unset, `get_config()` returns
-  null, moodleform falls back to the first option, and `ENROL_INSTANCE_ENABLED` is
-  `0` — so the form pre-selected *enabled*, the opposite of the documented safe
-  default and of what `get_instance_defaults()` returns for the same setting. Now
-  `get_config('status', ENROL_INSTANCE_DISABLED)`, matching the instance defaults.
-  **Found by the first Behat run**, which is a defect PHPUnit structurally could
-  not reach: the suite calls `add_instance()` with an array and never builds the
-  form.
+- `edit_instance_form()` passes a fallback to `setDefault('status', …)`, matching
+  the one `get_instance_defaults()` already used. This is tidiness, not a fix: a
+  person adding an instance through the UI always sees "Yes" preselected, because
+  `enrol/editinstance.php` sets `$instance->status = ENROL_INSTANCE_ENABLED`
+  before the form is built and `set_data()` overrides `setDefault()`. Core does
+  this deliberately — the site level setting governs automatically created
+  instances — and every enrolment plugin behaves the same way.
+
+### Verified by the first Behat run
+
+Four scenarios, all passing on a real site with chromedriver: adding the method,
+the two validation messages, and the student seeing the pay button on an enabled
+instance over HTTPS. The run also confirmed that the HTTPS guard on
+`edit_instance_validation()` does what it claims — the first attempt, over plain
+http, was refused.
 
 ### Pending for this release
 
-- Running the Behat suite. The feature file exists and has never been executed;
+- Nothing outstanding. The feature file exists and has never been executed;
   it covers the part of the plugin PHPUnit structurally cannot reach — the
   instance form as the browser actually submits it.
 

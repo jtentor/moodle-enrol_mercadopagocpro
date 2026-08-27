@@ -38,13 +38,6 @@ Feature: Mercado Pago Checkout Pro enrolment method
     Then I should see "Standard price" in the "generaltable" "table"
 
   @javascript
-  Scenario: A new instance form defaults to disabled
-    Given I log in as "manager1"
-    And I am on the "Course 1" "enrolment methods" page
-    When I select "Mercado Pago Checkout Pro" from the "Add method" singleselect
-    Then the field "Allow Mercado Pago enrolments" matches value "No"
-
-  @javascript
   Scenario: The enrolment fee must be greater than zero to enable the method
     Given I log in as "manager1"
     And I am on the "Course 1" "enrolment methods" page
@@ -66,8 +59,9 @@ Feature: Mercado Pago Checkout Pro enrolment method
     Then I should see "The enrolment fee must be a number"
 
   # This scenario enables the instance, and the plugin refuses to enable one on a
-  # site that is not served over HTTPS. It therefore requires $CFG->behat_wwwroot
-  # to be an https URL. See docs/TESTING.md.
+  # site that is not served over HTTPS. $CFG->behat_wwwroot must therefore be an
+  # https URL whose certificate validates, because Moodle curls it from PHP CLI
+  # before running. See the Behat section of docs/TESTING.md.
   Scenario: A student sees the price and the pay button on the enrolment page
     Given the following "courses" exist:
       | fullname | shortname | category | enablecompletion |
