@@ -22,7 +22,7 @@ use enrol_mercadopagocpro\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once $CFG->libdir . '/tablelib.php';
+require_once($CFG->libdir . '/tablelib.php');
 
 /**
  * Transaction report table.

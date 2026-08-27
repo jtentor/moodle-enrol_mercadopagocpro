@@ -27,7 +27,7 @@ use enrol_mercadopagocpro\privacy\provider;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once $CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php';
+require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
 
 /**
  * Tests for the privacy provider.

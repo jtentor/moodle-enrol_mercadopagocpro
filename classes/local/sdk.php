@@ -61,7 +61,7 @@ final class sdk
         // 1. Composer managed installation inside the plugin.
         $composerautoload = $plugindir . '/vendor/autoload.php';
         if (file_exists($composerautoload)) {
-            require_once $composerautoload;
+            require_once($composerautoload);
             return;
         }
 
@@ -82,7 +82,7 @@ final class sdk
                 // Guard against traversal coming from a crafted class name.
                 $real = realpath($path);
                 if ($real !== false && strpos($real, realpath($bundled)) === 0) {
-                    require_once $real;
+                    require_once($real);
                 }
             }
         );
@@ -111,6 +111,7 @@ final class sdk
         if (!self::is_available()) {
             return null;
         }
+        // phpcs:ignore moodle.NamingConventions.ValidVariableName -- Third party static property, not ours to rename.
         return \MercadoPago\MercadoPagoConfig::$CURRENT_VERSION;
     }
 

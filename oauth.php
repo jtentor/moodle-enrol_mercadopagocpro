@@ -26,7 +26,7 @@
  * @see       https://www.mercadopago.com.br/developers/en/docs/security/oauth/creation
  */
 
-require __DIR__ . '/../../config.php';
+require(__DIR__ . '/../../config.php');
 
 use enrol_mercadopagocpro\local\api_exception;
 use enrol_mercadopagocpro\local\oauth_helper;
@@ -49,7 +49,7 @@ if (!oauth_helper::is_enabled()) {
     throw new moodle_exception('error:marketplacedisabled', 'enrol_mercadopagocpro');
 }
 
-// ---------------------------------------------------------------- Start flow.
+// Start flow.
 if ($action === 'connect') {
     require_sesskey();
     $instanceid = required_param('instanceid', PARAM_INT);
@@ -61,7 +61,7 @@ if ($action === 'connect') {
     redirect(new moodle_url(oauth_helper::build_authorization_url($instanceid)));
 }
 
-// ----------------------------------------------------------- Handle callback.
+// Handle callback.
 $returnurl = new moodle_url('/enrol/instances.php');
 
 if ($error !== '') {

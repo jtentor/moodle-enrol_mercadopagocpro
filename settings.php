@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    // ------------------------------------------------------------- Diagnostics.
+    // Diagnostics.
     $notices = [];
     if (!sdk::is_available()) {
         $notices[] = new \core\output\notification(
@@ -65,7 +65,7 @@ if ($ADMIN->fulltree) {
     }
     $settings->add(new admin_setting_heading('enrol_mercadopagocpro_status', '', $noticehtml));
 
-    // ------------------------------------------------------------ Credentials.
+    // Credentials.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_credentials',
@@ -150,7 +150,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // --------------------------------------------------------------- Webhooks.
+    // Webhooks.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_webhooks',
@@ -226,7 +226,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // ------------------------------------------------- Checkout Pro preference.
+    // Checkout Pro preference.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_preference',
@@ -351,7 +351,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // -------------------------------------------------------- Split payments.
+    // Split payments.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_marketplace',
@@ -402,7 +402,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // ---------------------------------------------------- Enrolment behaviour.
+    // Enrolment behaviour.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_behaviour',
@@ -478,7 +478,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // ------------------------------------------------------------ Diagnostics.
+    // Diagnostics.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_diagnostics',
@@ -538,7 +538,7 @@ if ($ADMIN->fulltree) {
         )
     );
 
-    // --------------------------------------------------- Instance defaults.
+    // Instance defaults.
     $settings->add(
         new admin_setting_heading(
             'enrol_mercadopagocpro_defaults',

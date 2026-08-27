@@ -211,8 +211,10 @@ final class util
         if ($context) {
             $line .= ' ' . self::encode_for_storage($context, 4000);
         }
-        // debugging() honours the site's debug settings; error_log guarantees the
-        // line reaches the server log even on a production site.
+        // The debugging() call honours the site's debug settings, which are off on
+        // a production site. A payment audit trail has to survive that, so the line
+        // also goes to the server log unconditionally.
+        // phpcs:ignore moodle.PHP.ForbiddenFunctions.FoundWithAlternative -- Deliberate: see above.
         error_log($line);
     }
 

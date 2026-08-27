@@ -189,6 +189,7 @@ final class credentials
      *
      * @return array
      */
+    // phpcs:ignore moodle.NamingConventions.ValidFunctionName.MagicLikeMethod -- __debugInfo is a real PHP magic method.
     public function __debugInfo(): array
     {
         return [

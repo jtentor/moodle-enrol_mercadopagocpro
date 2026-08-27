@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require __DIR__ . '/../../config.php';
+require(__DIR__ . '/../../config.php');
 
 use enrol_mercadopagocpro\local\payment_processor;
 use enrol_mercadopagocpro\local\status;
@@ -62,7 +62,7 @@ $PAGE->set_pagelayout('report');
 $PAGE->set_title(get_string('transactions', 'enrol_mercadopagocpro'));
 $PAGE->set_heading($course->fullname);
 
-// ------------------------------------------------------- Manual reconciliation.
+// Manual reconciliation.
 if ($action === 'reconcile' && $txnid > 0) {
     require_sesskey();
     require_capability('enrol/mercadopagocpro:reconcile', $context);

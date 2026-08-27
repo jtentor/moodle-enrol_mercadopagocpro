@@ -550,7 +550,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
 
         $settings = instance_settings::from_instance($instance);
 
-        // ---------------------------------------------------------------- General.
+        // General.
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'), ['size' => 40]);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'server');
@@ -570,7 +570,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
         $mform->addHelpButton('status', 'status', 'enrol_mercadopagocpro');
         $mform->setDefault('status', $this->get_config('status'));
 
-        // ------------------------------------------------------------------ Price.
+        // Price.
         $mform->addElement('text', 'cost', get_string('cost', 'enrol_mercadopagocpro'), ['size' => 8]);
         $mform->setType('cost', PARAM_RAW);
         $mform->setDefault('cost', format_float((float)$this->get_config('cost'), 2, true));
@@ -582,7 +582,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
         );
         $mform->setDefault('currency', $this->get_config('currency'));
 
-        // ------------------------------------------------------------- Enrolment.
+        // Enrolment.
         $mform->addElement(
             'select', 'roleid', get_string('assignrole', 'enrol_mercadopagocpro'),
             $this->get_roleid_options($instance, $context)
@@ -633,7 +633,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
         $mform->addHelpButton('customint5', 'maxenrolled', 'enrol_mercadopagocpro');
         $mform->setDefault('customint5', 0);
 
-        // ------------------------------------------------- Payment behaviour.
+        // Payment behaviour.
         $mform->addElement('header', 'mpbehaviour', get_string('paymentbehaviour', 'enrol_mercadopagocpro'));
 
         $trilean = [
@@ -662,7 +662,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
         $mform->addHelpButton('customint6', 'reversalaction', 'enrol_mercadopagocpro');
         $mform->setDefault('customint6', -1);
 
-        // ------------------------------------------------- Course welcome message.
+        // Course welcome message.
         // Same behaviour and the same enrol table columns as enrol_self, so the
         // message and its placeholders work exactly as course staff already expect.
         $mform->addElement(
@@ -703,7 +703,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
             value: ENROL_DO_NOT_SEND_EMAIL,
         );
 
-        // ----------------------------------------- Checkout Pro advanced options.
+        // Checkout Pro advanced options.
         $mform->addElement('header', 'mpadvanced', get_string('advancedpreference', 'enrol_mercadopagocpro'));
 
         $mform->addElement('text', 'customint2', get_string('installments', 'enrol_mercadopagocpro'), ['size' => 4]);
@@ -766,7 +766,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
         $mform->addHelpButton('mpmetadata', 'custommetadata', 'enrol_mercadopagocpro');
         $mform->setDefault('mpmetadata', implode("\n", $metadatalines));
 
-        // ------------------------------------------------------- Split payments.
+        // Split payments.
         if ((bool)$this->get_config('marketplaceenabled')) {
             $mform->addElement('header', 'mpmarketplace', get_string('splitpayments', 'enrol_mercadopagocpro'));
 
@@ -807,7 +807,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
             }
         }
 
-        // ---------------------------------------------- Per instance credentials.
+        // Per instance credentials.
         if (credentials::instance_override_allowed()) {
             $mform->addElement('header', 'mpcredentials', get_string('instancecredentials', 'enrol_mercadopagocpro'));
             $mform->addElement(
@@ -1104,7 +1104,7 @@ class enrol_mercadopagocpro_plugin extends enrol_plugin
     public function restore_group_member($instance, $groupid, $userid)
     {
         global $CFG;
-        require_once $CFG->dirroot . '/group/lib.php';
+        require_once($CFG->dirroot . '/group/lib.php');
         groups_add_member($groupid, $userid);
         unset($instance);
     }

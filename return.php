@@ -28,7 +28,7 @@
  * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
  */
 
-require __DIR__ . '/../../config.php';
+require(__DIR__ . '/../../config.php');
 
 use enrol_mercadopagocpro\local\payment_processor;
 use enrol_mercadopagocpro\local\status;

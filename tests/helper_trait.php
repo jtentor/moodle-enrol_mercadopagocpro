@@ -36,7 +36,7 @@ if (!interface_exists(\MercadoPago\Net\MPHttpClient::class)) {
         'its interfaces, so the suite cannot run without it.'
     );
 }
-require_once $CFG->dirroot . '/enrol/mercadopagocpro/tests/fixtures/mock_http_client.php';
+require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/fixtures/mock_http_client.php');
 
 /**
  * Shared setup for the enrol_mercadopagocpro test suite.

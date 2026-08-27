@@ -24,7 +24,7 @@ use enrol_mercadopagocpro\local\webhook_handler;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once $CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php';
+require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
 
 /**
  * Tests for the webhook endpoint logic.

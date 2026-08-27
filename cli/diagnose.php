@@ -32,9 +32,9 @@
 
 define('CLI_SCRIPT', true);
 
-require __DIR__ . '/../../../config.php';
-require_once $CFG->libdir . '/clilib.php';
-require_once $CFG->libdir . '/ddllib.php';
+require(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/clilib.php');
+require_once($CFG->libdir . '/ddllib.php');
 
 /**
  * Plugin names this component used before it was renamed. Rows in the enrol table
@@ -123,7 +123,7 @@ function mpcp_report(?bool $ok, string $label, string $detail, string $fix = '')
 echo PHP_EOL;
 echo '=== enrol_mercadopagocpro diagnostics ===' . PHP_EOL . PHP_EOL;
 
-// ---------------------------------------------------------------- 1. Location.
+// 1. Location.
 echo '1. Installation' . PHP_EOL;
 
 $expecteddir = $CFG->dirroot . '/enrol/mercadopagocpro';
@@ -145,7 +145,7 @@ mpcp_report(
 $diskversion = null;
 if (file_exists($expecteddir . '/version.php')) {
     $plugin = new stdClass();
-    require $expecteddir . '/version.php';
+    require($expecteddir . '/version.php');
     $diskversion = $plugin->version ?? null;
     $requires = $plugin->requires ?? null;
 
@@ -183,7 +183,7 @@ if ($dbversion && $diskversion && (float)$dbversion < (float)$diskversion) {
     );
 }
 
-// ----------------------------------------------------------------- 2. Classes.
+// 2. Classes.
 echo PHP_EOL . '2. Code loading' . PHP_EOL;
 
 $classloadable = class_exists('enrol_mercadopagocpro_plugin');
@@ -244,7 +244,7 @@ if ($instance !== null) {
     }
 }
 
-// ----------------------------------------------------------------- 3. Enabled.
+// 3. Enabled.
 echo PHP_EOL . '3. Enabled state' . PHP_EOL;
 
 $enabledlist = isset($CFG->enrol_plugins_enabled) ? explode(',', $CFG->enrol_plugins_enabled) : [];
@@ -259,7 +259,7 @@ mpcp_report(
 );
 echo '         enrol_plugins_enabled = ' . implode(', ', $enabledlist) . PHP_EOL;
 
-// ------------------------------------------------------------ 4. Capabilities.
+// 4. Capabilities.
 echo PHP_EOL . '4. Capabilities' . PHP_EOL;
 
 $capsindb = $DB->get_fieldset_select(
@@ -367,7 +367,7 @@ if ($options['courseid']) {
     echo '         dropdown would contain: ' . (($candidates) ? implode(', ', $candidates) : '(nothing)') . PHP_EOL;
 }
 
-// ------------------------------------------------------------ 6. Environment.
+// 6. Environment.
 echo PHP_EOL . '6. Runtime prerequisites' . PHP_EOL;
 
 $https = strpos((string)$CFG->wwwroot, 'https://') === 0;
@@ -457,7 +457,7 @@ mpcp_report(
     'Only needed for per-course credentials, which are encrypted with \core\encryption.'
 );
 
-// -------------------------------------------------------------- 7. Database.
+// 7. Database.
 echo PHP_EOL . '7. Database tables' . PHP_EOL;
 
 $dbman = $DB->get_manager();
@@ -471,7 +471,7 @@ foreach (['enrol_mercadopagocpro_txn', 'enrol_mercadopagocpro_wh', 'enrol_mercad
     );
 }
 
-// ------------------------------------------------------------ 8. Credentials.
+// 8. Credentials.
 echo PHP_EOL . '8. Configuration' . PHP_EOL;
 
 if ($classloadable) {
@@ -507,14 +507,14 @@ mpcp_report(
     'Run php admin/cli/upgrade.php. Without reconcile_payments a lost notification strands a payment.'
 );
 
-// -------------------------------------------------- 9. Instance form smoke test.
+// 9. Instance form smoke test.
 // enrol/editinstance.php is what actually runs when you pick the method from the
 // dropdown, and edit_instance_form() only ever executes in the browser. Building
 // the form here reproduces that code path and surfaces any fatal it would throw.
 if ($options['courseid'] && $instance !== null) {
     echo PHP_EOL . '9. Instance form smoke test' . PHP_EOL;
 
-    require_once $CFG->libdir . '/formslib.php';
+    require_once($CFG->libdir . '/formslib.php');
 
     $course = $DB->get_record('course', ['id' => (int)$options['courseid']], '*', MUST_EXIST);
     $coursecontext = context_course::instance($course->id);
@@ -553,7 +553,7 @@ if ($options['courseid'] && $instance !== null) {
     }
 }
 
-// ------------------------------------------------ 10. Save path smoke test.
+// 10. Save path smoke test.
 // Reproduces what happens when you fill the form and press "Add method":
 // edit_instance_validation() first, then add_instance(). The submitted data is
 // derived from the real form built in section 9, so every field the browser
@@ -668,7 +668,7 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
     }
 }
 
-// ---------------------------------------------------- 11. Orphan cleanup.
+// 11. Orphan cleanup.
 if ($options['fixorphans']) {
     echo PHP_EOL . '11. Orphan cleanup' . PHP_EOL;
 
@@ -689,7 +689,7 @@ if ($options['fixorphans']) {
     }
 }
 
-// -------------------------------------------------------------- Conclusion.
+// Conclusion.
 echo PHP_EOL . '=== Result: ' . $failures . ' failure(s), ' . $warnings . ' warning(s) ===' . PHP_EOL;
 
 if ($failures === 0) {

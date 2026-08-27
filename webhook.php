@@ -31,7 +31,7 @@
 define('NO_MOODLE_COOKIES', true);
 define('NO_DEBUG_DISPLAY', true);
 
-require __DIR__ . '/../../config.php';
+require(__DIR__ . '/../../config.php');
 
 use enrol_mercadopagocpro\local\util;
 use enrol_mercadopagocpro\local\webhook_handler;
