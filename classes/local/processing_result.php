@@ -25,17 +25,16 @@ namespace enrol_mercadopagocpro\local;
  */
 final class processing_result
 {
-
     /**
-     * @var string The payment was looked up and the enrolment state is up to date. 
+     * @var string The payment was looked up and the enrolment state is up to date.
      */
     public const HANDLED = 'handled';
     /**
-     * @var string Nothing to do; this notification is not ours or is not actionable. 
+     * @var string Nothing to do; this notification is not ours or is not actionable.
      */
     public const IGNORED = 'ignored';
     /**
-     * @var string A transient failure; the caller should try again later. 
+     * @var string A transient failure; the caller should try again later.
      */
     public const RETRY = 'retry';
 
@@ -50,23 +49,23 @@ final class processing_result
      */
     private function __construct(
         /**
-         * @var string 
+         * @var string
          */
         public readonly string $outcome,
         /**
-         * @var string 
+         * @var string
          */
         public readonly string $message = '',
         /**
-         * @var string|null 
+         * @var string|null
          */
         public readonly ?string $enrolmentstate = null,
         /**
-         * @var string|null 
+         * @var string|null
          */
         public readonly ?string $paymentstatus = null,
         /**
-         * @var bool 
+         * @var bool
          */
         public readonly bool $retryable = false,
     ) {
@@ -79,8 +78,7 @@ final class processing_result
      * @param  string $paymentstatus
      * @return self
      */
-    public static function handled(string $enrolmentstate, string $paymentstatus): self
-    {
+    public static function handled(string $enrolmentstate, string $paymentstatus): self {
         return new self(self::HANDLED, 'Processed.', $enrolmentstate, $paymentstatus);
     }
 
@@ -90,8 +88,7 @@ final class processing_result
      * @param  string $message
      * @return self
      */
-    public static function ignored(string $message): self
-    {
+    public static function ignored(string $message): self {
         return new self(self::IGNORED, $message);
     }
 
@@ -102,8 +99,7 @@ final class processing_result
      * @param  bool   $retryable
      * @return self
      */
-    public static function retry(string $message, bool $retryable = true): self
-    {
+    public static function retry(string $message, bool $retryable = true): self {
         return new self(self::RETRY, $message, null, null, $retryable);
     }
 
@@ -112,8 +108,7 @@ final class processing_result
      *
      * @return bool
      */
-    public function is_handled(): bool
-    {
+    public function is_handled(): bool {
         return $this->outcome === self::HANDLED;
     }
 
@@ -122,8 +117,7 @@ final class processing_result
      *
      * @return bool
      */
-    public function should_retry(): bool
-    {
+    public function should_retry(): bool {
         return $this->outcome === self::RETRY && $this->retryable;
     }
 }

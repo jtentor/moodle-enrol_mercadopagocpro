@@ -43,8 +43,7 @@ use enrol_mercadopagocpro\local\webhook_handler;
  * @param  string $body   response body
  * @return void
  */
-function enrol_mercadopagocpro_respond(int $status, string $body): void
-{
+function enrol_mercadopagocpro_respond(int $status, string $body): void {
     if (!headers_sent()) {
         http_response_code($status);
         header('Content-Type: text/plain; charset=utf-8');

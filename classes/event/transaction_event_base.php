@@ -25,14 +25,12 @@ namespace enrol_mercadopagocpro\event;
  */
 abstract class transaction_event_base extends \core\event\base
 {
-
     /**
      * Common initialisation: read only, course level, on the transaction table.
      *
      * @return void
      */
-    protected function init()
-    {
+    protected function init() {
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_OTHER;
         $this->data['objecttable'] = 'enrol_mercadopagocpro_txn';
@@ -46,8 +44,7 @@ abstract class transaction_event_base extends \core\event\base
      * @param  array     $other       extra values for the `other` payload
      * @return static
      */
-    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self
-    {
+    public static function create_from_transaction(\stdClass $instance, \stdClass $transaction, array $other = []): self {
         $event = static::create(
             [
             'context' => \context_course::instance($instance->courseid),
@@ -64,7 +61,8 @@ abstract class transaction_event_base extends \core\event\base
                 'currency' => (string)$transaction->currency,
                 'enrolmentstate' => (string)$transaction->enrolmentstate,
                 'livemode' => (int)$transaction->livemode,
-                ], $other
+                ],
+                $other
             ),
             ]
         );
@@ -77,10 +75,10 @@ abstract class transaction_event_base extends \core\event\base
      *
      * @return \moodle_url
      */
-    public function get_url()
-    {
+    public function get_url() {
         return new \moodle_url(
-            '/enrol/mercadopagocpro/transactions.php', [
+            '/enrol/mercadopagocpro/transactions.php',
+            [
             'courseid' => $this->contextinstanceid,
             'txn' => $this->objectid,
             ]

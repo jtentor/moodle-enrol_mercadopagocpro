@@ -83,11 +83,11 @@ EOT;
 }
 
 /**
- * @var int Number of blocking problems found. 
+ * @var int Number of blocking problems found.
 */
 $failures = 0;
 /**
- * @var int Number of warnings found. 
+ * @var int Number of warnings found.
 */
 $warnings = 0;
 
@@ -100,8 +100,7 @@ $warnings = 0;
  * @param  string    $fix    what to do about it
  * @return void
  */
-function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void
-{
+function mpcp_report(?bool $ok, string $label, string $detail, string $fix = ''): void {
     global $failures, $warnings;
 
     if ($ok === true) {
@@ -425,8 +424,10 @@ if ($sdkok && $declaredversion !== null) {
 
 // Development tooling must never travel inside a released plugin.
 $strays = [];
-foreach (['vendor/autoload.php', 'vendor/composer', 'vendor/mercadopago/dx-php',
-    'vendor/squizlabs', 'vendor/moodlehq', 'vendor/phpcsstandards', 'composer.lock'] as $stray) {
+foreach (
+    ['vendor/autoload.php', 'vendor/composer', 'vendor/mercadopago/dx-php',
+    'vendor/squizlabs', 'vendor/moodlehq', 'vendor/phpcsstandards', 'composer.lock'] as $stray
+) {
     if (file_exists($expecteddir . '/' . $stray)) {
         $strays[] = $stray;
     }
