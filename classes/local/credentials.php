@@ -174,8 +174,8 @@ final class credentials
         return $this->webhooksecret !== '';
     }
 
-    // __debugInfo() is a genuine PHP magic method; the moodle-cs list of them is
-    // incomplete, so the naming sniff has to be silenced around this declaration.
+    // PHP's __debugInfo() is a genuine PHP magic method; the moodle-cs list of them
+    // is incomplete, so the naming sniff has to be silenced around this declaration.
     // The disable has to sit before the docblock, otherwise it separates the
     // docblock from the function and the MissingDocblock sniff fires instead.
     // phpcs:disable moodle.NamingConventions.ValidFunctionName.MagicLikeMethod
