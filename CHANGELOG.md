@@ -4,6 +4,24 @@ All notable changes to `enrol_mercadopagocpro` are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - v1.0.1
+
+### Fixed
+
+- **README: a typo inverted the meaning of the reliability guarantee.** The
+  settlement section read "a lost notification can ever strand a payment"; it
+  should be *never*. The sentence describes the whole point of having three
+  independent settlement paths, so the wrong word undermined exactly the claim it
+  was making. Introduced when the paragraphs were reflowed.
+- README: sentences broken mid-line by the same reflow, and grammar in the
+  acknowledgements and AI-assistance statement.
+
+### Pending for this release
+
+- Behat acceptance tests. The feature file exists and has never been executed;
+  it covers the part of the plugin PHPUnit structurally cannot reach — the
+  instance form as the browser actually submits it.
+
 ## [1.0.0] - 2026-08-25
 
 First release, under the component name `enrol_mercadopagocpro`.

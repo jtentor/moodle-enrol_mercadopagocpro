@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026082500;                  // Plugin version (YYYYMMDDXX).
+$plugin->version   = 2026082700;                  // Plugin version (YYYYMMDDXX).
 $plugin->requires  = 2026042002.00;               // Moodle 5.2.2 or later of the 5.2 branch.
 $plugin->supported = [502, 502];                  // Supported Moodle branches.
 $plugin->component = 'enrol_mercadopagocpro';      // Full name of the plugin.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0.0';
+$plugin->release   = 'v1.0.1';
