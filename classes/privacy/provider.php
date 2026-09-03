@@ -25,9 +25,21 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use enrol_mercadopagocpro\local\status;
 use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\webhook_handler;
 
 /**
  * Privacy Subsystem implementation for enrol_mercadopagocpro.
+ *
+ * Two tables hold data about an identifiable person. {@see transaction::TABLE}
+ * records the purchase itself, keyed by userid. {@see webhook_handler::LOG_TABLE}
+ * records every notification Mercado Pago sent about that purchase, keyed to the
+ * transaction by txnid; its payload is redacted before storage but the row is
+ * still about a specific person's payment, so it is declared, exported and
+ * deleted alongside the transaction it belongs to.
+ *
+ * The third table, enrol_mercadopagocpro_cred, holds collecting-account
+ * credentials attached to an enrolment instance. It is site configuration rather
+ * than data about a Moodle user, so it is deliberately not declared here.
  *
  * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
@@ -43,6 +55,9 @@ class provider implements
     /**
      * Describe the personal data this plugin stores and sends to Mercado Pago.
      *
+     * Every field named here is also exported by {@see self::export_user_data()},
+     * and every field exported there is named here. Keep the two in step.
+     *
      * @param  collection $items
      * @return collection
      */
@@ -56,14 +71,34 @@ class provider implements
                 'preferenceid' => 'privacy:metadata:txn:preferenceid',
                 'paymentid' => 'privacy:metadata:txn:paymentid',
                 'status' => 'privacy:metadata:txn:status',
+                'statusdetail' => 'privacy:metadata:txn:statusdetail',
+                'enrolmentstate' => 'privacy:metadata:txn:enrolmentstate',
                 'amount' => 'privacy:metadata:txn:amount',
                 'currency' => 'privacy:metadata:txn:currency',
                 'paymentmethodid' => 'privacy:metadata:txn:paymentmethodid',
+                'paymenttypeid' => 'privacy:metadata:txn:paymenttypeid',
                 'installments' => 'privacy:metadata:txn:installments',
                 'timecreated' => 'privacy:metadata:txn:timecreated',
                 'timeapproved' => 'privacy:metadata:txn:timeapproved',
             ],
             'privacy:metadata:txn'
+        );
+
+        $items->add_database_table(
+            webhook_handler::LOG_TABLE,
+            [
+                'txnid' => 'privacy:metadata:wh:txnid',
+                'notificationid' => 'privacy:metadata:wh:notificationid',
+                'requestid' => 'privacy:metadata:wh:requestid',
+                'type' => 'privacy:metadata:wh:type',
+                'action' => 'privacy:metadata:wh:action',
+                'dataid' => 'privacy:metadata:wh:dataid',
+                'signaturestatus' => 'privacy:metadata:wh:signaturestatus',
+                'errormessage' => 'privacy:metadata:wh:errormessage',
+                'payload' => 'privacy:metadata:wh:payload',
+                'timecreated' => 'privacy:metadata:wh:timecreated',
+            ],
+            'privacy:metadata:wh'
         );
 
         $items->add_external_location_link(
@@ -84,6 +119,10 @@ class provider implements
 
     /**
      * Course contexts where a user has payment transactions.
+     *
+     * Webhook log rows need no separate lookup: every one of them belongs to a
+     * transaction, so they can only ever be in a context this query already
+     * returns.
      *
      * @param  int $userid
      * @return contextlist
@@ -127,7 +166,8 @@ class provider implements
     }
 
     /**
-     * Export the transactions of the approved contexts.
+     * Export the transactions of the approved contexts, and the notifications
+     * received about them.
      *
      * @param  approved_contextlist $contextlist
      * @return void
@@ -179,15 +219,62 @@ class provider implements
                 ];
             }
 
+            $export = ['transactions' => $data];
+
+            $notifications = self::export_webhook_logs(array_keys($records));
+            if ($notifications) {
+                $export['notifications'] = $notifications;
+            }
+
             writer::with_context($context)->export_data(
                 [get_string('pluginname', 'enrol_mercadopagocpro')],
-                (object)['transactions' => $data]
+                (object)$export
             );
         }
     }
 
     /**
-     * Delete every transaction in a context.
+     * Build the exportable form of the notifications received about a set of
+     * transactions.
+     *
+     * @param  int[] $txnids
+     * @return \stdClass[]
+     */
+    protected static function export_webhook_logs(array $txnids): array {
+        global $DB;
+
+        if (!$txnids) {
+            return [];
+        }
+
+        [$insql, $params] = $DB->get_in_or_equal($txnids, SQL_PARAMS_NAMED);
+        $records = $DB->get_records_select(
+            webhook_handler::LOG_TABLE,
+            "txnid $insql",
+            $params,
+            'timecreated ASC'
+        );
+
+        $out = [];
+        foreach ($records as $record) {
+            $out[] = (object)[
+                'notificationid' => $record->notificationid,
+                'requestid' => $record->requestid,
+                'type' => $record->type,
+                'action' => $record->action,
+                'dataid' => $record->dataid,
+                'signaturestatus' => $record->signaturestatus,
+                'errormessage' => $record->errormessage,
+                'payload' => $record->payload,
+                'timecreated' => transform::datetime($record->timecreated),
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Delete every transaction in a context, and the notifications about them.
      *
      * @param  \context $context
      * @return void
@@ -198,11 +285,20 @@ class provider implements
         if (!$context instanceof \context_course) {
             return;
         }
+
+        $txnids = $DB->get_fieldset_select(
+            transaction::TABLE,
+            'id',
+            'courseid = :courseid',
+            ['courseid' => $context->instanceid]
+        );
+
+        self::delete_webhook_logs($txnids);
         $DB->delete_records(transaction::TABLE, ['courseid' => $context->instanceid]);
     }
 
     /**
-     * Delete the transactions of one user.
+     * Delete the transactions of one user, and the notifications about them.
      *
      * @param  approved_contextlist $contextlist
      * @return void
@@ -215,18 +311,27 @@ class provider implements
             if (!$context instanceof \context_course) {
                 continue;
             }
-            $DB->delete_records(
-                transaction::TABLE,
-                [
+
+            $conditions = [
                 'courseid' => $context->instanceid,
                 'userid' => $userid,
-                ]
+            ];
+
+            $txnids = $DB->get_fieldset_select(
+                transaction::TABLE,
+                'id',
+                'courseid = :courseid AND userid = :userid',
+                $conditions
             );
+
+            self::delete_webhook_logs($txnids);
+            $DB->delete_records(transaction::TABLE, $conditions);
         }
     }
 
     /**
-     * Delete the transactions of a list of users in one context.
+     * Delete the transactions of a list of users in one context, and the
+     * notifications about them.
      *
      * @param  approved_userlist $userlist
      * @return void
@@ -245,6 +350,32 @@ class provider implements
 
         [$insql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $params['courseid'] = $context->instanceid;
-        $DB->delete_records_select(transaction::TABLE, "courseid = :courseid AND userid $insql", $params);
+        $select = "courseid = :courseid AND userid $insql";
+
+        $txnids = $DB->get_fieldset_select(transaction::TABLE, 'id', $select, $params);
+
+        self::delete_webhook_logs($txnids);
+        $DB->delete_records_select(transaction::TABLE, $select, $params);
+    }
+
+    /**
+     * Delete the webhook log rows belonging to a set of transactions.
+     *
+     * Always call this before deleting the transactions themselves: once the
+     * transaction rows are gone there is nothing left to find their
+     * notifications by, and the rows become unreachable rather than deleted.
+     *
+     * @param  int[] $txnids
+     * @return void
+     */
+    protected static function delete_webhook_logs(array $txnids): void {
+        global $DB;
+
+        if (!$txnids) {
+            return;
+        }
+
+        [$insql, $params] = $DB->get_in_or_equal($txnids, SQL_PARAMS_NAMED);
+        $DB->delete_records_select(webhook_handler::LOG_TABLE, "txnid $insql", $params);
     }
 }

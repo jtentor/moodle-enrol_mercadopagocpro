@@ -22,6 +22,7 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use enrol_mercadopagocpro\local\instance_settings;
 use enrol_mercadopagocpro\local\transaction;
+use enrol_mercadopagocpro\local\webhook_handler;
 use enrol_mercadopagocpro\privacy\provider;
 
 defined('MOODLE_INTERNAL') || die();
@@ -56,6 +57,35 @@ final class privacy_provider_test extends \advanced_testcase
     }
 
     /**
+     * Insert a webhook log row belonging to a transaction.
+     *
+     * @param  int $txnid
+     * @return int Id of the new row.
+     */
+    protected function create_webhook_log(int $txnid): int {
+        global $DB;
+
+        return (int)$DB->insert_record(
+            webhook_handler::LOG_TABLE,
+            (object)[
+                'txnid' => $txnid,
+                'notificationid' => 'notif-' . $txnid,
+                'requestid' => 'req-' . $txnid,
+                'type' => 'payment',
+                'action' => 'payment.updated',
+                'dataid' => 'data-' . $txnid,
+                'signaturestatus' => 'valid',
+                'httpstatus' => 200,
+                'processed' => 1,
+                'attempts' => 1,
+                'payload' => '{"redacted":true}',
+                'timecreated' => time(),
+                'timeprocessed' => time(),
+            ]
+        );
+    }
+
+    /**
      * The metadata describes the table and the external transfer.
      *
      * @return void
@@ -64,6 +94,60 @@ final class privacy_provider_test extends \advanced_testcase
         $collection = provider::get_metadata(new \core_privacy\local\metadata\collection('enrol_mercadopagocpro'));
         $items = $collection->get_collection();
         $this->assertNotEmpty($items);
+
+        $tables = [];
+        $external = [];
+        foreach ($items as $item) {
+            if ($item instanceof \core_privacy\local\metadata\types\database_table) {
+                $tables[] = $item->get_name();
+            }
+            if ($item instanceof \core_privacy\local\metadata\types\external_location) {
+                $external[] = $item->get_name();
+            }
+        }
+
+        // Both tables that hold data about an identifiable person are declared.
+        $this->assertContains(transaction::TABLE, $tables);
+        $this->assertContains(webhook_handler::LOG_TABLE, $tables);
+
+        // Data leaves the site, so the external location has to be declared too.
+        $this->assertContains('mercadopago', $external);
+    }
+
+    /**
+     * Every field the export emits is declared in the metadata.
+     *
+     * These two drifted apart once: the export was emitting statusdetail,
+     * enrolmentstate and paymenttypeid while get_metadata() named twelve fields
+     * and not those three. This test is what stops that recurring.
+     *
+     * @return void
+     */
+    public function test_exported_fields_are_declared(): void {
+        $collection = provider::get_metadata(new \core_privacy\local\metadata\collection('enrol_mercadopagocpro'));
+
+        $declared = [];
+        foreach ($collection->get_collection() as $item) {
+            if ($item instanceof \core_privacy\local\metadata\types\database_table
+                && $item->get_name() === transaction::TABLE) {
+                $declared = array_keys($item->get_privacy_fields());
+            }
+        }
+
+        [$course, , $user] = $this->create_transaction();
+        $context = \context_course::instance($course->id);
+        provider::export_user_data(
+            new approved_contextlist($user, 'enrol_mercadopagocpro', [$context->id])
+        );
+
+        $data = writer::with_context($context)->get_data([get_string('pluginname', 'enrol_mercadopagocpro')]);
+        $exported = array_keys((array)$data->transactions[0]);
+
+        $this->assertEmpty(
+            array_diff($exported, $declared),
+            'Exported transaction fields that get_metadata() does not declare: '
+                . implode(', ', array_diff($exported, $declared))
+        );
     }
 
     /**
@@ -121,6 +205,28 @@ final class privacy_provider_test extends \advanced_testcase
     }
 
     /**
+     * Notifications about a transaction are exported with it.
+     *
+     * @return void
+     */
+    public function test_export_includes_webhook_logs(): void {
+        global $DB;
+
+        [$course, , $user] = $this->create_transaction();
+        $txnid = (int)$DB->get_field(transaction::TABLE, 'id', ['userid' => $user->id]);
+        $this->create_webhook_log($txnid);
+
+        $context = \context_course::instance($course->id);
+        provider::export_user_data(
+            new approved_contextlist($user, 'enrol_mercadopagocpro', [$context->id])
+        );
+
+        $data = writer::with_context($context)->get_data([get_string('pluginname', 'enrol_mercadopagocpro')]);
+        $this->assertCount(1, $data->notifications);
+        $this->assertSame('payment.updated', $data->notifications[0]->action);
+    }
+
+    /**
      * Deleting a context removes every transaction in it.
      *
      * @return void
@@ -128,10 +234,15 @@ final class privacy_provider_test extends \advanced_testcase
     public function test_delete_data_for_all_users_in_context(): void {
         global $DB;
 
-        [$course] = $this->create_transaction();
+        [$course, , $user] = $this->create_transaction();
+        $txnid = (int)$DB->get_field(transaction::TABLE, 'id', ['userid' => $user->id]);
+        $this->create_webhook_log($txnid);
+
         provider::delete_data_for_all_users_in_context(\context_course::instance($course->id));
 
         $this->assertSame(0, $DB->count_records(transaction::TABLE));
+        // The notifications must go with the transactions, not be orphaned by them.
+        $this->assertSame(0, $DB->count_records(webhook_handler::LOG_TABLE));
     }
 
     /**
@@ -144,7 +255,11 @@ final class privacy_provider_test extends \advanced_testcase
 
         [$course, $instance, $user] = $this->create_transaction();
         $other = $this->getDataGenerator()->create_user();
-        transaction::create($instance, $other, instance_settings::from_instance($instance));
+        $othertxn = transaction::create($instance, $other, instance_settings::from_instance($instance));
+
+        $txnid = (int)$DB->get_field(transaction::TABLE, 'id', ['userid' => $user->id]);
+        $this->create_webhook_log($txnid);
+        $this->create_webhook_log((int)$othertxn->id);
 
         provider::delete_data_for_user(
             new approved_contextlist(
@@ -156,6 +271,10 @@ final class privacy_provider_test extends \advanced_testcase
 
         $this->assertSame(0, $DB->count_records(transaction::TABLE, ['userid' => $user->id]));
         $this->assertSame(1, $DB->count_records(transaction::TABLE, ['userid' => $other->id]));
+
+        // Only the erased user's notifications go; the other user's stay.
+        $this->assertSame(0, $DB->count_records(webhook_handler::LOG_TABLE, ['txnid' => $txnid]));
+        $this->assertSame(1, $DB->count_records(webhook_handler::LOG_TABLE, ['txnid' => (int)$othertxn->id]));
     }
 
     /**
@@ -168,7 +287,11 @@ final class privacy_provider_test extends \advanced_testcase
 
         [$course, $instance, $user] = $this->create_transaction();
         $other = $this->getDataGenerator()->create_user();
-        transaction::create($instance, $other, instance_settings::from_instance($instance));
+        $othertxn = transaction::create($instance, $other, instance_settings::from_instance($instance));
+
+        $txnid = (int)$DB->get_field(transaction::TABLE, 'id', ['userid' => $user->id]);
+        $this->create_webhook_log($txnid);
+        $this->create_webhook_log((int)$othertxn->id);
 
         provider::delete_data_for_users(
             new approved_userlist(
@@ -180,5 +303,8 @@ final class privacy_provider_test extends \advanced_testcase
 
         $this->assertSame(1, $DB->count_records(transaction::TABLE, ['userid' => $user->id]));
         $this->assertSame(0, $DB->count_records(transaction::TABLE, ['userid' => $other->id]));
+
+        $this->assertSame(1, $DB->count_records(webhook_handler::LOG_TABLE, ['txnid' => $txnid]));
+        $this->assertSame(0, $DB->count_records(webhook_handler::LOG_TABLE, ['txnid' => (int)$othertxn->id]));
     }
 }

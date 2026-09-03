@@ -24,6 +24,17 @@ Compliance release for Moodle Marketplace. No functional change.
 
 ### Fixed
 
+- **Incomplete erasure in the privacy provider.** `enrol_mercadopagocpro_wh`
+  was neither declared in `get_metadata()` nor deleted by any of the three
+  delete methods, so erasing a user left webhook log rows pointing at a `txnid`
+  that no longer existed. The table is now declared, exported alongside the
+  transactions it belongs to, and deleted with them. Deletion happens before the
+  transaction rows go, because once those are gone there is nothing left to find
+  the notifications by.
+- **`export_user_data()` emitted three fields `get_metadata()` did not
+  declare**: `statusdetail`, `enrolmentstate` and `paymenttypeid`. All three are
+  now declared, and a new test compares the exported keys against the declared
+  ones so the two cannot drift apart again.
 - **README claimed PHP 8.2+.** Moodle 5.2 requires PHP 8.3 or later, so the
   stated requirement was wrong in both the badge and the requirements list.
   `composer.json` carried the same wrong constraint.
