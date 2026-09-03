@@ -4,7 +4,7 @@
     "type": "project",
     "license": "GPL-3.0-or-later",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "mercadopago/dx-php": "3.14.0"
     },
     "config": {

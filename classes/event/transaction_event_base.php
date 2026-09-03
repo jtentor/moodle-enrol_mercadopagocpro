@@ -20,7 +20,8 @@ namespace enrol_mercadopagocpro\event;
  * Shared behaviour for the events raised about a payment transaction.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class transaction_event_base extends \core\event\base

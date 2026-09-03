@@ -1,7 +1,7 @@
 # Mercado Pago Checkout Pro - Moodle enrolment plugin
 
 ![Moodle Plugin](https://img.shields.io/badge/Moodle-Plugin-orange?style=flat&logo=moodle)
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat&logo=php&logoColor=white)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=flat&logo=gnu&logoColor=white)
 
 `enrol_mercadopagocpro` lets students pay for a course through **Mercado Pago
@@ -10,8 +10,7 @@ Checkout Pro** and be enrolled automatically once the payment is credited.
 - **Component:** `enrol_mercadopagocpro`
 - **Directory:** `enrol/mercadopagocpro`
 - **Main class:** `enrol_mercadopagocpro_plugin`
-- **Version:** v1.0.0
-- **Requires:** Moodle 5.2.2 (`2026042002.00`) or a later release of the 5.2 branch, PHP 8.2+
+- **Requires:** Moodle 5.2.2 (`2026042002.00`) or a later release of the 5.2 branch, PHP 8.3+
 - **Default currency:** ARS (BRL, CLP, COP, MXN, PEN and UYU are also selectable)
 - **Licence:** GPL v3 or later
 

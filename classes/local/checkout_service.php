@@ -22,7 +22,8 @@ use enrol_mercadopagocpro\event\preference_created;
  * Creates the Checkout Pro preference and hands back the URL the buyer is sent to.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class checkout_service

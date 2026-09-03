@@ -23,7 +23,8 @@ namespace enrol_mercadopagocpro\local;
  * (webhook.php) or that cost an outbound API call (checkout.php).
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rate_limiter

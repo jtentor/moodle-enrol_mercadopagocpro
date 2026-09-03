@@ -18,7 +18,8 @@
  * Site settings for the Mercado Pago Checkout Pro enrolment plugin.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

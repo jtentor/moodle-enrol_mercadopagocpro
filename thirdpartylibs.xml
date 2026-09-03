@@ -5,7 +5,6 @@
         <name>Mercado Pago PHP SDK (mercadopago/dx-php)</name>
         <description>Official Mercado Pago SDK for PHP, used to call the Checkout Preferences and Payments APIs and to validate webhook signatures.</description>
         <version>3.14.0</version>
-        <licenseversion></licenseversion>
         <license>MIT</license>
         <repository>https://github.com/mercadopago/sdk-php</repository>
     </library>

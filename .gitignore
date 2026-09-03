@@ -1,6 +1,5 @@
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
+# Visual Studio Code -- editor configuration is not part of the plugin.
+.vscode/
 
 #-------------------------
 # Composer
@@ -14,10 +13,8 @@
 #/tools/
 
 #-------------------------
-# Working Files
+# Work in progress -- not part of the plugin.
 #-------------------------
-working/
+.wpi/
 
 #-------------------------
-
-

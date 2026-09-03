@@ -27,7 +27,8 @@ use enrol_mercadopagocpro\local\util;
  * happens to the notifications, every payment converges to the right enrolment.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reconcile_payments extends \core\task\scheduled_task

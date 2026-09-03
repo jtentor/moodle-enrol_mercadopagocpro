@@ -4,7 +4,47 @@ All notable changes to `enrol_mercadopagocpro` are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - v1.0.1
+## [Unreleased] - v1.1.0
+
+Compliance release for Moodle Marketplace. No functional change.
+
+### Changed
+
+- **Copyright is now held by Julio Tentor & Associates**, with authorship
+  attributed separately through `@author`. Applied to all 57 PHP files.
+- **`$string['pluginname']` is now "Mercado Pago Checkout Pro (Tentor &
+  Associates)".** `enrol_mpcheckoutpro` uses effectively the same words, so a
+  site with both installed previously saw two indistinguishable entries in the
+  *Add method* dropdown.
+- **All files converted to Unix line endings.** The tree was stored with CRLF,
+  which the Moodle coding style does not use.
+- The Spanish language pack moved out of `lang/` and no longer ships in the
+  package. Only English strings ship; translations are contributed through AMOS
+  after approval, as the contribution guidelines require.
+
+### Fixed
+
+- **README claimed PHP 8.2+.** Moodle 5.2 requires PHP 8.3 or later, so the
+  stated requirement was wrong in both the badge and the requirements list.
+  `composer.json` carried the same wrong constraint.
+- README carried a hard-coded `Version: v1.0.0` line that was already stale at
+  v1.0.1. Removed rather than corrected: `version.php` is the only place the
+  version needs to exist, and this line has drifted once already.
+
+### Added
+
+- **Continuous integration.** `.github/workflows/ci.yml` runs moodle-plugin-ci
+  across PHP 8.3/8.4 and PostgreSQL/MariaDB against `MOODLE_502_STABLE`. The
+  PostgreSQL leg is the first time this plugin has been exercised on anything
+  other than MariaDB.
+- `.gitattributes` builds the distribution package with `git archive`, excluding
+  development-only files and producing the `mercadopagocpro/` top-level
+  directory the installer expects.
+- `docs/ADMINISTRATOR-SETUP.md`, replacing `docs/HUMAN-TASKS.md`: the same
+  material stated as what an administrator must configure rather than as a list
+  of known gaps.
+
+## [1.0.1] - 2026-08-28
 
 ### Fixed
 

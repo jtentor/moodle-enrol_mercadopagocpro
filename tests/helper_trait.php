@@ -42,7 +42,8 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/fixtures/mock_http_cl
  * Shared setup for the enrol_mercadopagocpro test suite.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait helper_trait

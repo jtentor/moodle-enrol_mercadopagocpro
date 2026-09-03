@@ -27,7 +27,8 @@ use enrol_mercadopagocpro\local\webhook_handler;
  * records. Only checkouts the buyer never completed and old notification rows go.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cleanup_records extends \core\task\scheduled_task

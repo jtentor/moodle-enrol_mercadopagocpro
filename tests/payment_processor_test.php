@@ -30,7 +30,8 @@ require_once($CFG->dirroot . '/enrol/mercadopagocpro/tests/helper_trait.php');
  * Tests for the payment status to enrolment state machine.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers    \enrol_mercadopagocpro\local\payment_processor
  */

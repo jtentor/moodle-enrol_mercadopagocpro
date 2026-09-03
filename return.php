@@ -23,7 +23,8 @@
  * trusted: the page always re-queries the API before deciding anything.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see       https://www.mercadopago.com.ar/developers/en/docs/checkout-pro/configure-back-urls
  */

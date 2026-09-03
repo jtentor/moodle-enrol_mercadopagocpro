@@ -18,7 +18,8 @@
  * Strings for the Mercado Pago Checkout Pro enrolment plugin.
  *
  * @package   enrol_mercadopagocpro
- * @copyright 2026 Julio Tentor <jtentor@gmail.com>
+ * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
+ * @author    Julio Tentor <jtentor@juliotentor.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -242,7 +243,7 @@ $string['pendingholding_help'] = 'A suspended enrolment does not give access to 
 $string['pendingpaymentnotice'] = 'You already have a payment being processed ({$a}). You will be enrolled automatically as soon as it is credited.';
 $string['platformid'] = 'Platform id';
 $string['platformid_desc'] = 'Optional platform id supplied by Mercado Pago for platform tracking.';
-$string['pluginname'] = 'Mercado Pago Checkout Pro';
+$string['pluginname'] = 'Mercado Pago Checkout Pro (Tentor & Associates)';
 $string['pluginname_desc'] = 'The Mercado Pago Checkout Pro enrolment method lets students pay for a course through Mercado Pago and be enrolled automatically once the payment is credited.';
 $string['preferenceexpiry'] = 'Preference validity';
 $string['preferenceexpiry_desc'] = 'How long a payment link stays valid. Set to 0 to send no expiration dates.';
