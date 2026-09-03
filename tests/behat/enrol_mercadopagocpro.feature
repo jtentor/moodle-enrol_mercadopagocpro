@@ -62,6 +62,13 @@ Feature: Mercado Pago Checkout Pro enrolment method
   # site that is not served over HTTPS. $CFG->behat_wwwroot must therefore be an
   # https URL whose certificate validates, because Moodle curls it from PHP CLI
   # before running. See the Behat section of docs/TESTING.md.
+  #
+  # The tag exists so continuous integration can skip it. moodle-plugin-ci serves
+  # the Behat site over plain http on localhost, so this scenario can only fail
+  # there -- and it fails by proving the HTTPS guard works, which is not a useful
+  # signal to receive on every push. Run it before each release on a site that
+  # really is HTTPS.
+  @enrol_mercadopagocpro_https
   Scenario: A student sees the price and the pay button on the enrolment page
     Given the following "courses" exist:
       | fullname | shortname | category | enablecompletion |

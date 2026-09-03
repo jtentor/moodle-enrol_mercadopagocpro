@@ -35,7 +35,7 @@ enabled plugin.
 
 ### Behat
 
-Four of the five scenarios need a real browser; these instructions use
+Three of the four scenarios need a real browser; these instructions use
 **chromedriver alone**, with no Selenium and no Java. Run everything on a
 throwaway clone.
 
@@ -46,6 +46,18 @@ over HTTPS, because Mercado Pago rejects plain http `notification_url` and
 `back_urls`. That check reads `$CFG->wwwroot`, and during a Behat run Moodle
 assigns `$CFG->wwwroot = $CFG->behat_wwwroot` (`lib/setup.php`). So a plain-http
 Behat site cannot exercise the scenario that enables an instance.
+
+That one scenario carries the tag `@enrol_mercadopagocpro_https`, and continuous
+integration excludes it: `moodle-plugin-ci` serves the Behat site over plain http
+on `localhost`, so the scenario can only fail there — and it fails by proving the
+guard works, which is not a useful signal on every push. The other three run in
+CI on every commit. **This one is a pre-release check, and it is on you to run
+it**, on a site set up as described below:
+
+```bash
+php public/admin/tool/behat/cli/run.php --profile=chrome \
+    --tags='@enrol_mercadopagocpro&&@enrol_mercadopagocpro_https'
+```
 
 A self-signed certificate does not solve it either. Before running anything,
 Moodle curls `$CFG->behat_wwwroot/admin/tool/behat/tests/behat/fixtures/environment.php`

@@ -54,6 +54,10 @@ Compliance release for Moodle Marketplace. No functional change.
 - `docs/ADMINISTRATOR-SETUP.md`, replacing `docs/HUMAN-TASKS.md`: the same
   material stated as what an administrator must configure rather than as a list
   of known gaps.
+- The Behat scenario that needs an HTTPS site is tagged
+  `@enrol_mercadopagocpro_https` and excluded from continuous integration, which
+  serves the test site over plain http. It remains a pre-release check on a real
+  HTTPS site; `docs/TESTING.md` says how to run it on its own.
 
 ## [1.0.1] - 2026-08-28
 
