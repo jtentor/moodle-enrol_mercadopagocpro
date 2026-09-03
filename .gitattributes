@@ -1,0 +1,57 @@
+# ---------------------------------------------------------------------------
+# Line endings
+# ---------------------------------------------------------------------------
+# The working tree was stored with CRLF and something on the authoring side
+# keeps reintroducing it. Normalising here is the durable fix: git stores LF in
+# the object database regardless of what the editor writes, and `git archive`
+# honours these attributes, so the released package is always LF.
+#
+# Apply once, after adding this file:
+#     git add .gitattributes
+#     git add --renormalize .
+#     git commit -m "Normalise line endings to LF"
+
+* text=auto eol=lf
+
+# The bundled Mercado Pago SDK must stay byte-for-byte identical to upstream
+# 3.14.0, which thirdpartylibs.xml declares. Renormalisation must never touch
+# it. `-text` disables all conversion for these paths.
+vendor/**       -text
+
+*.png           binary
+*.jpg           binary
+*.gif           binary
+*.ico           binary
+
+# ---------------------------------------------------------------------------
+# Package building for Moodle Marketplace
+# ---------------------------------------------------------------------------
+# `export-ignore` removes a path from `git archive` output without affecting
+# `git clone`. The repository keeps everything; the published ZIP carries only
+# what a Moodle site needs.
+#
+#     git archive --format=zip --prefix=mercadopagocpro/ \
+#         -o enrol_mercadopagocpro-v1.1.0.zip v1.1.0
+#
+# The --prefix produces the single top-level `mercadopagocpro/` directory the
+# installer expects. Without it the files land at the archive root and the
+# install fails.
+
+.github/                export-ignore
+.vscode/                export-ignore
+.gitattributes          export-ignore
+.gitignore              export-ignore
+.editorconfig           export-ignore
+.phpcs.xml              export-ignore
+.moodle-plugin-ci.yml   export-ignore
+
+# Translations are contributed through AMOS after approval, not shipped in the
+# package. Only the English strings ship.
+translations/           export-ignore
+
+# Uncomment if composer.json stays in the repository. It must not ship: the
+# contribution checklist states plugins must not require an admin to run
+# Composer, and `composer require` inside the plugin directory has already once
+# installed a second copy of the SDK that shadowed the audited bundle.
+# composer.json         export-ignore
+# composer.lock         export-ignore
