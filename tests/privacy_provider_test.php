@@ -128,8 +128,10 @@ final class privacy_provider_test extends \advanced_testcase
 
         $declared = [];
         foreach ($collection->get_collection() as $item) {
-            if ($item instanceof \core_privacy\local\metadata\types\database_table
-                && $item->get_name() === transaction::TABLE) {
+            if (
+                $item instanceof \core_privacy\local\metadata\types\database_table
+                && $item->get_name() === transaction::TABLE
+            ) {
                 $declared = array_keys($item->get_privacy_fields());
             }
         }

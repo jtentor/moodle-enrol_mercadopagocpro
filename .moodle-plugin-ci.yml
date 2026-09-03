@@ -1,17 +1,24 @@
 # moodle-plugin-ci configuration.
 #
-# The bundled Mercado Pago SDK is third-party code and is excluded from every
-# lint and style check here.
+# Two exclusions, for two different reasons.
 #
-# This file and thirdpartylibs.xml must agree about what is third-party. They
-# serve different consumers -- this one CI, that one the Moodle Marketplace
-# precheck -- and a disagreement means one of them is wrong. If the Marketplace
-# `thirdparty` precheck reports errors in vendor/mercadopago, the problem is in
-# thirdpartylibs.xml, not here.
+# vendor/ is the bundled Mercado Pago SDK: third-party code, excluded from every
+# lint and style check. This file and thirdpartylibs.xml must agree about what is
+# third-party -- they serve different consumers, this one CI and that one the
+# Moodle Marketplace precheck, and a disagreement means one of them is wrong.
+#
+# translations/ holds the Spanish strings, kept in the repository but not shipped
+# in the package: only English strings ship, and the translation is contributed
+# through AMOS after approval. `export-ignore` in .gitattributes keeps it out of
+# `git archive`, but CI checks out the repository rather than the package, so it
+# needs excluding here as well. It is not a Moodle language directory, nothing
+# loads it, and holding it to the plugin's line-length limits would mean
+# reflowing strings that AMOS is about to own.
 
 filter:
   notPaths:
     - vendor
+    - translations
   notNames:
     - "*-min.js"
     - "*.min.css"
