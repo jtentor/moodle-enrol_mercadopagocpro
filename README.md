@@ -1,4 +1,4 @@
-# Mercado Pago Checkout Pro - Moodle enrolment plugin
+# Mercado Pago Checkout Pro  (Tentor & Associates) - Moodle enrolment plugin
 
 ![Moodle Plugin](https://img.shields.io/badge/Moodle-Plugin-orange?style=flat&logo=moodle)
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat&logo=php&logoColor=white)
