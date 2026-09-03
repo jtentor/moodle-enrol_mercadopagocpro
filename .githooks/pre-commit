@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# Pre-commit hook for moodle-enrol_mercadopagocpro.
+#
+# Two checks:
+#   1. PHP syntax, read from the index rather than from the working tree.
+#   2. A guard on vendor/, which must stay byte-identical to the upstream
+#      Mercado Pago SDK that thirdpartylibs.xml declares.
+#
+# Bypass the vendor guard deliberately when you really are updating the SDK:
+#   ALLOW_VENDOR=1 git commit ...
+#
+# Bypass everything (last resort, and think first):
+#   git commit --no-verify
+#
+# Install:
+#   cp pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -u
+
+# Colours only when stderr is a terminal, so piped output stays clean.
+if [ -t 2 ]; then
+    RED=$'\e[31m'; YELLOW=$'\e[33m'; GREEN=$'\e[32m'; RESET=$'\e[0m'
+else
+    RED=''; YELLOW=''; GREEN=''; RESET=''
+fi
+
+STATUS=0
+
+# ---------------------------------------------------------------------------
+# 1. vendor/ guard
+# ---------------------------------------------------------------------------
+# The SDK was reformatted wholesale once by a phpcbf run without --standard,
+# and shadowed once by a composer install inside the plugin directory. Both
+# produced perfectly valid PHP, so a syntax check would not have caught either.
+# What breaks is the byte-identity thirdpartylibs.xml asserts.
+
+VENDOR_FILES=$(git diff --cached --name-only --diff-filter=ACMRD -z \
+    | tr '\0' '\n' | grep '^vendor/' || true)
+
+if [ -n "$VENDOR_FILES" ]; then
+    COUNT=$(printf '%s\n' "$VENDOR_FILES" | grep -c .)
+    if [ "${ALLOW_VENDOR:-0}" != "1" ]; then
+        echo "${RED}Refusing to commit changes under vendor/.${RESET}" >&2
+        echo "" >&2
+        echo "$COUNT file(s) staged:" >&2
+        printf '%s\n' "$VENDOR_FILES" | head -20 | sed 's/^/  /' >&2
+        if [ "$COUNT" -gt 20 ]; then
+            echo "  ... and $((COUNT - 20)) more" >&2
+        fi
+        echo "" >&2
+        echo "vendor/ holds the Mercado Pago SDK, which thirdpartylibs.xml" >&2
+        echo "declares as unmodified upstream 3.14.0. If this was phpcbf or a" >&2
+        echo "composer run inside the plugin directory, restore it:" >&2
+        echo "" >&2
+        echo "  git restore --staged --worktree vendor/" >&2
+        echo "" >&2
+        echo "If you really are updating the SDK, say so:" >&2
+        echo "" >&2
+        echo "  ALLOW_VENDOR=1 git commit ..." >&2
+        echo "" >&2
+        echo "and update the version in thirdpartylibs.xml in the same commit." >&2
+        STATUS=1
+    else
+        echo "${YELLOW}ALLOW_VENDOR=1: committing $COUNT file(s) under vendor/.${RESET}" >&2
+        echo "${YELLOW}Confirm thirdpartylibs.xml states the new version.${RESET}" >&2
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# 2. PHP syntax, from the index
+# ---------------------------------------------------------------------------
+# `php -l "$FILE"` reads the working tree, which is not what is being committed.
+# Stage a good version, edit it badly, and the hook passes while the good
+# version gets committed; fix a file without re-staging it and the hook passes
+# while the broken version gets committed. `git show ":$FILE"` reads the exact
+# blob that will land in the commit.
+
+if ! command -v php >/dev/null 2>&1; then
+    echo "${YELLOW}php not found on PATH; skipping the syntax check.${RESET}" >&2
+else
+    # -z and the null-delimited read survive filenames with spaces, quotes or
+    # newlines, which a bare `for FILE in $FILES` does not.
+    ERRORS=0
+    CHECKED=0
+
+    while IFS= read -r -d '' FILE; do
+        case "$FILE" in
+            vendor/*) continue ;;   # third-party, and guarded above.
+            *.php) ;;
+            *) continue ;;
+        esac
+
+        CHECKED=$((CHECKED + 1))
+
+        if ! OUTPUT=$(git show ":$FILE" 2>/dev/null | php -l 2>&1); then
+            echo "${RED}Syntax error in:${RESET} $FILE" >&2
+            # php -l reads stdin, so it reports "Standard input code" rather
+            # than the filename. Substitute the real path back in.
+            printf '%s\n' "$OUTPUT" | sed "s|Standard input code|$FILE|g" | sed 's/^/  /' >&2
+            ERRORS=$((ERRORS + 1))
+        fi
+    done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+    if [ "$ERRORS" -ne 0 ]; then
+        echo "" >&2
+        echo "${RED}$ERRORS of $CHECKED staged PHP file(s) failed to parse.${RESET}" >&2
+        STATUS=1
+    elif [ "$CHECKED" -gt 0 ]; then
+        echo "${GREEN}$CHECKED staged PHP file(s) parse cleanly.${RESET}" >&2
+    fi
+fi
+
+if [ "$STATUS" -ne 0 ]; then
+    echo "" >&2
+    echo "${RED}Commit aborted.${RESET}" >&2
+fi
+
+exit "$STATUS"
