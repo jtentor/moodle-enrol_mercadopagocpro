@@ -55,9 +55,10 @@ Compliance release for Moodle Marketplace. No functional change.
   material stated as what an administrator must configure rather than as a list
   of known gaps.
 - The Behat scenario that needs an HTTPS site is tagged
-  `@enrol_mercadopagocpro_https` and excluded from continuous integration, which
-  serves the test site over plain http. It remains a pre-release check on a real
-  HTTPS site; `docs/TESTING.md` says how to run it on its own.
+  `@enrol_mercadopagocpro_https`, so it can be run or excluded on its own.
+  Continuous integration does not run Behat at all: the site it serves is plain
+  http, so that scenario could only ever fail there. Behat remains a pre-release
+  check on the HTTPS development site; `docs/TESTING.md` says how to run it.
 
 ## [1.0.1] - 2026-08-28
 

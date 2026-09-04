@@ -47,17 +47,29 @@ over HTTPS, because Mercado Pago rejects plain http `notification_url` and
 assigns `$CFG->wwwroot = $CFG->behat_wwwroot` (`lib/setup.php`). So a plain-http
 Behat site cannot exercise the scenario that enables an instance.
 
-That one scenario carries the tag `@enrol_mercadopagocpro_https`, and continuous
-integration excludes it: `moodle-plugin-ci` serves the Behat site over plain http
-on `localhost`, so the scenario can only fail there — and it fails by proving the
-guard works, which is not a useful signal on every push. The other three run in
-CI on every commit. **This one is a pre-release check, and it is on you to run
-it**, on a site set up as described below:
+That one scenario carries the tag `@enrol_mercadopagocpro_https`, so it can be run
+or skipped on its own:
 
 ```bash
+# Just that scenario.
 php public/admin/tool/behat/cli/run.php --profile=chrome \
     --tags='@enrol_mercadopagocpro&&@enrol_mercadopagocpro_https'
+
+# Everything except it.
+php public/admin/tool/behat/cli/run.php --profile=chrome \
+    --tags='@enrol_mercadopagocpro&&~@enrol_mercadopagocpro_https'
 ```
+
+**Continuous integration does not run Behat at all.** `moodle-plugin-ci` serves
+the Behat site over plain http on `localhost`, so this scenario could only ever
+fail there — and it would fail by proving the HTTPS guard works, which is not a
+useful signal on every push. The whole suite is therefore a pre-release check on
+a real HTTPS site, and it is on you to run it.
+
+Note when composing tag expressions: `moodle-plugin-ci behat --tags=X` **replaces**
+the `@enrol_mercadopagocpro` tag the tool builds by default rather than adding to
+it, so a bare negation runs the whole of Moodle's own Behat suite. Both conditions
+have to go in one expression, as above.
 
 A self-signed certificate does not solve it either. Before running anything,
 Moodle curls `$CFG->behat_wwwroot/admin/tool/behat/tests/behat/fixtures/environment.php`

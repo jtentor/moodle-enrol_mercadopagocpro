@@ -2,16 +2,16 @@
 #
 # Runs the same checks the Moodle Marketplace runs as automated prechecks
 # (moodle-plugin-ci bundles moodlehq/moodle-cs and moodlehq/moodle-local_ci,
-# which are those checks), plus the PHPUnit and Behat suites, across both
-# database engines.
+# which are those checks), plus the PHPUnit suite, across both database engines.
+# Behat is deliberately not run here -- see the note at the end of this file.
 #
 # The PostgreSQL leg is not optional decoration: "your SQL fails on PostgreSQL
 # even when working on MySQL" is an explicit approval blocker, and this plugin
-# has only ever been exercised by hand on MariaDB.
+# had only ever been exercised by hand on MariaDB before this workflow existed.
 #
-# VERIFY BEFORE FIRST USE: option names and step shape change between
-# moodle-plugin-ci minor releases. Diff this against the current template at
-# https://moodlehq.github.io/moodle-plugin-ci/ for the version pinned below.
+# Option names and step shape change between moodle-plugin-ci minor releases.
+# Diff against the current template at https://moodlehq.github.io/moodle-plugin-ci/
+# before changing anything here.
 
 name: Moodle Plugin CI
 
@@ -23,6 +23,12 @@ on:
 
 permissions:
   contents: read
+
+# Overlapping pushes compete for runners against each other. Cancel the older
+# run for the same ref; a cancelled run here is normal and not a failure.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -131,22 +137,25 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpunit --fail-on-warning
 
-      # Behat exercises the instance form and its validation -- none of it
-      # database-dependent -- so one leg of the matrix is enough signal for the
-      # cost.
+      # Behat is deliberately NOT run here.
       #
-      # @enrol_mercadopagocpro_https is excluded. That scenario enables an
-      # enrolment instance, and the plugin refuses to enable one on a site that
-      # is not served over HTTPS; moodle-plugin-ci serves Behat over plain http
-      # on localhost:8000, so the scenario can only fail here, and it fails by
-      # proving the guard works. It runs before each release on a real HTTPS
-      # site instead -- see docs/TESTING.md.
+      # It is not required for publication: the Moodle plugin contribution
+      # checklist does not mention automated tests at all, and the Marketplace
+      # prechecks are the eight steps above. The suite is green on the HTTPS
+      # development site, which is the only place it can be fully exercised --
+      # the pay-button scenario enables an enrolment instance, and the plugin
+      # refuses to enable one on a site that is not served over HTTPS, while
+      # moodle-plugin-ci serves Behat over plain http on localhost:8000.
       #
-      # If `--tags` turns out not to be supported by this version of
-      # moodle-plugin-ci, or not to override the tag it builds by default, drop
-      # this whole step. Behat is not required for publication: the Moodle
-      # plugin contribution checklist does not mention automated tests at all,
-      # and the suite is green on the HTTPS box.
-      - name: Behat features
-        if: ${{ !cancelled() && matrix.database == 'pgsql' && matrix.php == '8.4' }}
-        run: moodle-plugin-ci behat --profile chrome --tags='~@enrol_mercadopagocpro_https'
+      # Measured 2026-09-04, so nobody has to rediscover it: `moodle-plugin-ci
+      # behat --tags=X` REPLACES the `@enrol_mercadopagocpro` tag the tool builds
+      # by default rather than adding to it. Passing a bare negation therefore
+      # runs the whole of Moodle's own Behat suite -- 3150+ steps and still
+      # going at 35 minutes. If this step is ever restored, both conditions have
+      # to be in one expression:
+      #
+      #   moodle-plugin-ci behat --profile chrome \
+      #       --tags='@enrol_mercadopagocpro&&~@enrol_mercadopagocpro_https'
+      #
+      # and give it a timeout-minutes so a hang cannot burn an hour of runner
+      # time. Run Behat before each release instead -- see docs/TESTING.md.
