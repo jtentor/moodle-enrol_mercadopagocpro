@@ -1,0 +1,58 @@
+# gitleaks configuration for enrol_mercadopagocpro.
+#
+# Run against the full history, not the working tree:
+#
+#     gitleaks git --config .gitleaks.toml --log-opts="--all --full-history" -v
+#
+# Development-only; excluded from the released package by .gitattributes.
+
+[extend]
+useDefault = true
+
+# ---------------------------------------------------------------------------
+# Mercado Pago credentials
+# ---------------------------------------------------------------------------
+# The default rule set knows nothing about this platform. Access tokens and
+# public keys carry a prefix and are matchable; the webhook secret, the
+# marketplace client secret and the database password are plain strings with no
+# recognisable shape and can only be found by context, which is what the second
+# rule does.
+
+[[rules]]
+id = "mercadopago-token"
+description = "Mercado Pago access token or public key"
+regex = '''(APP_USR|TEST)-[0-9a-f]{8,}[-0-9a-f]*'''
+[rules.allowlist]
+# Placeholders used in fixtures, documentation and the SDK's own examples.
+regexes = [
+    '''APP_USR-secret''',
+    '''APP_USR-other-token''',
+    '''(APP_USR|TEST)-(YOUR|xxx|\.\.\.)''',
+]
+
+[[rules]]
+id = "assigned-secret"
+description = "Credential-looking assignment to a literal value"
+regex = '''(?i)(accesstoken|publickey|webhooksecret|marketplaceclientsecret|dbpass|password)\s*(=>|=|:)\s*['"][^'"$\s]{12,}['"]'''
+[rules.allowlist]
+regexes = [
+    '''CHANGE_ME''',
+    '''(?i)(your|example|placeholder|redacted)''',
+]
+
+# ---------------------------------------------------------------------------
+# Allowlist
+# ---------------------------------------------------------------------------
+
+[allowlist]
+description = "Paths and values that are not secrets"
+
+paths = [
+    # The bundled Mercado Pago SDK. Its Resources/Order/*.php files carry
+    # "/** API version: <uuid> */" docblocks, which the default generic-api-key
+    # rule reports on entropy alone -- 75 findings, none of them a credential
+    # and none of them ours. The tree is byte-identical to upstream 3.14.0,
+    # verified by diff against the released tarball, and thirdpartylibs.xml
+    # declares it as such. Anything that appears here is upstream's to fix.
+    '''^vendor/''',
+]
