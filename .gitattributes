@@ -51,9 +51,12 @@ vendor/**       -text
 # package. Only the English strings ship.
 translations/           export-ignore
 
-# Uncomment if composer.json stays in the repository. It must not ship: the
-# contribution checklist states plugins must not require an admin to run
-# Composer, and `composer require` inside the plugin directory has already once
-# installed a second copy of the SDK that shadowed the audited bundle.
-# composer.json         export-ignore
-# composer.lock         export-ignore
+# There is deliberately no rule for composer.json here. The plugin's own
+# composer.json was removed from the repository in v1.1.0; the only one left is
+# vendor/mercadopago/composer.json, which belongs to the SDK and MUST ship --
+# removing it would break the byte-identity with upstream 3.14.0 that
+# thirdpartylibs.xml declares.
+#
+# If a rule is ever needed here, anchor it: a pattern without a slash matches at
+# every depth, so a bare `composer.json` would silently take the SDK's with it.
+# Write `/composer.json` to mean the one at the plugin root.
