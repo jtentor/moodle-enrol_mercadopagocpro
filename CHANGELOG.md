@@ -18,11 +18,28 @@ Compliance release for Moodle Marketplace. No functional change.
   *Add method* dropdown.
 - **All files converted to Unix line endings.** The tree was stored with CRLF,
   which the Moodle coding style does not use.
+- **`composer.json` removed from the repository.** It recorded how the bundled
+  SDK was produced, but its presence invited exactly the Composer run that
+  breaks the bundle, and the version pin it documented is already stated in
+  `thirdpartylibs.xml`, which is the file Moodle actually reads.
 - The Spanish language pack moved out of `lang/` and no longer ships in the
   package. Only English strings ship; translations are contributed through AMOS
   after approval, as the contribution guidelines require.
 
 ### Fixed
+
+- **The plugin contradicted itself about Composer, and the loader was on the
+  wrong side of it.** `sdk::register()` preferred a `vendor/autoload.php` inside
+  the plugin directory over the bundled SDK, and `README.md`,
+  `docs/DEPLOYMENT.md` and `docs/TROUBLESHOOTING.md` all recommended creating one
+  — while `cli/diagnose.php` reported those same files as an error state and
+  `docs/TESTING.md` warned against producing them. Following the documentation
+  therefore replaced the audited bundle that `thirdpartylibs.xml` declares as
+  unmodified upstream 3.14.0, silently making that declaration false. The
+  bundled copy is now the only source the plugin loads from, a
+  `vendor/autoload.php` there is ignored, and the three documents say so. Moodle
+  requires that a plugin install without an administrator running Composer, so
+  there was never a supported configuration on the other side of this.
 
 - **Incomplete erasure in the privacy provider.** `enrol_mercadopagocpro_wh`
   was neither declared in `get_metadata()` nor deleted by any of the three

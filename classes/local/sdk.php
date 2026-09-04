@@ -21,8 +21,15 @@ namespace enrol_mercadopagocpro\local;
  *
  * The SDK has no runtime dependencies beyond PHP itself, so it is shipped inside
  * the plugin under vendor/mercadopago/ and loaded through a small PSR-4
- * autoloader. If the site prefers to manage it with Composer, a
- * vendor/autoload.php inside the plugin directory takes precedence.
+ * autoloader. That bundle is the only supported configuration.
+ *
+ * Composer must not be run inside the plugin directory. Doing so installs a
+ * second copy of the SDK and writes a vendor/autoload.php; until v1.1.0 this
+ * class preferred that copy, which meant a Composer run silently replaced the
+ * audited bundle that thirdpartylibs.xml declares as unmodified upstream. The
+ * plugin's own cli/diagnose.php has always reported those files as an error
+ * state, so the loader and the diagnostic contradicted each other. The loader
+ * was wrong. Development tools belong in the Moodle root's vendor/.
  *
  * @package   enrol_mercadopagocpro
  * @copyright 2026 Julio Tentor & Associates <https://juliotentor.com>
@@ -57,14 +64,9 @@ final class sdk
 
         $plugindir = $CFG->dirroot . '/enrol/mercadopagocpro';
 
-        // 1. Composer managed installation inside the plugin.
-        $composerautoload = $plugindir . '/vendor/autoload.php';
-        if (file_exists($composerautoload)) {
-            require_once($composerautoload);
-            return;
-        }
-
-        // 2. Bundled copy of the SDK sources.
+        // The bundled copy of the SDK sources is the only source this plugin
+        // loads from. A vendor/autoload.php in this directory is deliberately
+        // ignored -- see the class docblock and cli/diagnose.php.
         $bundled = $plugindir . '/vendor/mercadopago/src/MercadoPago';
         if (!is_dir($bundled)) {
             return;

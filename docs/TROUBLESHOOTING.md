@@ -85,8 +85,12 @@ Mercado Pago will reject `http` `back_urls` anyway.
 **"The Mercado Pago PHP SDK is not available"**
 `vendor/mercadopago/src/MercadoPago` is missing, usually because the directory
 was excluded when the plugin was copied or a `.gitignore` swallowed `vendor/`.
-Restore it, or run `composer install --no-dev` in the plugin directory. The
-settings page shows the detected version when it is found.
+Restore that directory from the release ZIP — do **not** run Composer in the
+plugin directory to recreate it. The bundled tree is byte-identical to upstream
+3.14.0, which is what `thirdpartylibs.xml` declares, and a Composer-installed
+copy is not the same artefact. The settings page shows the detected version once
+it is found, and `cli/diagnose.php` reports both the version and any Composer
+artefacts present.
 
 **"The enrolment fee must be greater than zero"**
 An enabled instance needs a price. Use `self` enrolment for free courses.

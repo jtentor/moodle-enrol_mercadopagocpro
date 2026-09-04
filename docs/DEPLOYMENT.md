@@ -34,16 +34,19 @@ or through **Site administration ▸ Plugins ▸ Enrolments ▸ Manage enrol plu
 
 ### The SDK
 
-The official Mercado Pago PHP SDK ships inside `vendor/mercadopago`. Nothing
-else is needed. To manage it with Composer instead:
+The official Mercado Pago PHP SDK ships inside `vendor/mercadopago`. Nothing else
+is needed, and there is nothing to install: Moodle requires that a plugin be
+installable without an administrator running Composer.
 
-```bash
-cd public/enrol/mercadopagocpro
-composer install --no-dev --optimize-autoloader
-```
+**Do not run Composer inside the plugin directory.** It installs a second copy of
+the SDK next to the bundled one. The bundled copy is byte-identical to upstream
+3.14.0 and `thirdpartylibs.xml` declares it unmodified, so a second copy makes
+that declaration false — and the plugin will keep loading the bundle regardless,
+leaving you with two versions on disk and no indication of which is in use.
 
-`vendor/autoload.php` takes precedence over the bundled copy when it exists.
-The plugin settings page reports which SDK version was detected.
+The plugin settings page reports which SDK version was detected, and
+`cli/diagnose.php` checks that version against `thirdpartylibs.xml` and reports
+any Composer artefacts found in the plugin directory.
 
 ## Configure
 

@@ -1,4 +1,4 @@
-# Mercado Pago Checkout Pro  (Tentor & Associates) - Moodle enrolment plugin
+# Mercado Pago Checkout Pro - Moodle enrolment plugin
 
 ![Moodle Plugin](https://img.shields.io/badge/Moodle-Plugin-orange?style=flat&logo=moodle)
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat&logo=php&logoColor=white)
@@ -88,7 +88,7 @@ Specifically, these tools were employed as technical assistants for the architec
 3. Enable the method in **Site administration ▸ Plugins ▸ Enrolments ▸ Manage enrol plugins**.
 4. Configure the credentials in **Site administration ▸ Plugins ▸ Enrolments ▸ Mercado Pago Checkout Pro**.
 
-The official Mercado Pago PHP SDK is bundled under `vendor/mercadopago`, so no Composer step is required. If you prefer to manage it yourself, run `composer install --no-dev` inside the plugin directory; a `vendor/autoload.php` there takes precedence over the bundled copy.
+The official Mercado Pago PHP SDK is bundled under `vendor/mercadopago`, so no Composer step is required — and Composer must not be run inside the plugin directory. The bundled copy is byte-identical to upstream 3.14.0 and declared as such in `thirdpartylibs.xml`; a second copy installed alongside it would make that declaration false. The settings page reports the detected SDK version.
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full production checklist.
 
