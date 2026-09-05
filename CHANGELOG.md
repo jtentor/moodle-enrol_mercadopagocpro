@@ -28,6 +28,18 @@ Compliance release for Moodle Marketplace. No functional change.
 
 ### Fixed
 
+- **Two settings-page strings described behaviour the plugin does not have.**
+  `environment_desc` claimed the buyer is sent to a sandbox checkout in the test
+  environment; there is no sandbox checkout — `sandbox_init_point` is a legacy
+  field that produces a redirect loop, and the plugin always uses `init_point`.
+  `testmodenotice` promised that no real money would be charged, which the
+  setting cannot guarantee: whether money moves is decided by the Mercado Pago
+  account the credentials belong to, not by which slot they were pasted into.
+  Both rewritten, and the credentials section now explains the test seller model
+  outright — the account is what makes a payment a test, not the type of
+  credential, and a real account's `TEST-` credentials cannot complete a payment
+  at all.
+
 - **The plugin contradicted itself about Composer, and the loader was on the
   wrong side of it.** `sdk::register()` preferred a `vendor/autoload.php` inside
   the plugin directory over the bundled SDK, and `README.md`,

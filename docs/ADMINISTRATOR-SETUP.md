@@ -25,9 +25,32 @@ Checkout Pro* exactly.
       `testaccesstoken`, `testpublickey`, `testwebhooksecret`.
 
 The webhook secret is a different value from the access token, taken from *Your
-integrations ▸ Webhooks*, and **the test application has its own**. Using the production
-secret with test credentials produces signature failures that look like an attack and are
+integrations ▸ Webhooks*, and each integration has its own. Using one integration's secret
+with another's access token produces signature failures that look like an attack and are
 not.
+
+### Testing with fake money — the naming is misleading
+
+**The account is what makes a payment a test, not the type of credential.** This costs
+people a day if they work it out themselves.
+
+To test end to end: create a **test seller** user in the developer dashboard, create an
+integration under that account, and use *its* credentials in the Production slots above
+with **Environment** left on Production. Those credentials look and behave like ordinary
+production credentials — they even report `live_mode: true` — and no real money moves,
+because the account they belong to is a test account. The buyer must sign in to Mercado
+Pago with **test buyer** credentials and pay with one of the test cards the dashboard
+generates for each card brand.
+
+A real account's `TEST-` credentials are **not** an alternative route, despite the name.
+A payment created with them cannot be completed by any buyer: the checkout renders
+normally, the buyer chooses a method, and it is refused at the last step. The Environment
+setting and the test credential slots exist for that credential set; they do not give you
+a working test payment on their own.
+
+There is no combination of accounts in which an unregistered buyer — the guest path —
+completes a payment in a test environment. That path can only be validated in production
+with real money.
 
 **One application per plugin.** The notification URL belongs to the application, not to an
 individual payment, so two Mercado Pago plugins pointed at the same application receive

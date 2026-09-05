@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['accesstoken'] = 'Access token';
-$string['accesstoken_desc'] = 'Production access token of your Mercado Pago application. Used as the Bearer token for every API call.';
+$string['accesstoken_desc'] = 'The access token used when Environment is set to Production. Used as the Bearer token for every API call. On a test seller integration, paste that integration\'s own access token here and leave Environment on Production: a test seller\'s credentials are its own production credentials and still move only fake money.';
 $string['advancedpreference'] = 'Checkout Pro advanced options';
 $string['allowinstancecredentials'] = 'Allow per-course credentials';
 $string['allowinstancecredentials_desc'] = 'Let each enrolment instance store its own Mercado Pago credentials. Useful when different departments collect into different accounts. Instance credentials are encrypted and are never included in course backups.';
@@ -80,7 +80,7 @@ $string['enrolperiod_desc'] = 'Default length of the enrolment bought. Set to 0 
 $string['enrolperiod_help'] = 'How long the access bought lasts, counted from the moment the payment is approved. Leave empty for unlimited access.';
 $string['enrolstartdate'] = 'Start date';
 $string['environment'] = 'Environment';
-$string['environment_desc'] = 'Which set of credentials to use. In the test environment the buyer is sent to the sandbox checkout and no real money moves.';
+$string['environment_desc'] = 'Which of the two credential sets below the plugin uses. That is the only thing this setting changes: the buyer is sent to the same Mercado Pago checkout either way. Whether real money moves is decided by the Mercado Pago account the credentials belong to, not by this setting.';
 $string['environment_production'] = 'Production';
 $string['environment_test'] = 'Test';
 $string['error:alreadyenrolled'] = 'You are already enrolled in this course through this method.';
@@ -282,7 +282,7 @@ $string['privacy:metadata:wh:timecreated'] = 'When the notification was received
 $string['privacy:metadata:wh:txnid'] = 'The payment this notification was about.';
 $string['privacy:metadata:wh:type'] = 'The type of the notification, for example payment.';
 $string['publickey'] = 'Public key';
-$string['publickey_desc'] = 'Production public key of your Mercado Pago application.';
+$string['publickey_desc'] = 'The public key used when Environment is set to Production.';
 $string['reconcilemaxage'] = 'Maximum reconciliation age';
 $string['reconcilemaxage_desc'] = 'Stop re-checking transactions older than this.';
 $string['reconcilemaxattempts'] = 'Maximum reconciliation attempts';
@@ -321,7 +321,7 @@ $string['sendcoursewelcomemessage_help'] = 'The welcome message is sent once, wh
 Core\'s "From the key holder" option is not offered here: it resolves the sender through the self enrolment key holder capability, and a paid enrolment has no key holder.';
 $string['settings_behaviour'] = 'Enrolment behaviour';
 $string['settings_credentials'] = 'Mercado Pago credentials';
-$string['settings_credentials_desc'] = 'Credentials come from <em>Your integrations</em> in the Mercado Pago developer dashboard. They can also be supplied from config.php as <code>$CFG->enrol_mercadopagocpro</code> or from the <code>MERCADOPAGOCPRO_ACCESS_TOKEN</code>, <code>MERCADOPAGOCPRO_PUBLIC_KEY</code> and <code>MERCADOPAGOCPRO_WEBHOOK_SECRET</code> environment variables, which take precedence over the values stored here.';
+$string['settings_credentials_desc'] = 'Credentials come from <em>Your integrations</em> in the Mercado Pago developer dashboard. They can also be supplied from config.php as <code>$CFG->enrol_mercadopagocpro</code> or from the <code>MERCADOPAGOCPRO_ACCESS_TOKEN</code>, <code>MERCADOPAGOCPRO_PUBLIC_KEY</code> and <code>MERCADOPAGOCPRO_WEBHOOK_SECRET</code> environment variables, which take precedence over the values stored here.<br><br><strong>Testing with fake money:</strong> the account is what makes a payment a test, not the type of credential. Create a <em>test seller</em> user in the developer dashboard, create an integration under that account, and use its credentials here. A test seller\'s credentials look and behave like production ones and no real money moves. The buyer must sign in to Mercado Pago with <em>test buyer</em> credentials and pay with one of the test cards the dashboard generates. A real account\'s test credentials are not an alternative: a subscription or payment created with them cannot be completed by any buyer.';
 $string['settings_diagnostics'] = 'Diagnostics and performance';
 $string['settings_marketplace'] = 'Split payments (marketplace)';
 $string['settings_marketplace_desc'] = 'Split payments let a marketplace collect a commission on each sale. Register <code>{$a->redirecturi}</code> as the redirect URI of your Mercado Pago application before connecting any seller.';
@@ -355,9 +355,9 @@ $string['task:process_expirations'] = 'Process Mercado Pago enrolment expiration
 $string['task:reconcile_payments'] = 'Reconcile Mercado Pago payments';
 $string['task:retry_webhooks'] = 'Retry Mercado Pago notifications';
 $string['testaccesstoken'] = 'Test access token';
-$string['testaccesstoken_desc'] = 'Access token of your test credentials, used when the environment is set to Test.';
+$string['testaccesstoken_desc'] = 'The access token used when Environment is set to Test. Note that a payment cannot be completed with a real account\'s test credentials: the buyer is refused at the last step. End-to-end testing needs a test seller integration instead — see the note above.';
 $string['testmode'] = 'Test';
-$string['testmodenotice'] = 'This site is running Mercado Pago in test mode. No real money will be charged.';
+$string['testmodenotice'] = 'This site is using the test credential set rather than the production one. No real money moves as long as those credentials belong to a test seller integration.';
 $string['testpublickey'] = 'Test public key';
 $string['testwebhooksecret'] = 'Test webhook secret signature';
 $string['transactions'] = 'Mercado Pago transactions';
