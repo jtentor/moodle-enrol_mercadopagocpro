@@ -80,6 +80,11 @@ Compliance release for Moodle Marketplace. No functional change.
 - `.gitattributes` builds the distribution package with `git archive`, excluding
   development-only files and producing the `mercadopagocpro/` top-level
   directory the installer expects.
+- `cli/diagnose.php` now announces the sections it skips. Sections 5, 5b, 9, 10
+  and 11 only run when `--courseid`, `--tryadd` or `--fixorphans` is supplied,
+  and the numbering used to jump — 4 straight to 6, 8 straight to 11 — which
+  reads as something having failed silently. Each skipped section now prints one
+  line saying what would run it.
 - `docs/ADMINISTRATOR-SETUP.md`, replacing `docs/HUMAN-TASKS.md`: the same
   material stated as what an administrator must configure rather than as a list
   of known gaps.

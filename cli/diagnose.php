@@ -284,6 +284,22 @@ if ($options['username'] !== '') {
     }
 }
 
+/**
+ * Announce a section that is being skipped, and say what would run it.
+ *
+ * Without this the numbering jumps -- 4 straight to 6, 8 straight to 11 -- and
+ * a reader reasonably assumes something failed silently. Say so instead.
+ *
+ * @param  string $number Section number as printed, e.g. '5' or '9'.
+ * @param  string $title  Section title.
+ * @param  string $needs  What the caller has to supply, e.g. '--courseid=N'.
+ * @return void
+ */
+function mercadopagocpro_section_skipped(string $number, string $title, string $needs): void {
+    echo PHP_EOL . $number . '. ' . $title . PHP_EOL;
+    echo '  SKIP not run                                  pass ' . $needs . PHP_EOL;
+}
+
 if ($options['courseid']) {
     $course = $DB->get_record('course', ['id' => (int)$options['courseid']]);
     if (!$course) {
@@ -365,6 +381,11 @@ if ($options['courseid']) {
 }
 
 // 6. Environment.
+if (!$options['courseid']) {
+    mercadopagocpro_section_skipped('5', 'Course evaluation', '--courseid=N');
+    mercadopagocpro_section_skipped('5b', 'Simulated "Add method" dropdown', '--courseid=N');
+}
+
 echo PHP_EOL . '6. Runtime prerequisites' . PHP_EOL;
 
 $https = strpos((string)$CFG->wwwroot, 'https://') === 0;
@@ -510,6 +531,10 @@ mpcp_report(
 // enrol/editinstance.php is what actually runs when you pick the method from the
 // dropdown, and edit_instance_form() only ever executes in the browser. Building
 // the form here reproduces that code path and surfaces any fatal it would throw.
+if (!($options['courseid'] && $instance !== null)) {
+    mercadopagocpro_section_skipped('9', 'Instance form smoke test', '--courseid=N --tryadd');
+}
+
 if ($options['courseid'] && $instance !== null) {
     echo PHP_EOL . '9. Instance form smoke test' . PHP_EOL;
 
@@ -557,6 +582,10 @@ if ($options['courseid'] && $instance !== null) {
 // edit_instance_validation() first, then add_instance(). The submitted data is
 // derived from the real form built in section 9, so every field the browser
 // posts is present - not just the handful a hand written array would cover.
+if (!($options['courseid'] && $instance !== null && isset($mform))) {
+    mercadopagocpro_section_skipped('10', 'Save path smoke test', '--courseid=N --tryadd');
+}
+
 if ($options['courseid'] && $instance !== null && isset($mform)) {
     echo PHP_EOL . '10. Save path smoke test' . PHP_EOL;
 
@@ -668,6 +697,10 @@ if ($options['courseid'] && $instance !== null && isset($mform)) {
 }
 
 // 11. Orphan cleanup.
+if (!$options['fixorphans']) {
+    mercadopagocpro_section_skipped('11', 'Orphan cleanup', '--fixorphans');
+}
+
 if ($options['fixorphans']) {
     echo PHP_EOL . '11. Orphan cleanup' . PHP_EOL;
 
